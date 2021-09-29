@@ -1,5 +1,6 @@
 #include "pinepch.h"
 #include "Window.h"
+#include "Event.h"
 
 namespace Pine {
 	namespace Utils {
@@ -42,7 +43,7 @@ namespace Pine {
 
 		glfwMakeContextCurrent(m_WindowHandle);
 
-		//event_dispatcher<window_resize_event>::dispatch({ m_properties.width, m_properties.height });
+		EventDispatcher<WindowResizeEvent>::Dispatch({ m_Spec.Width, m_Spec.Height });
 
 		// Enable VSync
 		if (m_Spec.VSync)
@@ -87,6 +88,31 @@ namespace Pine {
 
 	void Window::RegisterEvents()
 	{
+		// Window event callbacks
+		glfwSetWindowSizeCallback(m_WindowHandle, [](GLFWwindow* window, int width, int height) {
+			uint32_t w = static_cast<uint32_t>(width);
+			uint32_t h = static_cast<uint32_t>(height);
+
+			auto pine_window = reinterpret_cast<::Pine::Window*>(glfwGetWindowUserPointer(window));
+			pine_window->m_Spec.Width = w;
+			pine_window->m_Spec.Height = h;
+
+			EventDispatcher<WindowResizeEvent>::Dispatch({ w, h });
+		});
+
+		glfwSetWindowCloseCallback(m_WindowHandle, [](GLFWwindow* window) {
+			EventDispatcher<WindowCloseEvent>::Dispatch({});
+		});
+
+		glfwSetWindowFocusCallback(m_WindowHandle, [](GLFWwindow* window, int in_focus) {
+			if (in_focus == GLFW_FALSE) {
+				EventDispatcher<WindowFocusEvent>::Dispatch({});
+			}
+			else {
+				EventDispatcher<WindowBlurEvent>::Dispatch({});
+			}
+		});
+		// End window event callbacks
 	}
 
 }
