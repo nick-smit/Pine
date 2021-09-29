@@ -8,7 +8,7 @@ Pine::Application* CreateApplication()
 {
 	Pine::Application* application = new Pine::Application("Sandbox App");
 
-	application->GetLayerStack().PushLayer(std::make_shared<SandboxLayer>());
+	application->PushLayer(std::make_shared<SandboxLayer>());
 
 	return application;
 }

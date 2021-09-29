@@ -14,7 +14,12 @@ namespace Pine {
 
 		void Run();
 
-		LayerStack GetLayerStack() const { return m_LayerStack; }
+
+		void PushLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushLayer(layer); };
+		void PopLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopLayer(layer); };
+
+		void PushOverlay(std::shared_ptr<Layer> layer) { m_LayerStack.PushOverlay(layer); };
+		void PopOverlay(std::shared_ptr<Layer> layer) { m_LayerStack.PopOverlay(layer); };
 
 	public:
 		static Application* Get() { return s_Instance; }
