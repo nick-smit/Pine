@@ -3,6 +3,7 @@
 #include <memory>
 #include "Window.h"
 #include "Input.h"
+#include "LayerStack.h"
 
 namespace Pine {
 
@@ -13,6 +14,8 @@ namespace Pine {
 
 		void Run();
 
+		LayerStack GetLayerStack() const { return m_LayerStack; }
+
 	public:
 		static Application* Get() { return s_Instance; }
 
@@ -20,6 +23,7 @@ namespace Pine {
 		bool m_Running = false;
 
 		std::unique_ptr<Window> m_Window;
+		LayerStack m_LayerStack;
 
 	private:
 		static Application* s_Instance;

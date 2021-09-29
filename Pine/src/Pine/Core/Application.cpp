@@ -30,6 +30,10 @@ namespace Pine {
 	void Application::Run()
 	{
 		while (!m_Window->ShouldClose()) {
+			for (auto layer : m_LayerStack) {
+				layer->OnUpdate();
+			}
+
 			m_Window->SwapBuffers();
 			m_Window->PollEvents();
 		}
