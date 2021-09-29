@@ -9,7 +9,7 @@ public:
 
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
-	virtual void OnUpdate() override;
+	virtual void OnUpdate(Pine::Timestep ts) override;
 
 private:
 };

@@ -1,6 +1,7 @@
 #include "pinepch.h"
 #include "Application.h"
 #include "Logger.h"
+#include "Timestep.h"
 
 namespace Pine {
 	Application* Application::s_Instance = nullptr;
@@ -30,8 +31,12 @@ namespace Pine {
 	void Application::Run()
 	{
 		while (!m_Window->ShouldClose()) {
+			float time = m_Window->GetTime();
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			for (auto layer : m_LayerStack) {
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 			}
 
 			m_Window->SwapBuffers();

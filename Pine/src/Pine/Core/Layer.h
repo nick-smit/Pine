@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Timestep.h"
 
 namespace Pine {
 
@@ -13,7 +14,7 @@ namespace Pine {
 	public:
 		virtual void OnAttach() = 0;
 		virtual void OnDetach() = 0;
-		virtual void OnUpdate() = 0;
+		virtual void OnUpdate(Timestep ts) = 0;
 
 		const std::string& GetName() const { return m_Name; }
 
