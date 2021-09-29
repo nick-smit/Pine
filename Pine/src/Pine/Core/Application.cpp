@@ -1,12 +1,13 @@
+#include "pinepch.h"
 #include "Application.h"
-
-#include <iostream>
+#include "Logger.h"
 
 namespace Pine {
 
 	Application::Application(const std::string& name)
 	{
-		std::cout << "Starting" << std::endl;
+		CoreLogger::Initialize();
+		AppLogger::Initialize();
 	}
 
 	Application::~Application()
@@ -16,7 +17,7 @@ namespace Pine {
 
 	void Application::Run()
 	{
-		std::cout << "Running" << std::endl;
+		PINE_LOG_CORE_INFO("Application is running!");
 	}
 
 }

@@ -1,3 +1,5 @@
+include "dependencies/dependencies.lua"
+
 workspace "Pine"
   architecture "x64"
   
@@ -9,12 +11,19 @@ workspace "Pine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+group "Dependencies"
+	include "dependencies/spdlog"
+
+group ""
 project "Pine"
 	location "Pine"
 	kind "StaticLib"
 	language "C++"
   cppdialect "C++17"
   staticruntime "on"
+
+  pchheader "pinepch.h"
+  pchsource "%{prj.name}/src/pinepch.cpp"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -25,6 +34,8 @@ project "Pine"
 	}
 
 	includedirs {
+    "%{prj.name}/src",
+		"%{IncludeDir.spdlog}",
 	}
 
 	filter "system:windows"
@@ -58,7 +69,8 @@ project "Sandbox"
 	}
 
 	includedirs {
-		"Pine/src"
+		"Pine/src",
+		"%{IncludeDir.spdlog}",
 	}
 
 	links {
