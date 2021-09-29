@@ -86,6 +86,16 @@ namespace Pine {
 		return (float) glfwGetTime();
 	}
 
+	bool Window::IsKeyPressed(Key key) const
+	{
+		return glfwGetKey(m_WindowHandle, (int)key) == GLFW_PRESS;
+	}
+
+	bool Window::IsMouseButtonPressed(MouseButton button) const
+	{
+		return glfwGetMouseButton(m_WindowHandle, (int)button) == GLFW_PRESS;
+	}
+
 	void Window::RegisterEvents()
 	{
 		// Window event callbacks

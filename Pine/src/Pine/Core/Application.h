@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "Window.h"
+#include "Input.h"
 
 namespace Pine {
 
@@ -22,6 +23,8 @@ namespace Pine {
 
 	private:
 		static Application* s_Instance;
+
+		friend class Input;
 	};
 
 }

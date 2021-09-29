@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Input.h"
 #include <string>
 #include <GLFW\glfw3.h>
 
@@ -33,6 +34,9 @@ namespace Pine {
 		bool ShouldClose() const;
 
 		float GetTime() const;
+
+		bool IsKeyPressed(Key key) const;
+		bool IsMouseButtonPressed(MouseButton button) const;
 
 	private:
 		void RegisterEvents();
