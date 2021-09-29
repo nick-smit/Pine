@@ -1,3 +1,6 @@
 [submodule "Pine/vendor/spdlog"]
 	path = Pine/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Pine/vendor/glfw"]
+	path = Pine/vendor/glfw
+	url = https://github.com/glfw/glfw.git

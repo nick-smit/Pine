@@ -1,4 +1,4 @@
-dir = "%{wks.location}/Pine/vendor/spdlog";
+spdlogDir = "%{wks.location}/Pine/vendor/spdlog";
 
 project "spdlog"
 	kind "StaticLib"
@@ -8,7 +8,7 @@ project "spdlog"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files {
-		"%{dir}/include/spdlog/**.h",
+		"%{spdlogDir}/include/spdlog/**.h",
 	}
 
 	filter "system:linux"

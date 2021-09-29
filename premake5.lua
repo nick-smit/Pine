@@ -1,4 +1,4 @@
-include "dependencies/dependencies.lua"
+include "Dependencies/Dependencies.lua"
 
 workspace "Pine"
   architecture "x64"
@@ -12,7 +12,8 @@ workspace "Pine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
-	include "dependencies/spdlog"
+	include "Dependencies/glfw"
+	include "Dependencies/spdlog"
 
 group ""
 project "Pine"
@@ -35,7 +36,12 @@ project "Pine"
 
 	includedirs {
     "%{prj.name}/src",
+		"%{IncludeDir.glfw}",
 		"%{IncludeDir.spdlog}",
+	}
+
+	links {
+		"GLFW",
 	}
 
 	filter "system:windows"
@@ -70,6 +76,7 @@ project "Sandbox"
 
 	includedirs {
 		"Pine/src",
+		"%{IncludeDir.glfw}",
 		"%{IncludeDir.spdlog}",
 	}
 
