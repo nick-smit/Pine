@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Input.h"
+
 namespace Pine {
 
 	template<typename T>
@@ -40,5 +42,45 @@ namespace Pine {
 	struct WindowCloseEvent {};
 	struct WindowFocusEvent {};
 	struct WindowBlurEvent {};
+
+	// Mouse events
+	struct MouseButtonPressedEvent {
+		MouseButton button;
+		uint8_t mods;
+	};
+
+	struct MouseButtonReleasedEvent {
+		MouseButton button;
+		uint8_t mods;
+	};
+
+	struct MouseMovedEvent {
+		float x, y;
+	};
+
+	struct MouseScrolledEvent {
+		float x_offset, y_offset;
+	};
+
+	// key events
+	struct KeyPressedEvent {
+		Key key;
+		uint8_t mods;
+	};
+
+	struct KeyReleasedEvent {
+		Key key;
+		uint8_t mods;
+	};
+
+	struct KeyRepeatedEvent {
+		Key key;
+		uint8_t mods;
+	};
+
+	struct KeyTypedEvent {
+		Key key;
+	};
+
 
 }

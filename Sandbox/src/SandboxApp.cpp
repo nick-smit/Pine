@@ -13,5 +13,11 @@ Pine::Application* CreateApplication()
 		return false;
 	});
 
+	Pine::EventDispatcher<Pine::KeyPressedEvent>::Listen([](const Pine::KeyPressedEvent& e, void* data) {
+		PINE_LOG_INFO("Key {0} was pressed", (char)e.key);
+
+		return false;
+	});
+
 	return application;
 }

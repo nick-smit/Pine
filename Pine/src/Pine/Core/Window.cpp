@@ -113,6 +113,50 @@ namespace Pine {
 			}
 		});
 		// End window event callbacks
+
+		// Mouse event callbacks
+		glfwSetMouseButtonCallback(m_WindowHandle, [](GLFWwindow* window, int button, int action, int mods) {
+			if (action == GLFW_PRESS) {
+				EventDispatcher<MouseButtonPressedEvent>::Dispatch({
+					static_cast<MouseButton>(button),
+					static_cast<uint8_t>(mods)
+				});
+			}
+			else {
+				EventDispatcher<MouseButtonReleasedEvent>::Dispatch({
+					static_cast<MouseButton>(button),
+					static_cast<uint8_t>(mods)
+				});
+			}
+		});
+
+		glfwSetCursorPosCallback(m_WindowHandle, [](GLFWwindow* window, double x, double y) {
+			EventDispatcher<MouseMovedEvent>::Dispatch({ (float)x, (float)y });
+		});
+
+		glfwSetScrollCallback(m_WindowHandle, [](GLFWwindow* window, double x_offset, double y_offset) {
+			EventDispatcher<MouseScrolledEvent>::Dispatch({ (float)x_offset, (float)y_offset });
+		});
+		// End mouse events
+
+		// Key events
+		glfwSetKeyCallback(m_WindowHandle, [](GLFWwindow* window, int key, int keycode, int action, int mods) {
+			PINE_ASSERT((key != GLFW_KEY_UNKNOWN), "Unknown key was pressed");
+
+			if (action == GLFW_PRESS) {
+				EventDispatcher<KeyPressedEvent>::Dispatch({ static_cast<Key>(key), static_cast<uint8_t>(mods) });
+			}
+			else if (action == GLFW_RELEASE) {
+				EventDispatcher<KeyReleasedEvent>::Dispatch({ static_cast<Key>(key), static_cast<uint8_t>(mods) });
+			}
+			else if (action == GLFW_REPEAT) {
+				EventDispatcher<KeyRepeatedEvent>::Dispatch({ static_cast<Key>(key), static_cast<uint8_t>(mods) });
+			}
+			else {
+				PINE_ASSERT(false, "Unkown action {0}", action);
+			}
+		});
+		// End key events
 	}
 
 }
