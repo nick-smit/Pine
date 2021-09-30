@@ -5,6 +5,8 @@
 #include "Input.h"
 #include "LayerStack.h"
 
+#include "Pine\Renderer\GraphicsContext.h"
+
 #include <memory>
 
 namespace Pine {
@@ -31,8 +33,10 @@ namespace Pine {
 
 		float m_LastFrameTime = 0.0f;
 
-		std::unique_ptr<Window> m_Window;
+		std::shared_ptr<Window> m_Window;
 		LayerStack m_LayerStack;
+
+		GraphicsContext m_GraphicsContext = NULL;
 
 	private:
 		static Application* s_Instance;

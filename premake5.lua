@@ -12,6 +12,7 @@ workspace "Pine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
+	include "Dependencies/glad"
 	include "Dependencies/glfw"
 	include "Dependencies/spdlog"
 
@@ -36,12 +37,18 @@ project "Pine"
 
 	includedirs {
     "%{prj.name}/src",
+		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.spdlog}",
 	}
 
 	links {
+		"GLAD",
 		"GLFW",
+	}
+
+	defines {
+		"GLFW_INCLUDE_NONE"
 	}
 
 	filter "system:windows"

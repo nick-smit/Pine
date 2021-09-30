@@ -16,11 +16,14 @@ namespace Pine {
 		PINE_LOG_CORE_INFO("Initializing PINE {0}", PINE_VERSION);
 
 		Window::Specification windowSpec("Pine " PINE_VERSION, 720, 480);
-		m_Window = std::make_unique<Window>(windowSpec);
+		m_Window = std::make_shared<Window>(windowSpec);
 		{
 			bool success = m_Window->Initialize();
 			PINE_ASSERT(success, "Failed to initialize window!");
 		}
+
+		m_GraphicsContext = GraphicsContext(m_Window);
+		m_GraphicsContext.Init();
 	}
 
 	Application::~Application()
@@ -39,7 +42,7 @@ namespace Pine {
 				layer->OnUpdate(timestep);
 			}
 
-			m_Window->SwapBuffers();
+			m_GraphicsContext.SwapBuffers();
 			m_Window->PollEvents();
 		}
 	}

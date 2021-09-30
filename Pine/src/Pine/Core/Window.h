@@ -40,6 +40,8 @@ namespace Pine {
 		bool IsKeyPressed(Key key) const;
 		bool IsMouseButtonPressed(MouseButton button) const;
 
+		GLFWwindow* GetNativeWindow() const { return m_WindowHandle; }
+
 	private:
 		void RegisterEvents();
 
