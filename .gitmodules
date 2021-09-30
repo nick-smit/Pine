@@ -4,3 +4,6 @@
 [submodule "Pine/vendor/glfw"]
 	path = Pine/vendor/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule ".\\Pine\\vendor\\glm"]
+	path = .\\Pine\\vendor\\glm
+	url = https://github.com/g-truc/glm.git

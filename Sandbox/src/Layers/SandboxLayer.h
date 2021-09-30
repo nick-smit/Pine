@@ -2,6 +2,8 @@
 
 #include <Pine.h>
 
+#include <memory>
+
 class SandboxLayer : public Pine::Layer {
 public:
 	SandboxLayer()
@@ -12,4 +14,6 @@ public:
 	virtual void OnUpdate(Pine::Timestep ts) override;
 
 private:
+	std::shared_ptr<Pine::VertexArray> m_VertexArray = nullptr;
+	std::shared_ptr<Pine::Shader> m_Shader = nullptr;
 };

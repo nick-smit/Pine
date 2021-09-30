@@ -13,6 +13,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
 	include "Dependencies/glad"
+	include "Dependencies/glm"
 	include "Dependencies/glfw"
 	include "Dependencies/spdlog"
 
@@ -38,6 +39,7 @@ project "Pine"
 	includedirs {
     "%{prj.name}/src",
 		"%{IncludeDir.glad}",
+		"%{IncludeDir.glm}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.spdlog}",
 	}
@@ -84,6 +86,7 @@ project "Sandbox"
 	includedirs {
 		"Pine/src",
 		"%{IncludeDir.glfw}",
+		"%{IncludeDir.glm}",
 		"%{IncludeDir.spdlog}",
 	}
 
