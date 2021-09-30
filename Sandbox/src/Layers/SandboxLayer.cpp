@@ -25,5 +25,5 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnUpdate(Pine::Timestep ts)
 {
-	PINE_LOG_INFO("Frame time: {:03.4f}", ts.GetSeconds());
+	//PINE_LOG_INFO("Frame time: {:03.4f}", ts.GetSeconds());
 }

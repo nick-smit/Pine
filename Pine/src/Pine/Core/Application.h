@@ -1,9 +1,11 @@
 #pragma once
 
-#include <memory>
+#include "Core.h"
 #include "Window.h"
 #include "Input.h"
 #include "LayerStack.h"
+
+#include <memory>
 
 namespace Pine {
 

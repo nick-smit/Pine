@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Input.h"
+
 #include <string>
+
 #include <GLFW\glfw3.h>
 
 namespace Pine {

@@ -2,6 +2,10 @@
 
 #include "Input.h"
 
+#include <functional>
+#include <vector>
+#include <utility>
+
 namespace Pine {
 
 	template<typename T>

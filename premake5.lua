@@ -24,7 +24,7 @@ project "Pine"
   staticruntime "on"
 
   pchheader "pinepch.h"
-  pchsource "%{prj.name}/src/pinepch.cpp"
+  pchsource "Pine/src/pinepch.cpp"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
