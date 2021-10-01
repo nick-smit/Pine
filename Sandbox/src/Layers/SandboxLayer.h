@@ -1,8 +1,12 @@
 #pragma once
 
+#include "..\Controller\OrthographicCameraController.h"
+
 #include <Pine.h>
 
+#include <functional>
 #include <memory>
+#include <vector>
 
 class SandboxLayer : public Pine::Layer {
 public:
@@ -14,7 +18,8 @@ public:
 	virtual void OnUpdate(Pine::Timestep ts) override;
 
 private:
-	Pine::OrthographicCamera m_Camera;
+	OrthographicCameraController m_CameraController;
+	std::vector<std::function<void()>> m_EventHandlers;
 
 	std::shared_ptr<Pine::VertexArray> m_VertexArray = nullptr;
 	std::shared_ptr<Pine::Shader> m_Shader = nullptr;

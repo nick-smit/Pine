@@ -5,7 +5,7 @@
 
 namespace Pine {
     
-    bool Pine::Input::isKeyPressed(Key key)
+    bool Pine::Input::IsKeyPressed(Key key)
     {
         return Application::Get()->m_Window->IsKeyPressed(key);
     }

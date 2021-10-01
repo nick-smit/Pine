@@ -34,7 +34,7 @@ namespace Pine {
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
 		glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
 
-		glm::vec3 m_Position = glm::vec3(1.0f);
+		glm::vec3 m_Position = glm::vec3(0.0f);
 		float m_ZRotation = 0.0f;
 	};
 

@@ -62,11 +62,11 @@ namespace Pine {
 
 				//"layout (location = 0) out VertexOutput Output;\n"
 
-				"uniform mat4 u_ViewProjectionMatrix;\n"
 				"uniform mat4 u_Transform;\n"
+				"uniform mat4 u_ViewProjectionMatrix;\n"
 
 				"void main() {\n"
-				"  gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0f);\n"
+				"  gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0f);\n"
 				//"  Output.Color = a_Color;\n"
 				//"  Output.TexCoords = a_TexCoords;\n"
 				"}\n";
@@ -113,7 +113,7 @@ namespace Pine {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
 		transform = glm::scale(transform, glm::vec3(size, 1.0f));
 
-		//s_Data->TextureShader->SetMat4("u_Transform", transform);
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray, s_Data->TextureShader);
