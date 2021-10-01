@@ -24,9 +24,11 @@ void SandboxLayer::OnAttach()
 		"#version 450 core\n"
 		"layout (location = 0) in vec3 a_Pos;\n"
 		"layout (location = 1) in vec4 a_Color;\n"
+		"layout (location = 2) in vec2 a_TexCoords;\n"
 
 		"struct VertexOutput {\n"
 		"  vec4 Color;\n"
+		"  vec2 TexCoords;\n"
 		"};\n"
 
 		"layout (location = 0) out VertexOutput Output;\n"
@@ -34,6 +36,7 @@ void SandboxLayer::OnAttach()
 		"void main() {\n"
 		"  gl_Position = vec4(a_Pos, 1.0);\n"
 		"  Output.Color = a_Color;\n"
+		"  Output.TexCoords = a_TexCoords;\n"
 		"}\n";
 
 	std::string fragmentSource =
@@ -42,12 +45,15 @@ void SandboxLayer::OnAttach()
 
 		"struct VertexOutput {\n"
 		"  vec4 Color;\n"
+		"  vec2 TexCoords;\n"
 		"};\n"
 
 		"layout (location = 0) in VertexOutput Input;\n"
 
+		"uniform sampler2D u_BoxTexture;\n"
+
 		"void main() {\n"
-		"  o_Color = Input.Color;\n"
+		"  o_Color = texture(u_BoxTexture, Input.TexCoords) * Input.Color;\n"
 		"}\n";
 
 	m_Shader = std::make_shared<Pine::Shader>("Renderer2D_FlatColor", vertexSource, fragmentSource);
@@ -65,20 +71,30 @@ void SandboxLayer::OnAttach()
 
 	{
 		float vertices[] = {
-			// positions        // colors              
-			-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+			// positions        // colors               // texture coord
+			-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		};
 
 		Pine::BufferLayout layout = {
 			{ Pine::ShaderDataType::Float3, "a_Position" },
 			{ Pine::ShaderDataType::Float4, "a_Color" },
+			{ Pine::ShaderDataType::Float2, "a_TexCoord" },
 		};
 
 		auto vertexBuffer = std::make_shared<Pine::VertexBuffer>(vertices, sizeof(vertices), layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
+	}
+
+	{
+		m_Shader->SetInt("u_BoxTexture", 0);
+
+		Pine::Texture2D::Specification textureSpec;
+
+		m_Texture = std::make_shared<Pine::Texture2D>(textureSpec, "./assets/textures/box.png");
+		m_Texture->Bind(1);
 	}
 }
 

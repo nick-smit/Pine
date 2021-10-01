@@ -40,70 +40,70 @@ namespace Pine {
 	void Shader::SetInt(const std::string& name, int32_t value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform1i(location, value);
 	}
 
 	void Shader::SetIntArray(const std::string& name, int32_t* value, uint32_t count) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform1iv(location, count, value);
 	}
 
 	void Shader::SetUint(const std::string& name, uint32_t value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform1ui(location, value);
 	}
 
 	void Shader::SetUintArray(const std::string& name, uint32_t* value, uint32_t count) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform1uiv(location, count, value);
 	}
 
 	void Shader::SetFloat(const std::string& name, float value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform1f(location, value);
 	}
 
 	void Shader::SetFloat2(const std::string& name, const glm::vec2& value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform2f(location, value.x, value.y);
 	}
 
 	void Shader::SetFloat3(const std::string& name, const glm::vec3& value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
 	void Shader::SetFloat4(const std::string& name, const glm::vec4& value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
 
 	void Shader::SetMat3(const std::string& name, const glm::mat3& value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
 	}
 
 	void Shader::SetMat4(const std::string& name, const glm::mat4& value) const
 	{
 		GLint location = glGetUniformLocation(m_ProgramId, name.c_str());
-		PINE_ASSERT(location != -1, "Unable to find location for uniform {0} in shader {1}", name, m_Name);
+		PINE_ASSERT((location != -1), "Unable to find location for uniform {0} in shader {1}", name, m_Name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 	}
 

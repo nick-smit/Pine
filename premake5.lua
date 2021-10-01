@@ -33,7 +33,8 @@ project "Pine"
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb/**.h",
 	}
 
 	includedirs {
@@ -42,6 +43,7 @@ project "Pine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.stb}",
 	}
 
 	links {
@@ -50,7 +52,8 @@ project "Pine"
 	}
 
 	defines {
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"STB_IMAGE_IMPLEMENTATION"
 	}
 
 	filter "system:windows"

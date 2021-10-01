@@ -16,4 +16,5 @@ public:
 private:
 	std::shared_ptr<Pine::VertexArray> m_VertexArray = nullptr;
 	std::shared_ptr<Pine::Shader> m_Shader = nullptr;
+	std::shared_ptr<Pine::Texture2D> m_Texture = nullptr;
 };
