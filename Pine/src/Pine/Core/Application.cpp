@@ -12,7 +12,10 @@ namespace Pine {
 	Application::Application(const std::string& name)
 	{
 		s_Instance = this;
+	}
 
+	void Application::Init()
+	{
 		CoreLogger::Initialize();
 		AppLogger::Initialize();
 

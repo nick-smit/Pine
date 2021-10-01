@@ -16,8 +16,9 @@ namespace Pine {
 		Application(const std::string& name);
 		virtual ~Application();
 
-		void Run();
+		void Init();
 
+		void Run();
 
 		void PushLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushLayer(layer); };
 		void PopLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopLayer(layer); };
@@ -30,6 +31,8 @@ namespace Pine {
 
 	private:
 		bool m_Running = false;
+
+		std::string m_Name;
 
 		float m_LastFrameTime = 0.0f;
 
