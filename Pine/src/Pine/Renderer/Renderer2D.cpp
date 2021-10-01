@@ -13,6 +13,8 @@ namespace Pine {
 	struct Renderer2DData {
 		std::shared_ptr<VertexArray> QuadVertexArray;
 		std::shared_ptr<Shader> TextureShader;
+
+		std::shared_ptr<Texture2D> WhiteTexture;
 	};
 
 	static Renderer2DData* s_Data;
@@ -21,18 +23,25 @@ namespace Pine {
 	{
 		s_Data = new Renderer2DData();
 
+		{
+			Texture2D::Specification spec;
+			uint32_t data = 0xFFFFFFFF;
+			s_Data->WhiteTexture = std::make_shared<Texture2D>(spec, 1, 1, 4, &data, sizeof(uint32_t));
+		}
+
 		s_Data->QuadVertexArray = std::make_shared<VertexArray>();
 
 		{
-			float quadVertices[3 * 4] = {
-				-0.5f, -0.5f, 0.0f,
-				 0.5f, -0.5f, 0.0f,
-				 0.5f,  0.5f, 0.0f,
-				-0.5f,  0.5f, 0.0f,
+			float quadVertices[5 * 4] = {
+				-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+				 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+				 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+				-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 			};
 
 			BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position" }
+				{ ShaderDataType::Float3, "a_Position" },
+				{ ShaderDataType::Float2, "a_TexCoords" }
 			};
 
 			auto vertexBuffer = std::make_shared<VertexBuffer>(quadVertices, sizeof(quadVertices), layout);
@@ -53,41 +62,41 @@ namespace Pine {
 				"#version 450 core\n"
 				"layout (location = 0) in vec3 a_Position;\n"
 				//"layout (location = 1) in vec4 a_Color;\n"
-				//"layout (location = 2) in vec2 a_TexCoords;\n"
+				"layout (location = 1) in vec2 a_TexCoords;\n"
 
-				//"struct VertexOutput {\n"
+				"struct VertexOutput {\n"
 				//"  vec4 Color;\n"
-				//"  vec2 TexCoords;\n"
-				//"};\n"
+				"  vec2 TexCoords;\n"
+				"};\n"
 
-				//"layout (location = 0) out VertexOutput Output;\n"
+				"layout (location = 0) out VertexOutput Output;\n"
 
 				"uniform mat4 u_Transform;\n"
 				"uniform mat4 u_ViewProjectionMatrix;\n"
+				"uniform float u_TilingFactor;\n"
 
 				"void main() {\n"
 				"  gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0f);\n"
 				//"  Output.Color = a_Color;\n"
-				//"  Output.TexCoords = a_TexCoords;\n"
+				"  Output.TexCoords = a_TexCoords * u_TilingFactor;\n"
 				"}\n";
 
 			std::string fragmentSource =
 				"#version 450 core\n"
 				"layout (location = 0) out vec4 o_Color;\n"
 
-				//"struct VertexOutput {\n"
+				"struct VertexOutput {\n"
 				//"  vec4 Color;\n"
-				//"  vec2 TexCoords;\n"
-				//"};\n"
+				"  vec2 TexCoords;\n"
+				"};\n"
 
-				//"layout (location = 0) in VertexOutput Input;\n"
+				"layout (location = 0) in VertexOutput Input;\n"
 
-				//"uniform sampler2D u_BoxTexture;\n"
+				"uniform sampler2D u_Texture;\n"
 				"uniform vec4 u_Color;\n"
 
 				"void main() {\n"
-				//"  o_Color = texture(u_BoxTexture, Input.TexCoords) * Input.Color;\n"
-				"  o_Color = u_Color;\n"
+				"  o_Color = texture(u_Texture, Input.TexCoords) * u_Color;\n"
 				"}\n";
 
 			s_Data->TextureShader = std::make_shared<Shader>("Renderer2D_FlatColor", vertexSource, fragmentSource);
@@ -108,13 +117,29 @@ namespace Pine {
 	{
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const QuadSpecification& spec)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
-		transform = glm::scale(transform, glm::vec3(size, 1.0f));
+		if (spec.UseTransform) {
+			s_Data->TextureShader->SetMat4("u_Transform", spec.Transform);
+		} else {
+			glm::mat4 transform;
 
-		s_Data->TextureShader->SetMat4("u_Transform", transform);
-		s_Data->TextureShader->SetFloat4("u_Color", color);
+			transform = glm::translate(glm::mat4(1.0f), spec.Position) *
+				glm::rotate(glm::mat4(1.0f), glm::radians(spec.ZRotation), { 0.0f, 0.0f, 1.0f }) *
+				glm::scale(glm::mat4(1.0f), spec.Scale);
+
+			s_Data->TextureShader->SetMat4("u_Transform", transform);
+		}
+
+		s_Data->TextureShader->SetFloat4("u_Color", spec.Color);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", spec.TilingFactor);
+		
+		if (spec.Texture) {
+			spec.Texture->Bind(0);
+		}
+		else {
+			s_Data->WhiteTexture->Bind(0);
+		}
 
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray, s_Data->TextureShader);
 	}

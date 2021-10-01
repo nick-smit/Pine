@@ -17,6 +17,8 @@ private:
 	glm::vec3 m_CameraPosition = glm::vec3(1.0f);
 	float m_CameraTranslationSpeed = 1.0f;
 	float m_CameraRotationSpeed = 60.0f;
+	float m_CameraRotation = 0.0f;
+
 	float m_ZoomLevel = 1.0f;
 	float m_AspectRatio = 16.0f / 9.0f;
 

@@ -26,9 +26,10 @@ namespace Pine {
 		}
 	}
 
-	Texture2D::Texture2D(const Specification& spec, uint32_t width, uint32_t height, uint32_t channels, unsigned char* data)
+	Texture2D::Texture2D(const Specification& spec, uint32_t width, uint32_t height, uint32_t channels, void* data, size_t size)
 		: m_Spec(spec), m_Width(width), m_Height(height), m_Channels(channels)
 	{
+		PINE_ASSERT((size == m_Channels * m_Width * m_Height), "Supplied an incomplete texture!");
 		Load(data);
 	}
 
@@ -45,20 +46,20 @@ namespace Pine {
 		glBindTexture(GL_TEXTURE_2D, m_TextureId);
 	}
 
-	void Texture2D::Load(unsigned char* data)
+	void Texture2D::Load(void* data)
 	{
+		GLenum internalFormat = m_Channels == 3 ? GL_RGB8 : GL_RGBA8;
 		GLenum dataFormat = m_Channels == 3 ? GL_RGB : GL_RGBA;
 
-		glGenTextures(1, &m_TextureId);
-		glBindTexture(GL_TEXTURE_2D, m_TextureId);
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
+		glTextureStorage2D(m_TextureId, 1, internalFormat, m_Width, m_Height);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, dataFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glTextureSubImage2D(m_TextureId, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 	}
 
 }

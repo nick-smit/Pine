@@ -18,10 +18,10 @@ namespace Pine {
 	public:
 		OrthographicCamera() = default;
 
-		OrthographicCamera(float left, float right, float bottom, float top, float zNear = -1.0f, float zFar = 1.0f);
+		OrthographicCamera(float left, float right, float bottom, float top, float zNear = -1000.0f, float zFar = 1000.0f);
 		virtual ~OrthographicCamera() = default;
 
-		void SetProjection(float left, float right, float bottom, float top, float zNear = -1.0f, float zFar = 1.0f);
+		void SetProjection(float left, float right, float bottom, float top, float zNear = -1000.0f, float zFar = 1000.0f);
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(const glm::vec3& position);

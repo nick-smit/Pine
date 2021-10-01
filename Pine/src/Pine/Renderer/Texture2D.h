@@ -11,13 +11,13 @@ namespace Pine {
 		};
 	public:
 		Texture2D(const Specification& spec, const std::string& path);
-		Texture2D(const Specification& spec, uint32_t width, uint32_t height, uint32_t channels, unsigned char* data);
+		Texture2D(const Specification& spec, uint32_t width, uint32_t height, uint32_t channels, void* data, size_t size);
 		virtual ~Texture2D();
 
 		void Bind(uint32_t slot) const;
 
 	private:
-		void Load(unsigned char* data);
+		void Load(void* data);
 
 	private:
 		uint32_t m_TextureId;
