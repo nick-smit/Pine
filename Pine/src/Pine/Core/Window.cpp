@@ -27,8 +27,8 @@ namespace Pine {
 
 		glfwSetErrorCallback(Utils::ErrorCallback);
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, PINE_OPENGL_MAJOR_VERSION);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, PINE_OPENGL_MINOR_VERSION);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		m_WindowHandle = glfwCreateWindow(m_Spec.Width, m_Spec.Height, m_Spec.Title.c_str(), NULL, NULL);
 		if (!m_WindowHandle) {

@@ -4,7 +4,7 @@
 #include "Logger.h"
 #include "Timestep.h"
 
-#include "Pine\Renderer\Renderer2D.h"
+#include "Pine\Renderer\Renderer.h"
 
 namespace Pine {
 	Application* Application::s_Instance = nullptr;
@@ -30,12 +30,12 @@ namespace Pine {
 
 		m_GraphicsContext = GraphicsContext(m_Window);
 		m_GraphicsContext.Init();
-		Renderer2D::Init();
+		Renderer::Init();
 	}
 
 	Application::~Application()
 	{
-		Renderer2D::Terminate();
+		Renderer::Terminate();
 		m_Window->Terminate();
 	}
 

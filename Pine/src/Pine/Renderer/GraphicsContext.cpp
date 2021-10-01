@@ -17,7 +17,7 @@ namespace Pine {
 		PINE_LOG_CORE_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
 		PINE_LOG_CORE_INFO("  Version: {0}", glGetString(GL_VERSION));
 
-		PINE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "Pine requires at least OpenGL version 4.5!");
+		PINE_ASSERT((GLVersion.major > PINE_OPENGL_MAJOR_VERSION || (GLVersion.major == PINE_OPENGL_MAJOR_VERSION && GLVersion.minor >= PINE_OPENGL_MINOR_VERSION)), "Pine requires at least OpenGL version 4.5!");
 	}
 
 	void GraphicsContext::SwapBuffers()
