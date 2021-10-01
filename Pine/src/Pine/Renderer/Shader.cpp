@@ -70,9 +70,6 @@ namespace Pine {
 		PINE_ASSERT((shaderSources.find(GL_VERTEX_SHADER) != shaderSources.end()), "A vertex shader must be provided!");
 		PINE_ASSERT((shaderSources.find(GL_FRAGMENT_SHADER) != shaderSources.end()), "A fragment shader must be provided!");
 
-		PINE_LOG_CORE_INFO("Parsed vertex shader:\n{0}", shaderSources[GL_VERTEX_SHADER]);
-		PINE_LOG_CORE_INFO("Parsed fragment shader:\n{0}", shaderSources[GL_FRAGMENT_SHADER]);
-
 		return std::make_shared<Shader>(name, shaderSources[GL_VERTEX_SHADER], shaderSources[GL_FRAGMENT_SHADER]);
 	}
 
