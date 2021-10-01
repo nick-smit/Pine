@@ -22,4 +22,7 @@ private:
 	std::vector<std::function<void()>> m_EventHandlers;
 
 	std::shared_ptr<Pine::Texture2D> m_CheckerboardTexture = nullptr;
+	std::shared_ptr<Pine::Texture2D> m_SmileyTexture = nullptr;
+
+	float m_GreenQuadZRotation = 0.0f;
 };
