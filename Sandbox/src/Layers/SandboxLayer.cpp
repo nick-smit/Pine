@@ -6,14 +6,10 @@
 SandboxLayer::SandboxLayer()
 	: Pine::Layer("SandboxLayer")
 {
-	Pine::EventDispatcher<Pine::WindowResizeEvent>::Listen([](const Pine::WindowResizeEvent& e, void* data) {
-		auto* cam = (Pine::OrthographicCamera*)data;
-		cam->SetProjection(-(e.Width / 100.0f), e.Width / 100.0f, -(e.Height / 100.0f), e.Height / 100.0f);
+}
 
-		PINE_LOG_INFO("Resized camera to {0}, {1}", e.Width / 100.0f, e.Height / 100.0f);
-
-		return false;
-	}, &m_Camera);
+SandboxLayer::~SandboxLayer()
+{
 }
 
 void SandboxLayer::OnAttach()

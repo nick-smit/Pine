@@ -9,35 +9,49 @@
 namespace Pine {
 
 	template<typename T>
+	using EventFn = std::function<bool(const T&)>;
+
+	template <typename T>
+	using ListenerPair = std::pair<uint32_t, EventFn<T>>;
+
+	template<typename T>
 	class EventDispatcher {
 	public:
-		static std::function<void()> Listen(bool(*handler)(const T&, void*), void* data = nullptr)
+		static std::function<void()> Listen(EventFn<T> handler)
 		{
-			std::pair<bool(*)(const T&, void*), void*> pair = { handler, data };
-			s_Handlers.push_back(pair);
+			uint32_t id = s_NextId++;
+			ListenerPair<T> pair = { id, handler };
+			s_Listeners.push_back(pair);
 
-			return [pair]() {
-				s_Handlers.erase(std::find(s_Handlers.begin(), s_Handlers.end(), pair));
+			return [id]() {
+				for (auto it = s_Listeners.cbegin(); it != s_Listeners.cend(); it++) {
+					if ((*it).first == id) {
+						s_Listeners.erase(it);
+						break;
+					}
+				}
 			};
 		}
 
 		static void Dispatch(const T& e)
 		{
-			for (auto pair = s_Handlers.crbegin(); pair != s_Handlers.crend(); ++pair) {
-				bool(*fn)(const T&, void*) = (*pair).first;
-				void* ptr = (*pair).second;
+			for (auto it = s_Listeners.crbegin(); it != s_Listeners.crend(); ++it) {
+				EventFn<T> fn = (*it).second;
 
-				if ((*fn)(e, ptr))
+				if (fn(e))
 					break;
 			}
 		}
 
 	private:
-		static std::vector<std::pair<bool(*)(const T&, void*), void*>> s_Handlers;
+		static uint32_t s_NextId;
+		static std::vector<ListenerPair<T>> s_Listeners;
 	};
 
 	template<typename T>
-	std::vector<std::pair<bool(*)(const T&, void*), void*>> EventDispatcher<T>::s_Handlers;
+	std::vector<ListenerPair<T>> EventDispatcher<T>::s_Listeners;
+	template<typename T>
+	uint32_t EventDispatcher<T>::s_NextId = 0;
 
 	// Window events
 	struct WindowResizeEvent {
@@ -49,41 +63,41 @@ namespace Pine {
 
 	// Mouse events
 	struct MouseButtonPressedEvent {
-		MouseButton button;
-		uint8_t mods;
+		MouseButton Button;
+		uint8_t Mods;
 	};
 
 	struct MouseButtonReleasedEvent {
-		MouseButton button;
-		uint8_t mods;
+		MouseButton Button;
+		uint8_t Mods;
 	};
 
 	struct MouseMovedEvent {
-		float x, y;
+		float X, Y;
 	};
 
 	struct MouseScrolledEvent {
-		float x_offset, y_offset;
+		float XOffset, YOffset;
 	};
 
 	// key events
 	struct KeyPressedEvent {
-		Key key;
-		uint8_t mods;
+		Key Key;
+		uint8_t Mods;
 	};
 
 	struct KeyReleasedEvent {
-		Key key;
-		uint8_t mods;
+		Key Key;
+		uint8_t Mods;
 	};
 
 	struct KeyRepeatedEvent {
-		Key key;
-		uint8_t mods;
+		Key Key;
+		uint8_t Mods;
 	};
 
 	struct KeyTypedEvent {
-		Key key;
+		Key Key;
 	};
 
 

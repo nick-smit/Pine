@@ -7,6 +7,7 @@
 class SandboxLayer : public Pine::Layer {
 public:
 	SandboxLayer();
+	virtual ~SandboxLayer();
 
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
