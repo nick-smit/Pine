@@ -42,8 +42,7 @@ namespace Pine {
 	{
 		PINE_ASSERT((slot < 16), "Pine does not allow more than 16 textures!");
 
-		glActiveTexture(GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_2D, m_TextureId);
+		glBindTextureUnit(slot, m_TextureId);
 	}
 
 	void Texture2D::Load(void* data)

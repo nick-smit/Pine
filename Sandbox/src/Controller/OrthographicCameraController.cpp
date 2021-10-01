@@ -1,7 +1,14 @@
 #include "OrthographicCameraController.h"
 
+#include <Pine.h>
+
 OrthographicCameraController::OrthographicCameraController()
 {
+	const Pine::Window::Specification& spec = Pine::Application::Get()->GetWindow()->GetSpecification();
+
+	m_AspectRatio = (float)spec.Width / (float)spec.Height;
+
+	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	m_Camera.SetPosition(m_CameraPosition);
 	m_Camera.SetZRotation(m_CameraRotation);
 

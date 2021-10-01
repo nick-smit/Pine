@@ -8,8 +8,6 @@ int main(int argc, char** argv)
 {
 	Pine::Application* application = CreateApplication();
 
-	application->Init();
-
 	application->Run();
 
 	delete application;

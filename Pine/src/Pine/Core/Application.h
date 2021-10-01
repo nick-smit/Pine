@@ -16,8 +16,6 @@ namespace Pine {
 		Application(const std::string& name);
 		virtual ~Application();
 
-		void Init();
-
 		void Run();
 
 		void PushLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushLayer(layer); };
@@ -25,6 +23,8 @@ namespace Pine {
 
 		void PushOverlay(std::shared_ptr<Layer> layer) { m_LayerStack.PushOverlay(layer); };
 		void PopOverlay(std::shared_ptr<Layer> layer) { m_LayerStack.PopOverlay(layer); };
+
+		std::shared_ptr<Window> GetWindow() const { return m_Window; }
 
 	public:
 		static Application* Get() { return s_Instance; }
