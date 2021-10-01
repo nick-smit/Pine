@@ -25,6 +25,14 @@ namespace Pine {
 		Draw(vertexArray->GetIndexBuffer()->GetCount());
 	}
 
+	void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader, uint32_t count)
+	{
+		shader->Bind();
+		vertexArray->Bind();
+
+		Draw(count);
+	}
+
 	void RenderCommand::Clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -32,6 +32,15 @@ namespace Pine {
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 
+	VertexBuffer::VertexBuffer(size_t size, const BufferLayout& layout)
+		: m_Layout(layout)
+	{
+		glGenBuffers(1, &m_BufferId);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+
 	VertexBuffer::~VertexBuffer()
 	{
 		glDeleteBuffers(1, &m_BufferId);
@@ -45,6 +54,12 @@ namespace Pine {
 	void VertexBuffer::Unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void VertexBuffer::SetData(const void* data, uint32_t size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	IndexBuffer::IndexBuffer(uint32_t* indices, uint32_t count)

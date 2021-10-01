@@ -56,6 +56,10 @@ void SandboxLayer::OnUpdate(Pine::Timestep ts)
 	smileyQuad.Texture = m_SmileyTexture;
 	Pine::Renderer2D::DrawQuad(smileyQuad);
 
+	Pine::Renderer2D::QuadSpecification smileyQuad2(glm::vec3(1.8f,1.8f, 1.0f), glm::vec3(0.5f, 0.5f, 0.0f));
+	smileyQuad2.Texture = m_SmileyTexture;
+	Pine::Renderer2D::DrawQuad(smileyQuad2);
+
 	Pine::Renderer2D::QuadSpecification greenQuad(glm::vec3(1.5f, 0.5f, 1.0f), glm::vec3(0.5f, 0.75f, 0.0f), 45.0f);
 	greenQuad.Color = glm::vec4(0.2f, 0.6f, 0.1f, 1.0f);
 	greenQuad.ZRotation = m_GreenQuadZRotation;

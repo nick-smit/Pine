@@ -40,7 +40,7 @@ namespace Pine {
 
 	void Texture2D::Bind(uint32_t slot) const
 	{
-		PINE_ASSERT((slot < 16), "Pine does not allow more than 16 textures!");
+		PINE_ASSERT((slot < 32), "Pine does not allow more than 16 textures!");
 
 		glBindTextureUnit(slot, m_TextureId);
 	}

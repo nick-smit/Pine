@@ -93,10 +93,13 @@ namespace Pine {
 	class VertexBuffer {
 	public:
 		VertexBuffer(float* vertices, size_t size, const BufferLayout& layout);
+		VertexBuffer(size_t size, const BufferLayout& layout);
 		virtual ~VertexBuffer();
 
 		void Bind() const;
 		void Unbind() const;
+
+		void SetData(const void* data, uint32_t size);
 
 		const BufferLayout& GetLayout() const { return m_Layout; }
 

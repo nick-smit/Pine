@@ -46,6 +46,10 @@ namespace Pine {
 		static void EndScene();
 
 		static void DrawQuad(const QuadSpecification& spec);
+
+	private:
+		static void StartBatch();
+		static void Flush();
 	};
 
 }

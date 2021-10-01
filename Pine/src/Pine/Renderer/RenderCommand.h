@@ -15,6 +15,7 @@ namespace Pine {
 
 		static void Draw(uint32_t indices);
 		static void DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader);
+		static void DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader, uint32_t count);
 
 		static void Clear();
 
