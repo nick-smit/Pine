@@ -1,7 +1,10 @@
 #include "pinepch.h"
+
 #include "Application.h"
 #include "Logger.h"
 #include "Timestep.h"
+
+#include "Pine\Renderer\Renderer2D.h"
 
 namespace Pine {
 	Application* Application::s_Instance = nullptr;
@@ -24,10 +27,12 @@ namespace Pine {
 
 		m_GraphicsContext = GraphicsContext(m_Window);
 		m_GraphicsContext.Init();
+		Renderer2D::Init();
 	}
 
 	Application::~Application()
 	{
+		Renderer2D::Terminate();
 		m_Window->Terminate();
 	}
 

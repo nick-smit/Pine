@@ -13,6 +13,7 @@
 #include "Pine\Renderer\Buffers.h"
 #include "Pine\Renderer\RenderCommand.h"
 #include "Pine\Renderer\Renderer.h"
+#include "Pine\Renderer\Renderer2D.h"
 #include "Pine\Renderer\Shader.h"
 #include "Pine\Renderer\Texture2D.h"
 #include "Pine\Renderer\VertexArray.h"
