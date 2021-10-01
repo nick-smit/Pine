@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 #include <glm\glm.hpp>
@@ -11,6 +12,8 @@ namespace Pine {
 	public:
 		Shader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
 		virtual ~Shader();
+
+		static std::shared_ptr<Shader> FromFile(const std::string& name, const std::string& path);
 
 		bool IsValid() const;
 

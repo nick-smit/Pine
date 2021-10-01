@@ -57,50 +57,7 @@ namespace Pine {
 			s_Data->QuadVertexArray->SetIndexBuffer(indexBuffer);
 		}
 
-		{
-			std::string vertexSource =
-				"#version 450 core\n"
-				"layout (location = 0) in vec3 a_Position;\n"
-				//"layout (location = 1) in vec4 a_Color;\n"
-				"layout (location = 1) in vec2 a_TexCoords;\n"
-
-				"struct VertexOutput {\n"
-				//"  vec4 Color;\n"
-				"  vec2 TexCoords;\n"
-				"};\n"
-
-				"layout (location = 0) out VertexOutput Output;\n"
-
-				"uniform mat4 u_Transform;\n"
-				"uniform mat4 u_ViewProjectionMatrix;\n"
-				"uniform float u_TilingFactor;\n"
-
-				"void main() {\n"
-				"  gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0f);\n"
-				//"  Output.Color = a_Color;\n"
-				"  Output.TexCoords = a_TexCoords * u_TilingFactor;\n"
-				"}\n";
-
-			std::string fragmentSource =
-				"#version 450 core\n"
-				"layout (location = 0) out vec4 o_Color;\n"
-
-				"struct VertexOutput {\n"
-				//"  vec4 Color;\n"
-				"  vec2 TexCoords;\n"
-				"};\n"
-
-				"layout (location = 0) in VertexOutput Input;\n"
-
-				"uniform sampler2D u_Texture;\n"
-				"uniform vec4 u_Color;\n"
-
-				"void main() {\n"
-				"  o_Color = texture(u_Texture, Input.TexCoords) * u_Color;\n"
-				"}\n";
-
-			s_Data->TextureShader = std::make_shared<Shader>("Renderer2D_FlatColor", vertexSource, fragmentSource);
-		}
+		s_Data->TextureShader = Shader::FromFile("Renderer2D_QuadShader", "./assets/shaders/Renderer2D_QuadShader.glsl");
 	}
 
 	void Renderer2D::Terminate()

@@ -1,10 +1,25 @@
 #include "pinepch.h"
 #include "Shader.h"
 
+#include "Pine\Core\File.h"
+
 #include <glad\glad.h>
 #include <glm\gtc\type_ptr.hpp>
 
 namespace Pine {
+
+	namespace Utils {
+		static GLenum ShaderTypeFromString(const std::string& type)
+		{
+			if (type == "vertex")
+				return GL_VERTEX_SHADER;
+			if (type == "fragment" || type == "pixel")
+				return GL_FRAGMENT_SHADER;
+
+			PINE_ASSERT(false, "Unknown shader type '{0}'!", type);
+			return 0;
+		}
+	}
 
 	Shader::Shader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
 		: m_Name(name)
@@ -20,6 +35,45 @@ namespace Pine {
 	Shader::~Shader()
 	{
 		glDeleteProgram(m_ProgramId);
+	}
+
+	std::shared_ptr<Shader> Shader::FromFile(const std::string& name, const std::string& filepath)
+	{
+		std::string contents;
+		FileStream::GetContents(filepath, contents);
+
+		std::unordered_map<GLenum, std::string> shaderSources;
+
+		const char* typeToken = "#type";
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = contents.find(typeToken, 0);
+		while (pos != std::string::npos) {
+			//End of shader type declaration line
+			size_t eol = contents.find_first_of("\r\n", pos);
+			PINE_ASSERT(eol != std::string::npos, "Syntax error");
+			
+			//Start of shader type name (after "#type " keyword)
+			size_t begin = pos + typeTokenLength + 1;
+			std::string type = contents.substr(begin, eol - begin);
+			PINE_ASSERT(Utils::ShaderTypeFromString(type), "Invalid shader type specified");
+
+			//Start of shader code after shader type declaration line
+			size_t nextLinePos = contents.find_first_not_of("\r\n", eol); 
+			PINE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+			
+			//Start of next shader type declaration line
+			pos = contents.find(typeToken, nextLinePos);
+
+			shaderSources[Utils::ShaderTypeFromString(type)] = (pos == std::string::npos) ? contents.substr(nextLinePos) : contents.substr(nextLinePos, pos - nextLinePos);
+		}
+
+		PINE_ASSERT((shaderSources.find(GL_VERTEX_SHADER) != shaderSources.end()), "A vertex shader must be provided!");
+		PINE_ASSERT((shaderSources.find(GL_FRAGMENT_SHADER) != shaderSources.end()), "A fragment shader must be provided!");
+
+		PINE_LOG_CORE_INFO("Parsed vertex shader:\n{0}", shaderSources[GL_VERTEX_SHADER]);
+		PINE_LOG_CORE_INFO("Parsed fragment shader:\n{0}", shaderSources[GL_FRAGMENT_SHADER]);
+
+		return std::make_shared<Shader>(name, shaderSources[GL_VERTEX_SHADER], shaderSources[GL_FRAGMENT_SHADER]);
 	}
 
 	bool Shader::IsValid() const
