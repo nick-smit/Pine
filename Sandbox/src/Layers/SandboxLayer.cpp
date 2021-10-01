@@ -27,8 +27,9 @@ void SandboxLayer::OnUpdate(Pine::Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
-	Pine::RenderCommand::ClearColorBufferBit();
-	Pine::RenderCommand::SetClearColor({ 0.1f, 0.2f, 0.4f });
+	// Render;
+	Pine::RenderCommand::Clear();
+	Pine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f });
 
 	Pine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 	Pine::Renderer2D::DrawQuad(glm::vec3(0.5f, 1.0f, 1.0f), glm::vec2(1.0f), glm::vec4(1.0f));

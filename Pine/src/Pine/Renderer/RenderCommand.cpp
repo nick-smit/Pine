@@ -25,7 +25,7 @@ namespace Pine {
 		Draw(vertexArray->GetIndexBuffer()->GetCount());
 	}
 
-	void RenderCommand::ClearColorBufferBit()
+	void RenderCommand::Clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}

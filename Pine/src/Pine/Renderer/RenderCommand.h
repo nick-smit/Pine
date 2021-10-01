@@ -16,7 +16,7 @@ namespace Pine {
 		static void Draw(uint32_t indices);
 		static void DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader);
 
-		static void ClearColorBufferBit();
+		static void Clear();
 
 		static void SetClearColor(glm::vec3 color);
 		static void SetClearColor(glm::vec4 color);
