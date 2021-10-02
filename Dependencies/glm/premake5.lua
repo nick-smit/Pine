@@ -5,8 +5,8 @@ project "glm"
 	language "C++"
 	staticruntime "on"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir (targetDir)
+	objdir (objDir)
 
 	files {
 		"%{glmDir}/glm/**.hpp",

@@ -4,8 +4,8 @@ project "spdlog"
 	kind "StaticLib"
 	language "C++"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir (targetDir)
+	objdir (objDir)
 
 	files {
 		"%{spdlogDir}/include/spdlog/**.h",
