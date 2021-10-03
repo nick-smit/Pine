@@ -20,6 +20,9 @@ namespace Pine {
 		virtual void OnUpdate(Timestep ts) override;
 
 	private:
+		void BeginDockspace() const;
+		void EndDockspace() const;
+	private:
 		std::vector<std::function<void()>> m_UnsubscribeFunctions;
 
 		PanelManager m_panelManager;

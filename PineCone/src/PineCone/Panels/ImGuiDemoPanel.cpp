@@ -4,15 +4,6 @@
 
 namespace Pine {
 
-	ImGuiDemoPanel::ImGuiDemoPanel()
-		: Panel("ImGui Demo Panel")
-	{
-	}
-
-	ImGuiDemoPanel::~ImGuiDemoPanel()
-	{
-	}
-
 	void ImGuiDemoPanel::OnRender(Timestep ts)
 	{
 		bool show_demo_window = true;

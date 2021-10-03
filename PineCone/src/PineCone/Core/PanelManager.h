@@ -22,11 +22,20 @@ namespace Pine {
 		void ActivatePanel(const std::string& name);
 		void DeactivatePanel(const std::string& name);
 
+		bool IsPanelActive(const std::string& name);
+
 		void OnRender(Timestep ts) const;
+
+	public:
+		static PanelManager* Get() { return s_Instance; }
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Panel>> m_Panels;
+		std::unordered_map<std::string, bool> m_PanelStates;
 		std::vector<std::shared_ptr<Panel>> m_ActivePanels;
+
+	private:
+		static PanelManager* s_Instance;
 	};
 
 }

@@ -7,13 +7,13 @@ namespace Pine {
 	class ImGuiDemoPanel : public Panel
 	{
 	public:
-		ImGuiDemoPanel();
-		~ImGuiDemoPanel();
+		ImGuiDemoPanel() = default;
+		~ImGuiDemoPanel() = default;
 
 		virtual void OnRender(Timestep ts) override;
 
 	public:
-		static const std::string& GetName() { return "ImGuiDemoPanel"; }
+		static std::string GetName() { return "ImGuiDemoPanel"; }
 	};
 
 }

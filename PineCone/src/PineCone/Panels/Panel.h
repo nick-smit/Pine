@@ -7,8 +7,7 @@ namespace Pine {
 
 	class Panel {
 	public:
-		Panel(const std::string& name)
-			: m_Name(name) {};
+		Panel() = default;
 		virtual ~Panel() = default;
 
 		virtual void OnAttach() {};
@@ -18,9 +17,6 @@ namespace Pine {
 
 	public:
 		static std::string GetName() { PINE_ASSERT(false, "GetName must be implemented by child class"); return "Unnamed Panel"; };
-
-	private:
-		std::string m_Name;
 	};
 
 }
