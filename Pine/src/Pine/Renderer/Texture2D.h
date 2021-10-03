@@ -16,6 +16,8 @@ namespace Pine {
 
 		void Bind(uint32_t slot) const;
 
+		uint32_t GetId() const { return m_TextureId; }
+
 	private:
 		void Load(void* data);
 

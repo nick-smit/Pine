@@ -2,6 +2,7 @@
 
 #include "PineCone\Panels\MenuBarPanel.h"
 #include "PineCone\Panels\ImGuiDemoPanel.h"
+#include "PineCone\Panels\ViewportPanel.h"
 
 #include <Pine.h>
 
@@ -18,6 +19,7 @@ namespace Pine {
 		: Layer("PineCone_PineConeLayer")
 	{
 		m_panelManager.AddPanel(MenuBarPanel::GetName(), std::make_shared<MenuBarPanel>(), true);
+		m_panelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<ViewportPanel>(), true);
 		m_panelManager.AddPanel(ImGuiDemoPanel::GetName(), std::make_shared<ImGuiDemoPanel>(), true);
 	}
 
