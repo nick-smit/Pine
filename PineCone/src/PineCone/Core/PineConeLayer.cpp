@@ -1,6 +1,6 @@
 #include "PineConeLayer.h"
 
-#include "..\Panels\ImGuiDemoPanel.h"
+#include "PineCone\Panels\ImGuiDemoPanel.h"
 
 #include <imgui.h>
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM

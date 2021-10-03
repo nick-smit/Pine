@@ -2,17 +2,18 @@ project "PineCone"
 	kind "ConsoleApp"
 	language "C++"
   cppdialect "C++17"
-  staticruntime "On"
+  staticruntime "on"
 
 	targetdir (targetDir)
 	objdir (objDir)
 
 	files {
 		"src/**.h",
-		"src/**.cpp"
+		"src/**.cpp",
 	}
 
 	includedirs {
+		"src",
 		"%{wks.location}/Pine/src",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
