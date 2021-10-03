@@ -18,7 +18,7 @@ namespace Pine {
 
 		PINE_LOG_CORE_INFO("Initializing PINE {0}", PINE_VERSION);
 
-		Window::Specification windowSpec("Pine " PINE_VERSION, 720, 480);
+		Window::Specification windowSpec("Pine " PINE_VERSION, 1600, 900);
 		m_Window = std::make_shared<Window>(windowSpec);
 		{
 			bool success = m_Window->Initialize();

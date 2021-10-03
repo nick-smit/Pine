@@ -96,9 +96,5 @@ namespace Pine {
 		uint8_t Mods;
 	};
 
-	struct KeyTypedEvent {
-		Key Key;
-	};
-
 
 }
