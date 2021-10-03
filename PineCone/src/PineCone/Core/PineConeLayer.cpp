@@ -4,23 +4,19 @@
 #include "PineCone\Panels\ImGuiDemoPanel.h"
 #include "PineCone\Panels\ViewportPanel.h"
 
-#include <Pine.h>
-
 #include <imgui.h>
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include "backends\imgui_impl_opengl3.h"
 #include "backends\imgui_impl_glfw.h"
 
 #include <GLFW\glfw3.h>
+#include <glm\glm.hpp>
 
 namespace Pine {
 
 	PineConeLayer::PineConeLayer()
 		: Layer("PineCone_PineConeLayer")
 	{
-		m_panelManager.AddPanel(MenuBarPanel::GetName(), std::make_shared<MenuBarPanel>(), true);
-		m_panelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<ViewportPanel>(), true);
-		m_panelManager.AddPanel(ImGuiDemoPanel::GetName(), std::make_shared<ImGuiDemoPanel>(), true);
 	}
 
 	PineConeLayer::~PineConeLayer()
@@ -32,6 +28,25 @@ namespace Pine {
 
 	void PineConeLayer::OnAttach()
 	{
+		// setup renderer related stuff
+		FramebufferSpecification fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8 };
+		fbSpec.Width = 1280;
+		fbSpec.Height = 720;
+		m_Framebuffer = std::make_shared<Framebuffer>(fbSpec);
+
+		float aspectRatio = (float)fbSpec.Width / (float)fbSpec.Height;
+		m_Camera.SetProjection(-aspectRatio, aspectRatio, -1.0f, 1.0f);
+
+		{
+			m_PanelManager.AddPanel(MenuBarPanel::GetName(), std::make_shared<MenuBarPanel>(), true);
+			m_PanelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<ViewportPanel>(m_Framebuffer), true);
+
+			#if PINE_DEBUG
+			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), std::make_shared<ImGuiDemoPanel>(), true);
+			#endif
+		}
+
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -91,6 +106,8 @@ namespace Pine {
 
 	void PineConeLayer::OnUpdate(Timestep ts)
 	{
+		UpdateScene(ts);
+
 		RenderCommand::Clear();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 
@@ -101,7 +118,7 @@ namespace Pine {
 		BeginDockspace();
 
 		{
-			m_panelManager.OnRender(ts);
+			m_PanelManager.OnRender(ts);
 		}
 
 		EndDockspace();
@@ -160,6 +177,41 @@ namespace Pine {
 	void PineConeLayer::EndDockspace() const
 	{
 		ImGui::End();
+	}
+
+	void PineConeLayer::UpdateScene(Timestep ts)
+	{
+		// Resize framebuffer if necessary
+		{
+			FramebufferSpecification spec = m_Framebuffer->GetSpecification();
+			auto viewportPanel = m_PanelManager.GetPanel<ViewportPanel>(ViewportPanel::GetName());
+			const glm::vec2& viewportSize = viewportPanel->GetSize();
+
+			if (viewportSize.x > 0.0f && viewportSize.y > 0.0f && // zero sized framebuffer is invalid
+				(spec.Width != viewportSize.x || spec.Height != viewportSize.y))
+			{
+				m_Framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+
+				float aspectRatio = viewportSize.x / viewportSize.y;
+				m_Camera.SetProjection(-aspectRatio, aspectRatio, -1.0f, 1.0f);
+			}
+		}
+
+		m_Framebuffer->Bind();
+
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		RenderCommand::Clear();
+
+		Renderer2D::BeginScene(m_Camera);
+
+		Renderer2D::QuadSpecification quadSpec;
+		quadSpec.Color = { 0.3f, 0.7f, 0.1f, 1.0f };
+		quadSpec.Position = { 0.0f, 0.0f, 0.0f };
+		Renderer2D::DrawQuad(quadSpec);
+
+		Renderer2D::EndScene();
+
+		m_Framebuffer->Unbind();
 	}
 	
 }

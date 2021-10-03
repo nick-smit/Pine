@@ -16,7 +16,12 @@ namespace Pine {
 		PanelManager();
 		~PanelManager();
 
-		std::shared_ptr<Panel> GetPanel(const std::string& name);
+		template<typename T>
+		std::shared_ptr<T> GetPanel(const std::string& name) {
+			PINE_ASSERT(m_Panels.find(name) != m_Panels.end(), "Panel '{0}' does not exist.", name);
+
+			return std::static_pointer_cast<T>(m_Panels[name]);
+		};
 		void AddPanel(const std::string& name, std::shared_ptr<Panel> panel, bool activate = false);
 
 		void ActivatePanel(const std::string& name);

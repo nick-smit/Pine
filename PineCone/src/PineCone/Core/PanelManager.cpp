@@ -17,13 +17,6 @@ namespace Pine {
 		}
 	}
 
-	std::shared_ptr<Panel> PanelManager::GetPanel(const std::string& name)
-	{
-		PINE_ASSERT(m_Panels.find(name) != m_Panels.end(), "Panel '{0}' does not exist.", name);
-
-		return m_Panels[name];
-	}
-
 	bool PanelManager::IsPanelActive(const std::string& name)
 	{
 		return m_PanelStates[name];

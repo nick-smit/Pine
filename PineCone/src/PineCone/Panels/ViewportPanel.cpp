@@ -4,10 +4,10 @@
 
 namespace Pine {
 
+
+
 	void ViewportPanel::OnAttach()
 	{
-		Texture2D::Specification spec;
-		m_Texture = std::make_unique<Texture2D>(spec, "./assets/textures/checkerboard.png");
 	}
 
 	void ViewportPanel::OnDetach()
@@ -19,12 +19,10 @@ namespace Pine {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
-		//auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
-		//auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
-		//auto viewportOffset = ImGui::GetWindowPos();
-
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		uint32_t textureId = m_Texture->GetId();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		uint32_t textureId = m_Framebuffer->GetColorAttachmentId();
 		ImGui::Image(reinterpret_cast<void*>(textureId), viewportPanelSize, ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::End();

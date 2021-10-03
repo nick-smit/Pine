@@ -33,14 +33,16 @@ namespace Pine {
 			}
 
 			if (ImGui::BeginMenu("View")) {
+
+				#if PINE_DEBUG
 				bool imguiDemoPanelActive = panelManager->IsPanelActive(ImGuiDemoPanel::GetName());
-				
 				if (ImGui::MenuItem("ImGui Demo", nullptr, &imguiDemoPanelActive)) {
 					if (imguiDemoPanelActive)
 						panelManager->ActivatePanel(ImGuiDemoPanel::GetName());
 					else
 						panelManager->DeactivatePanel(ImGuiDemoPanel::GetName());
 				}
+				#endif
 
 				ImGui::EndMenu();
 			}

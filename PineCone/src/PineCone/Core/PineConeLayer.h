@@ -3,6 +3,8 @@
 #include "PineCone\Core\PanelManager.h"
 #include "PineCone\Panels\Panel.h"
 
+#include <Pine.h>
+
 #include <functional>
 #include <memory>
 #include <vector>
@@ -22,10 +24,15 @@ namespace Pine {
 	private:
 		void BeginDockspace() const;
 		void EndDockspace() const;
+
+		void UpdateScene(Timestep ts);
 	private:
 		std::vector<std::function<void()>> m_UnsubscribeFunctions;
 
-		PanelManager m_panelManager;
+		PanelManager m_PanelManager;
+
+		std::shared_ptr<Framebuffer> m_Framebuffer;
+		OrthographicCamera m_Camera;
 	};
 
 }
