@@ -76,11 +76,6 @@ namespace Pine {
 		glfwPollEvents();
 	}
 
-	bool Window::ShouldClose() const
-	{
-		return glfwWindowShouldClose(m_WindowHandle);
-	}
-
 	float Window::GetTime() const
 	{
 		return (float) glfwGetTime();

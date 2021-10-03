@@ -33,8 +33,6 @@ namespace Pine {
 		void SwapBuffers() const;
 		void PollEvents() const;
 
-		bool ShouldClose() const;
-
 		float GetTime() const;
 
 		bool IsKeyPressed(Key key) const;

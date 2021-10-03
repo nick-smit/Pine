@@ -1,6 +1,7 @@
 #include "pinepch.h"
 
 #include "Application.h"
+#include "Event.h"
 #include "Logger.h"
 #include "Timestep.h"
 
@@ -28,6 +29,12 @@ namespace Pine {
 		m_GraphicsContext = GraphicsContext(m_Window);
 		m_GraphicsContext.Init();
 		Renderer::Init();
+
+		EventDispatcher<WindowCloseEvent>::Listen([this](const WindowCloseEvent& e) {
+			m_Running = false;
+
+			return false;
+		});
 	}
 
 	Application::~Application()
@@ -40,7 +47,7 @@ namespace Pine {
 
 	void Application::Run()
 	{
-		while (!m_Window->ShouldClose()) {
+		while (m_Running) {
 			float time = m_Window->GetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
@@ -52,6 +59,11 @@ namespace Pine {
 			m_GraphicsContext.SwapBuffers();
 			m_Window->PollEvents();
 		}
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
 	}
 
 }

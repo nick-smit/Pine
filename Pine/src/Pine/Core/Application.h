@@ -18,6 +18,8 @@ namespace Pine {
 
 		void Run();
 
+		void Close();
+
 		void PushLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PushLayer(layer); };
 		void PopLayer(std::shared_ptr<Layer> layer) { m_LayerStack.PopLayer(layer); };
 
@@ -30,7 +32,7 @@ namespace Pine {
 		static Application* Get() { return s_Instance; }
 
 	private:
-		bool m_Running = false;
+		bool m_Running = true;
 
 		std::string m_Name;
 
