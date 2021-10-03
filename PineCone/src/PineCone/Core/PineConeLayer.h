@@ -1,6 +1,7 @@
 #include <Pine.h>
 
-#include "..\Panels\Panel.h"
+#include "PineCone\Core\PanelManager.h"
+#include "PineCone\Panels\Panel.h"
 
 #include <functional>
 #include <memory>
@@ -21,7 +22,7 @@ namespace Pine {
 	private:
 		std::vector<std::function<void()>> m_UnsubscribeFunctions;
 
-		std::vector<std::shared_ptr<Panel>> m_Panels;
+		PanelManager m_panelManager;
 	};
 
 }

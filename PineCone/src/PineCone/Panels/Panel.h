@@ -15,6 +15,10 @@ namespace Pine {
 		virtual void OnDetach() {};
 		virtual void OnRender(Timestep ts) {};
 
+
+	public:
+		static std::string GetName() { PINE_ASSERT(false, "GetName must be implemented by child class"); return "Unnamed Panel"; };
+
 	private:
 		std::string m_Name;
 	};

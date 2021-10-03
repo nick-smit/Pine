@@ -11,7 +11,7 @@
 Pine::PineConeLayer::PineConeLayer()
 	: Layer("PineCone_PineConeLayer")
 {
-	m_Panels.push_back(std::make_shared<ImGuiDemoPanel>());
+	m_panelManager.AddPanel(ImGuiDemoPanel::GetName(), std::make_shared<ImGuiDemoPanel>(), true);
 }
 
 Pine::PineConeLayer::~PineConeLayer()
@@ -51,9 +51,7 @@ void Pine::PineConeLayer::OnUpdate(Timestep ts)
 	ImGui::NewFrame();
 
 	{
-		for (auto panel : m_Panels) {
-			panel->OnRender(ts);
-		}
+		m_panelManager.OnRender(ts);
 	}
 
 	ImGui::Render();

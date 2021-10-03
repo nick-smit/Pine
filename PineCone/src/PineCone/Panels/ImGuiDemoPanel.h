@@ -11,6 +11,9 @@ namespace Pine {
 		~ImGuiDemoPanel();
 
 		virtual void OnRender(Timestep ts) override;
+
+	public:
+		static const std::string& GetName() { return "ImGuiDemoPanel"; }
 	};
 
 }
