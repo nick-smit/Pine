@@ -14,13 +14,16 @@ project "PineCone"
 
 	includedirs {
 		"%{wks.location}/Pine/src",
+		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glm}",
+    "%{IncludeDir.ImGui}",
 		"%{IncludeDir.spdlog}",
 	}
 
 	links {
-		"Pine"
+		"Pine",
+    "ImGui",
 	}
 
 	filter "system:windows"

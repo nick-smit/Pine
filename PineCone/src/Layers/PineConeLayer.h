@@ -1,15 +1,18 @@
 #include <Pine.h>
 
+#include "..\Panels\Panel.h"
+
 #include <functional>
+#include <memory>
 #include <vector>
 
 namespace Pine {
 
-	class ImGuiLayer : public Layer
+	class PineConeLayer : public Layer
 	{
 	public:
-		ImGuiLayer();
-		virtual ~ImGuiLayer();
+		PineConeLayer();
+		virtual ~PineConeLayer();
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -17,6 +20,8 @@ namespace Pine {
 
 	private:
 		std::vector<std::function<void()>> m_UnsubscribeFunctions;
+
+		std::vector<std::shared_ptr<Panel>> m_Panels;
 	};
 
 }

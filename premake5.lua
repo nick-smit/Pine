@@ -19,6 +19,7 @@ group "Dependencies"
 	include "Dependencies/glad"
 	include "Dependencies/glm"
 	include "Dependencies/glfw"
+	include "Dependencies/ImGui"
 	include "Dependencies/spdlog"
 
 group ""

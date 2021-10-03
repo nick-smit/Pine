@@ -2,6 +2,7 @@ IncludeDir = {};
 IncludeDir["glfw"]   = "Pine/vendor/glfw/include";
 IncludeDir["glad"]   = "Pine/vendor/glad/include";
 IncludeDir["glm"]    = "Pine/vendor/glm";
+IncludeDir["ImGui"]  = "PineCone/vendor/imgui"
 IncludeDir["spdlog"] = "Pine/vendor/spdlog/include";
 IncludeDir["stb"]    = "Pine/vendor/stb";
 

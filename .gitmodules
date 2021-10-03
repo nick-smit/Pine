@@ -10,3 +10,6 @@
 [submodule ".\\Pine\\vendor\\stb\\stb"]
 	path = .\\Pine\\vendor\\stb\\stb
 	url = https://github.com/nothings/stb.git
+[submodule "PineCone/vendor/ImGui"]
+	path = PineCone/vendor/ImGui
+	url = https://github.com/ocornut/imgui.git

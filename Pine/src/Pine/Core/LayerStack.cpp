@@ -5,9 +5,16 @@ namespace Pine {
 
 	LayerStack::~LayerStack()
 	{
+		Terminate();
+	}
+
+	void LayerStack::Terminate()
+	{
 		for (auto layer : m_Layers) {
 			layer->OnDetach();
 		}
+
+		m_Layers.clear();
 	}
 
 	void LayerStack::PushLayer(std::shared_ptr<Layer> layer)

@@ -12,6 +12,8 @@ namespace Pine {
 		LayerStack() = default;
 		~LayerStack();
 
+		void Terminate();
+
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PopLayer(std::shared_ptr<Layer> layer);
 		

@@ -1,4 +1,4 @@
-#include "Layers\ImGuiLayer.h"
+#include "Layers\PineConeLayer.h"
 
 #include <Pine.h>
 #include "Pine\Core\Entrypoint.h"
@@ -11,7 +11,7 @@ Application* CreateApplication()
 {
 	Application* application = new Application("PineCone");
 
-	application->PushLayer(std::make_shared<ImGuiLayer>());
+	application->PushLayer(std::make_shared<PineConeLayer>());
 
 	return application;
 }

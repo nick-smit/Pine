@@ -32,6 +32,8 @@ namespace Pine {
 
 	Application::~Application()
 	{
+		m_LayerStack.Terminate();
+
 		Renderer::Terminate();
 		m_Window->Terminate();
 	}
