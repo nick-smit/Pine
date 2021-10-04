@@ -22,3 +22,6 @@
 #include "Pine\Renderer\Shader.h"
 #include "Pine\Renderer\Texture2D.h"
 #include "Pine\Renderer\VertexArray.h"
+
+// Scene
+#include "Pine\Scene\Scene.h"

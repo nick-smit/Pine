@@ -18,6 +18,7 @@ project "Pine"
 
 	includedirs {
     "src",
+		"%{IncludeDir.entt}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.glfw}",

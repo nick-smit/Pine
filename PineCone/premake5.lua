@@ -15,6 +15,7 @@ project "PineCone"
 	includedirs {
 		"src",
 		"%{wks.location}/Pine/src",
+		"%{IncludeDir.entt}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glm}",

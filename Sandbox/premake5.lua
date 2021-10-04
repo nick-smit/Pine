@@ -14,6 +14,7 @@ project "Sandbox"
 
 	includedirs {
 		"%{wks.location}/Pine/src",
+		"%{IncludeDir.entt}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.spdlog}",

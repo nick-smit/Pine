@@ -13,3 +13,6 @@
 [submodule "PineCone/vendor/ImGui"]
 	path = PineCone/vendor/ImGui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Pine/vendor/entt"]
+	path = Pine/vendor/entt
+	url = https://github.com/skypjack/entt.git

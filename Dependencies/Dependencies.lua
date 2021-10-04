@@ -1,4 +1,5 @@
 IncludeDir = {};
+IncludeDir["entt"]   = "Pine/vendor/entt/single_include";
 IncludeDir["glfw"]   = "Pine/vendor/glfw/include";
 IncludeDir["glad"]   = "Pine/vendor/glad/include";
 IncludeDir["glm"]    = "Pine/vendor/glm";
