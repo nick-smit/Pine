@@ -32,6 +32,9 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
+		Scene scene;
+		scene.CreateEntity("MyEntity");
+
 		// setup renderer related stuff
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8 };
