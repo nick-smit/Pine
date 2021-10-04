@@ -7,6 +7,7 @@ namespace Pine {
 	class Camera {
 	public:
 		Camera() = default;
+		Camera(const Camera& other) = delete;
 		virtual ~Camera() = default;
 
 		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }

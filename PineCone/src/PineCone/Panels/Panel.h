@@ -8,6 +8,7 @@ namespace Pine {
 	class Panel {
 	public:
 		Panel() = default;
+		Panel(const Panel& other) = delete;
 		virtual ~Panel() = default;
 
 		virtual void OnAttach() {};

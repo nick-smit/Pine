@@ -14,6 +14,7 @@ namespace Pine {
 	class Application {
 	public:
 		Application(const std::string& name);
+		Application(const Application& other) = delete;
 		virtual ~Application();
 
 		void Run();

@@ -14,6 +14,7 @@ namespace Pine {
 	class PanelManager {
 	public:
 		PanelManager();
+		PanelManager(const PanelManager& other) = delete;
 		~PanelManager();
 
 		template<typename T>

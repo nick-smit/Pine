@@ -10,6 +10,7 @@ namespace Pine {
 	class LayerStack {
 	public:
 		LayerStack() = default;
+		LayerStack(const LayerStack& other) = delete;
 		~LayerStack();
 
 		void Terminate();

@@ -51,6 +51,7 @@ namespace Pine {
 	{
 	public:
 		Framebuffer(const FramebufferSpecification& spec);
+		Framebuffer(const Framebuffer& other) = delete;
 		virtual ~Framebuffer();
 
 		void Invalidate();

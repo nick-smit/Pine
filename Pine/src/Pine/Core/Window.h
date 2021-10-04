@@ -24,6 +24,7 @@ namespace Pine {
 	public:
 		Window(const Specification& spec)
 			: m_Spec(spec) {};
+		Window(const Window& other) = delete;
 		virtual ~Window();
 
 	public:

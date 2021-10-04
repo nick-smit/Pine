@@ -10,6 +10,7 @@ namespace Pine {
 	public:
 		Layer(const std::string& name)
 			: m_Name(name) {}
+		Layer(const Layer& other) = delete;
 		virtual ~Layer() = default;
 
 	public:

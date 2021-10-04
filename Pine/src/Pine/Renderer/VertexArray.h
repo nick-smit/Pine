@@ -11,6 +11,7 @@ namespace Pine {
 	{
 	public:
 		VertexArray();
+		VertexArray(const VertexArray& other) = delete;
 		virtual ~VertexArray();
 
 		void Bind() const;
