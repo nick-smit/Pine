@@ -12,6 +12,8 @@ namespace Pine {
 
 	Application::Application(const std::string& name)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		s_Instance = this;
 
 		CoreLogger::Initialize();
@@ -39,6 +41,8 @@ namespace Pine {
 
 	Application::~Application()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		m_LayerStack.Terminate();
 
 		Renderer::Terminate();
@@ -47,7 +51,11 @@ namespace Pine {
 
 	void Application::Run()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		while (m_Running) {
+			PINE_PROFILE_SCOPE("Pine::Application::Run - Run Loop");
+
 			float time = m_Window->GetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;

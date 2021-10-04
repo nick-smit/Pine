@@ -10,6 +10,8 @@ namespace Pine {
 
 	void LayerStack::Terminate()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		for (auto layer : m_Layers) {
 			layer->OnDetach();
 		}
@@ -19,6 +21,8 @@ namespace Pine {
 
 	void LayerStack::PushLayer(std::shared_ptr<Layer> layer)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
 		m_LayerInsertIndex++;
 		
@@ -27,6 +31,8 @@ namespace Pine {
 
 	void LayerStack::PopLayer(std::shared_ptr<Layer> layer)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIndex, layer);
 		if (it != m_Layers.begin() + m_LayerInsertIndex)
 		{
@@ -39,11 +45,15 @@ namespace Pine {
 
 	void LayerStack::PushOverlay(std::shared_ptr<Layer> layer)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		m_Layers.emplace_back(layer);
 	}
 
 	void LayerStack::PopOverlay(std::shared_ptr<Layer> layer)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		auto it = std::find(m_Layers.begin() + m_LayerInsertIndex, m_Layers.end(), layer);
 		if (it != m_Layers.end())
 		{

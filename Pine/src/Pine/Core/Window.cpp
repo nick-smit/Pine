@@ -18,6 +18,8 @@ namespace Pine {
 
 	bool Window::Initialize()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PINE_ASSERT(!m_Initialized, "Window is already initialized!");
 
 		if (!glfwInit()) {
@@ -56,6 +58,8 @@ namespace Pine {
 
 	void Window::Terminate()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PINE_ASSERT(m_Initialized, "Window must be initialized before terminating the window!");
 
 		glfwDestroyWindow(m_WindowHandle);
@@ -93,6 +97,8 @@ namespace Pine {
 
 	void Window::RegisterEvents()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		// Window event callbacks
 		glfwSetWindowSizeCallback(m_WindowHandle, [](GLFWwindow* window, int width, int height) {
 			uint32_t w = static_cast<uint32_t>(width);

@@ -15,6 +15,8 @@ namespace Pine {
 
 		static void CreateTextures(bool multisampled, uint32_t* outID, uint32_t count)
 		{
+			PINE_PROFILE_FUNCTION();
+
 			glCreateTextures(TextureTarget(multisampled), count, outID);
 		}
 
@@ -25,6 +27,8 @@ namespace Pine {
 
 		static void AttachColorTexture(uint32_t id, int samples, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index)
 		{
+			PINE_PROFILE_FUNCTION();
+
 			bool multisampled = samples > 1;
 			if (multisampled)
 			{
@@ -46,6 +50,8 @@ namespace Pine {
 
 		static void AttachDepthTexture(uint32_t id, int samples, GLenum format, GLenum attachmentType, uint32_t width, uint32_t height)
 		{
+			PINE_PROFILE_FUNCTION();
+
 			bool multisampled = samples > 1;
 			if (multisampled)
 			{
@@ -91,6 +97,8 @@ namespace Pine {
 	Framebuffer::Framebuffer(const FramebufferSpecification& spec)
 		: m_Specification(spec)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		for (auto spec : m_Specification.Attachments.Attachments)
 		{
 			if (!Utils::IsDepthFormat(spec.TextureFormat)) {
@@ -106,6 +114,8 @@ namespace Pine {
 
 	Framebuffer::~Framebuffer()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		glDeleteFramebuffers(1, &m_FramebufferId);
 		glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
 		glDeleteTextures(1, &m_DepthAttachment);
@@ -113,6 +123,8 @@ namespace Pine {
 
 	void Framebuffer::Invalidate()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		if (m_FramebufferId) {
 			glDeleteFramebuffers(1, &m_FramebufferId);
 			glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
@@ -127,34 +139,41 @@ namespace Pine {
 
 		bool multisample = m_Specification.Samples > 1;
 
-		if (m_ColorAttachmentSpecifications.size()) {
-			m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());
-			Utils::CreateTextures(multisample, m_ColorAttachments.data(), m_ColorAttachments.size());
+		{
+			PINE_PROFILE_SCOPE("Pine::Framebuffer::Invalidate - Setup Color Attachments");
 
-			for (size_t i = 0; i < m_ColorAttachments.size(); i++) {
-				Utils::BindTexture(multisample, m_ColorAttachments[i]);
+			if (m_ColorAttachmentSpecifications.size()) {
+				m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());
+				Utils::CreateTextures(multisample, m_ColorAttachments.data(), m_ColorAttachments.size());
 
-				switch (m_ColorAttachmentSpecifications[i].TextureFormat) {
-					case FramebufferTextureFormat::RGBA8:
-						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
-						break;
-					case FramebufferTextureFormat::RED_INTEGER:
-						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
-						break;
-					default: PINE_ASSERT(false, "Unknown textureformat");
+				for (size_t i = 0; i < m_ColorAttachments.size(); i++) {
+					Utils::BindTexture(multisample, m_ColorAttachments[i]);
+
+					switch (m_ColorAttachmentSpecifications[i].TextureFormat) {
+						case FramebufferTextureFormat::RGBA8:
+							Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
+							break;
+						case FramebufferTextureFormat::RED_INTEGER:
+							Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
+							break;
+						default: PINE_ASSERT(false, "Unknown textureformat");
+					}
 				}
 			}
 		}
 
-		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None) {
-			Utils::CreateTextures(multisample, &m_DepthAttachment, 1);
-			Utils::BindTexture(multisample, m_DepthAttachment);
-			switch (m_DepthAttachmentSpecification.TextureFormat)
-			{
-				case FramebufferTextureFormat::DEPTH24STENCIL8:
-					Utils::AttachDepthTexture(m_DepthAttachment, m_Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_Specification.Width, m_Specification.Height);
-					break;
-				default: PINE_ASSERT(false, "Unknown textureformat");
+		{
+			PINE_PROFILE_SCOPE("Pine::Framebuffer::Invalidate - Setup Depth Attachments");
+			if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None) {
+				Utils::CreateTextures(multisample, &m_DepthAttachment, 1);
+				Utils::BindTexture(multisample, m_DepthAttachment);
+				switch (m_DepthAttachmentSpecification.TextureFormat)
+				{
+					case FramebufferTextureFormat::DEPTH24STENCIL8:
+						Utils::AttachDepthTexture(m_DepthAttachment, m_Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_Specification.Width, m_Specification.Height);
+						break;
+					default: PINE_ASSERT(false, "Unknown textureformat");
+				}
 			}
 		}
 
@@ -186,6 +205,8 @@ namespace Pine {
 
 	void Framebuffer::Resize(uint32_t width, uint32_t height)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
 		{
 			PINE_LOG_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);

@@ -31,11 +31,15 @@ namespace Pine {
 
 	VertexArray::VertexArray()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		glGenVertexArrays(1, &m_VertexArrayId);
 	}
 
 	VertexArray::~VertexArray()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_VertexArrayId);
 	}
 
@@ -51,6 +55,8 @@ namespace Pine {
 
 	void VertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_VertexArrayId);
 		vertexBuffer->Bind();
 
@@ -119,6 +125,8 @@ namespace Pine {
 
 	void VertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer> IndexBuffer)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_VertexArrayId);
 		IndexBuffer->Bind();
 

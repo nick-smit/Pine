@@ -24,6 +24,8 @@ namespace Pine {
 	Shader::Shader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
 		: m_Name(name)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		m_ProgramId = glCreateProgram();
 		bool success = Compile(vertexSource, fragmentSource);
 		if (!success) {
@@ -34,37 +36,44 @@ namespace Pine {
 
 	Shader::~Shader()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_ProgramId);
 	}
 
 	std::shared_ptr<Shader> Shader::FromFile(const std::string& name, const std::string& filepath)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		std::string contents;
 		FileStream::GetContents(filepath, contents);
 
 		std::unordered_map<GLenum, std::string> shaderSources;
 
-		const char* typeToken = "#type";
-		size_t typeTokenLength = strlen(typeToken);
-		size_t pos = contents.find(typeToken, 0);
-		while (pos != std::string::npos) {
-			//End of shader type declaration line
-			size_t eol = contents.find_first_of("\r\n", pos);
-			PINE_ASSERT(eol != std::string::npos, "Syntax error");
-			
-			//Start of shader type name (after "#type " keyword)
-			size_t begin = pos + typeTokenLength + 1;
-			std::string type = contents.substr(begin, eol - begin);
-			PINE_ASSERT(Utils::ShaderTypeFromString(type), "Invalid shader type specified");
+		{
+			PINE_PROFILE_SCOPE("Pine::Shader::FromFile - Parse shader file");
+			const char* typeToken = "#type";
+			size_t typeTokenLength = strlen(typeToken);
+			size_t pos = contents.find(typeToken, 0);
+			while (pos != std::string::npos) {
+				//End of shader type declaration line
+				size_t eol = contents.find_first_of("\r\n", pos);
+				PINE_ASSERT(eol != std::string::npos, "Syntax error");
 
-			//Start of shader code after shader type declaration line
-			size_t nextLinePos = contents.find_first_not_of("\r\n", eol); 
-			PINE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
-			
-			//Start of next shader type declaration line
-			pos = contents.find(typeToken, nextLinePos);
+				//Start of shader type name (after "#type " keyword)
+				size_t begin = pos + typeTokenLength + 1;
+				std::string type = contents.substr(begin, eol - begin);
+				PINE_ASSERT(Utils::ShaderTypeFromString(type), "Invalid shader type specified");
 
-			shaderSources[Utils::ShaderTypeFromString(type)] = (pos == std::string::npos) ? contents.substr(nextLinePos) : contents.substr(nextLinePos, pos - nextLinePos);
+				//Start of shader code after shader type declaration line
+				size_t nextLinePos = contents.find_first_not_of("\r\n", eol);
+				PINE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+
+				//Start of next shader type declaration line
+				pos = contents.find(typeToken, nextLinePos);
+
+				shaderSources[Utils::ShaderTypeFromString(type)] = (pos == std::string::npos) ? contents.substr(nextLinePos) : contents.substr(nextLinePos, pos - nextLinePos);
+			}
 		}
 
 		PINE_ASSERT((shaderSources.find(GL_VERTEX_SHADER) != shaderSources.end()), "A vertex shader must be provided!");
@@ -160,6 +169,8 @@ namespace Pine {
 
 	bool Shader::Compile(const std::string& vertexSource, const std::string& fragmentSource)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 		{

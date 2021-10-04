@@ -19,11 +19,15 @@ namespace Pine {
 	public:
 		static std::function<void()> Listen(EventFn<T> handler)
 		{
+			PINE_PROFILE_FUNCTION();
+
 			uint32_t id = s_NextId++;
 			ListenerPair<T> pair = { id, handler };
 			s_Listeners.push_back(pair);
 
 			return [id]() {
+				PINE_PROFILE_SCOPE("Unsubscribe listener");
+
 				for (auto it = s_Listeners.cbegin(); it != s_Listeners.cend(); it++) {
 					if ((*it).first == id) {
 						s_Listeners.erase(it);
@@ -35,6 +39,8 @@ namespace Pine {
 
 		static void Dispatch(const T& e)
 		{
+			PINE_PROFILE_FUNCTION();
+
 			for (auto it = s_Listeners.crbegin(); it != s_Listeners.crend(); ++it) {
 				EventFn<T> fn = (*it).second;
 

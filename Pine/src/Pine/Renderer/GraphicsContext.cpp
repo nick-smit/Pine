@@ -8,6 +8,8 @@ namespace Pine {
 
 	void GraphicsContext::Init()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_Window->GetNativeWindow());
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		PINE_ASSERT(status, "Failed to initialize GLAD!");

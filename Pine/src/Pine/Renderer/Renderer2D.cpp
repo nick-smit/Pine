@@ -45,6 +45,8 @@ namespace Pine {
 	
 	void Renderer2D::Init()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DData();
 
 		s_Data->QuadVertexArray = std::make_shared<VertexArray>();
@@ -101,12 +103,16 @@ namespace Pine {
 
 	void Renderer2D::Terminate()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		delete[] s_Data->QuadVertexBufferBase;
 		delete s_Data;
 	}
 
 	void Renderer2D::BeginScene(const Camera& camera)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		s_Data->TextureShader->SetMat4("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
 		StartBatch();
@@ -119,6 +125,8 @@ namespace Pine {
 
 	void Renderer2D::DrawQuad(const QuadSpecification& spec)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		constexpr size_t quadVertexCount = 4;
 		float textureIndex = 0; // White Texture
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
@@ -168,6 +176,8 @@ namespace Pine {
 
 	void Renderer2D::StartBatch()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		s_Data->QuadIndexCount = 0;
 		s_Data->QuadVertexBufferPtr = s_Data->QuadVertexBufferBase;
 
@@ -176,6 +186,8 @@ namespace Pine {
 
 	void Renderer2D::Flush()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		if (s_Data->QuadIndexCount) {
 			// Draw quads
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data->QuadVertexBufferPtr - (uint8_t*)s_Data->QuadVertexBufferBase);

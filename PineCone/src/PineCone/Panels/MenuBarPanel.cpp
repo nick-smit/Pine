@@ -11,6 +11,8 @@
 namespace Pine {
 	void MenuBarPanel::OnAttach()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		EventDispatcher<KeyPressedEvent>::Listen([](const KeyPressedEvent& e) {
 			switch (e.Key) {
 
@@ -22,6 +24,8 @@ namespace Pine {
 
 	void MenuBarPanel::OnRender(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PanelManager* panelManager = PanelManager::Get();
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {

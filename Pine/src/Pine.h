@@ -9,6 +9,8 @@
 #include "Pine\Core\Layer.h"
 #include "Pine\Core\Timestep.h"
 
+// Debug
+#include "Pine\Debug\Instrumentor.h"
 
 // Renderer
 #include "Pine\Renderer\Buffers.h"

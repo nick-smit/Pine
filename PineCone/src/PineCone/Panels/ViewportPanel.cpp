@@ -4,18 +4,22 @@
 
 namespace Pine {
 
-
-
 	void ViewportPanel::OnAttach()
 	{
+		PINE_PROFILE_FUNCTION();
+
 	}
 
 	void ViewportPanel::OnDetach()
 	{
+		PINE_PROFILE_FUNCTION();
+
 	}
 
 	void ViewportPanel::OnRender(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 

@@ -1,4 +1,3 @@
-
 #build folders
 **/bin/
 **/bin-int/
@@ -10,4 +9,11 @@
 **/*.vcxproj
 **/*.vcxproj.filters
 **/*.vcxproj.user
+
+# ImGui
 PineCone/imgui.ini
+
+# Instrumentation
+profile-init.json
+profile-run.json
+profile-terminate.json

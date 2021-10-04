@@ -12,6 +12,8 @@ namespace Pine {
 
 	PanelManager::~PanelManager()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		for (auto panels : m_ActivePanels) {
 			panels->OnDetach();
 		}
@@ -24,6 +26,8 @@ namespace Pine {
 
 	void PanelManager::AddPanel(const std::string& name, std::shared_ptr<Panel> panel, bool activate)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		m_Panels[name] = panel;
 		m_PanelStates[name] = activate;
 		
@@ -35,6 +39,8 @@ namespace Pine {
 
 	void PanelManager::ActivatePanel(const std::string& name)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PINE_ASSERT(m_Panels.find(name) != m_Panels.end(), "Panel '{0}' does not exist.", name);
 		PINE_ASSERT(!m_PanelStates[name], "Panel '{0}' is already active.", name);
 
@@ -47,6 +53,8 @@ namespace Pine {
 
 	void PanelManager::DeactivatePanel(const std::string& name)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PINE_ASSERT(m_Panels.find(name) != m_Panels.end(), "Panel '{0}' does not exist.", name);
 		PINE_ASSERT(m_PanelStates[name], "Panel '{0}' is not active.", name);
 
@@ -59,6 +67,8 @@ namespace Pine {
 
 	void PanelManager::OnRender(Timestep ts) const
 	{
+		PINE_PROFILE_FUNCTION();
+
 		for (auto panel : m_ActivePanels) {
 			panel->OnRender(ts);
 		}

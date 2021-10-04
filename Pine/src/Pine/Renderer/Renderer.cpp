@@ -33,6 +33,8 @@ namespace Pine {
 	
 	void Renderer::Init()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		#ifdef PINE_DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -57,6 +59,8 @@ namespace Pine {
 
 	void Renderer::Terminate()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		Renderer2D::Terminate();
 	}
 

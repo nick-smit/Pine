@@ -16,3 +16,5 @@
 #else
 #define PINE_ASSERT(x, ...)
 #endif
+
+#include "Pine\Debug\Instrumentor.h"

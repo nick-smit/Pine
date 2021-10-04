@@ -5,8 +5,6 @@
 
 namespace Pine {
 
-
-
 	void RenderCommand::SetViewportSize(uint32_t width, uint32_t height)
 	{
 		glViewport(0, 0, width, height);
@@ -19,6 +17,8 @@ namespace Pine {
 
 	void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		shader->Bind();
 		vertexArray->Bind();
 
@@ -27,6 +27,8 @@ namespace Pine {
 
 	void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader, uint32_t count)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		shader->Bind();
 		vertexArray->Bind();
 

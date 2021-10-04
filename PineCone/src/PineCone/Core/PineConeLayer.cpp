@@ -21,6 +21,8 @@ namespace Pine {
 
 	PineConeLayer::~PineConeLayer()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		for (auto fn : m_UnsubscribeFunctions) {
 			fn();
 		}
@@ -28,6 +30,8 @@ namespace Pine {
 
 	void PineConeLayer::OnAttach()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		// setup renderer related stuff
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8 };
@@ -39,6 +43,8 @@ namespace Pine {
 		m_Camera.SetProjection(-aspectRatio, aspectRatio, -1.0f, 1.0f);
 
 		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
+			
 			m_PanelManager.AddPanel(MenuBarPanel::GetName(), std::make_shared<MenuBarPanel>(), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<ViewportPanel>(m_Framebuffer), true);
 
@@ -47,58 +53,67 @@ namespace Pine {
 			#endif
 		}
 
-		// Setup Dear ImGui context
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO();
+		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Setup ImGui");
 
-
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(Application::Get()->GetWindow()->GetNativeWindow(), true);
-		ImGui_ImplOpenGL3_Init("#version 450");
-
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-
-		// Setup event handlers
-		// Mouse events
-		m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonPressedEvent>::Listen([](const MouseButtonPressedEvent& e) {
+			// Setup Dear ImGui context
+			IMGUI_CHECKVERSION();
+			ImGui::CreateContext();
 			ImGuiIO& io = ImGui::GetIO();
-			return io.WantCaptureMouse;
-			}));
-		m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonReleasedEvent>::Listen([](const MouseButtonReleasedEvent& e) {
-			ImGuiIO& io = ImGui::GetIO();
-			return io.WantCaptureMouse;
-			}));
-		m_UnsubscribeFunctions.push_back(EventDispatcher<MouseMovedEvent>::Listen([](const MouseMovedEvent& e) {
-			ImGuiIO& io = ImGui::GetIO();
-			return io.WantCaptureMouse;
-			}));
-		m_UnsubscribeFunctions.push_back(EventDispatcher<MouseScrolledEvent>::Listen([](const MouseScrolledEvent& e) {
-			ImGuiIO& io = ImGui::GetIO();
-			return io.WantCaptureMouse;
-			}));
 
-		// Keyboard events
-		m_UnsubscribeFunctions.push_back(EventDispatcher<KeyPressedEvent>::Listen([](const KeyPressedEvent& e) {
-			return ImGui::GetIO().WantCaptureKeyboard;
-			}));
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+			io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-		m_UnsubscribeFunctions.push_back(EventDispatcher<KeyReleasedEvent>::Listen([](const KeyReleasedEvent& e) {
-			return ImGui::GetIO().WantCaptureKeyboard;
-			}));
+			// Setup Platform/Renderer bindings
+			ImGui_ImplGlfw_InitForOpenGL(Application::Get()->GetWindow()->GetNativeWindow(), true);
+			ImGui_ImplOpenGL3_Init("#version 450");
 
-		m_UnsubscribeFunctions.push_back(EventDispatcher<KeyRepeatedEvent>::Listen([](const KeyRepeatedEvent& e) {
-			return ImGui::GetIO().WantCaptureKeyboard;
-			}));
+			// Setup Dear ImGui style
+			ImGui::StyleColorsDark();
+		}
+
+		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Register event handlers");
+
+			// Setup event handlers
+			// Mouse events
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonPressedEvent>::Listen([](const MouseButtonPressedEvent& e) {
+				ImGuiIO& io = ImGui::GetIO();
+				return io.WantCaptureMouse;
+				}));
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonReleasedEvent>::Listen([](const MouseButtonReleasedEvent& e) {
+				ImGuiIO& io = ImGui::GetIO();
+				return io.WantCaptureMouse;
+				}));
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseMovedEvent>::Listen([](const MouseMovedEvent& e) {
+				ImGuiIO& io = ImGui::GetIO();
+				return io.WantCaptureMouse;
+				}));
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseScrolledEvent>::Listen([](const MouseScrolledEvent& e) {
+				ImGuiIO& io = ImGui::GetIO();
+				return io.WantCaptureMouse;
+				}));
+
+			// Keyboard events
+			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyPressedEvent>::Listen([](const KeyPressedEvent& e) {
+				return ImGui::GetIO().WantCaptureKeyboard;
+				}));
+
+			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyReleasedEvent>::Listen([](const KeyReleasedEvent& e) {
+				return ImGui::GetIO().WantCaptureKeyboard;
+				}));
+
+			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyRepeatedEvent>::Listen([](const KeyRepeatedEvent& e) {
+				return ImGui::GetIO().WantCaptureKeyboard;
+				}));
+		}
 	}
 
 	void PineConeLayer::OnDetach()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -106,6 +121,8 @@ namespace Pine {
 
 	void PineConeLayer::OnUpdate(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		UpdateScene(ts);
 
 		RenderCommand::Clear();
@@ -118,28 +135,36 @@ namespace Pine {
 		BeginDockspace();
 
 		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnUpdate() - Render Panels");
+
 			m_PanelManager.OnRender(ts);
 		}
 
 		EndDockspace();
 
-		ImGuiIO& io = ImGui::GetIO();
-		Application* app = Application::Get();
-		io.DisplaySize = ImVec2((float)app->GetWindow()->GetSpecification().Width, (float)app->GetWindow()->GetSpecification().Height);
+		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnUpdate() - ImGui Draw");
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			ImGuiIO& io = ImGui::GetIO();
+			Application* app = Application::Get();
+			io.DisplaySize = ImVec2((float)app->GetWindow()->GetSpecification().Width, (float)app->GetWindow()->GetSpecification().Height);
 
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			GLFWwindow* originalContext = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(originalContext);
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+				GLFWwindow* originalContext = glfwGetCurrentContext();
+				ImGui::UpdatePlatformWindows();
+				ImGui::RenderPlatformWindowsDefault();
+				glfwMakeContextCurrent(originalContext);
+			}
 		}
 	}
 
 	void PineConeLayer::BeginDockspace() const
 	{
+		PINE_PROFILE_FUNCTION();
+
 		static bool dockspaceOpen = true;
 		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
@@ -176,13 +201,19 @@ namespace Pine {
 
 	void PineConeLayer::EndDockspace() const
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGui::End();
 	}
 
 	void PineConeLayer::UpdateScene(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		// Resize framebuffer if necessary
 		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::UpdateScene - Resize Framebuffer");
+
 			FramebufferSpecification spec = m_Framebuffer->GetSpecification();
 			auto viewportPanel = m_PanelManager.GetPanel<ViewportPanel>(ViewportPanel::GetName());
 			const glm::vec2& viewportSize = viewportPanel->GetSize();
@@ -197,21 +228,25 @@ namespace Pine {
 			}
 		}
 
-		m_Framebuffer->Bind();
+		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::UpdateScene - Draw Framebuffer");
 
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		RenderCommand::Clear();
+			m_Framebuffer->Bind();
 
-		Renderer2D::BeginScene(m_Camera);
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+			RenderCommand::Clear();
 
-		Renderer2D::QuadSpecification quadSpec;
-		quadSpec.Color = { 0.3f, 0.7f, 0.1f, 1.0f };
-		quadSpec.Position = { 0.0f, 0.0f, 0.0f };
-		Renderer2D::DrawQuad(quadSpec);
+			Renderer2D::BeginScene(m_Camera);
 
-		Renderer2D::EndScene();
+			Renderer2D::QuadSpecification quadSpec;
+			quadSpec.Color = { 0.3f, 0.7f, 0.1f, 1.0f };
+			quadSpec.Position = { 0.0f, 0.0f, 0.0f };
+			Renderer2D::DrawQuad(quadSpec);
 
-		m_Framebuffer->Unbind();
+			Renderer2D::EndScene();
+
+			m_Framebuffer->Unbind();
+		}
 	}
 	
 }

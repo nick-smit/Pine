@@ -9,6 +9,8 @@ namespace Pine {
 	Texture2D::Texture2D(const Specification& spec, const std::string& path)
 		: m_Spec(spec)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		stbi_set_flip_vertically_on_load(true);
 
 		int width, height, channels;
@@ -29,6 +31,8 @@ namespace Pine {
 	Texture2D::Texture2D(const Specification& spec, uint32_t width, uint32_t height, uint32_t channels, void* data, size_t size)
 		: m_Spec(spec), m_Width(width), m_Height(height), m_Channels(channels)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PINE_ASSERT((size == m_Channels * m_Width * m_Height), "Supplied an incomplete texture!");
 		Load(data);
 	}
@@ -47,6 +51,8 @@ namespace Pine {
 
 	void Texture2D::Load(void* data)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		GLenum internalFormat = m_Channels == 3 ? GL_RGB8 : GL_RGBA8;
 		GLenum dataFormat = m_Channels == 3 ? GL_RGB : GL_RGBA;
 
