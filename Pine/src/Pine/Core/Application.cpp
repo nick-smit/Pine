@@ -20,8 +20,12 @@ namespace Pine {
 		AppLogger::Initialize();
 
 		PINE_LOG_CORE_INFO("Initializing PINE {0}", PINE_VERSION);
+		
 
-		Window::Specification windowSpec("Pine " PINE_VERSION, 1600, 900);
+		std::string pineVersion = " (Pine " PINE_VERSION ")";
+		pineVersion.insert(0, name);
+
+		Window::Specification windowSpec(pineVersion, 1600, 900);
 		m_Window = std::make_shared<Window>(windowSpec);
 		{
 			bool success = m_Window->Initialize();
