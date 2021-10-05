@@ -1,4 +1,5 @@
 #include "SceneHierarchyPanel.h"
+#include "PineCone\Core\Event.h"
 
 #include <Pine.h>
 #include <entt\entt.hpp>
@@ -29,6 +30,7 @@ namespace Pine {
 
 		if (ImGui::Selectable(entity.GetTag().c_str(), &selected)) {
 			m_SelectedEntity = entity;
+			EventDispatcher<EntitySelectedEvent>::Dispatch({ entity });
 		}
 	}
 

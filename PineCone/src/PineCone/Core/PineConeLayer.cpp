@@ -1,5 +1,6 @@
 #include "PineConeLayer.h"
 
+#include "PineCone\Panels\EntityPropertiesPanel.h"
 #include "PineCone\Panels\MenuBarPanel.h"
 #include "PineCone\Panels\ImGuiDemoPanel.h"
 #include "PineCone\Panels\SceneHierarchyPanel.h"
@@ -53,7 +54,8 @@ namespace Pine {
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
 			
 			m_PanelManager.AddPanel(MenuBarPanel::GetName(), std::make_shared<MenuBarPanel>(), true);
-			m_PanelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<SceneHierarchyPanel>(m_ActiveScene), true);
+			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), std::make_shared<SceneHierarchyPanel>(m_ActiveScene), true);
+			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), std::make_shared<EntityPropertiesPanel>(), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<ViewportPanel>(m_Framebuffer), true);
 
 			#if PINE_DEBUG

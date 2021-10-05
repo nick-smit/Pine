@@ -10,6 +10,8 @@ namespace Pine {
 
 	class Entity {
 	public:
+		Entity()
+			: m_EntityHandle(entt::null), m_Scene(nullptr) {};
 		Entity(entt::entity handle, Scene* scene)
 			: m_EntityHandle(handle), m_Scene(scene) {};
 		Entity(const Entity& other) = default;
@@ -44,7 +46,6 @@ namespace Pine {
 		}
 
 		const std::string& GetTag() const { return m_Scene->GetEnttRegistry().get<TagComponent>(m_EntityHandle).Tag; }
-
 
 		operator bool() const { return m_EntityHandle != entt::null; }
 		operator entt::entity() const { return m_EntityHandle; }
