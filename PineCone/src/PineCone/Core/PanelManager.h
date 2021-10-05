@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace Pine {
 
@@ -30,7 +31,7 @@ namespace Pine {
 
 		bool IsPanelActive(const std::string& name);
 
-		void OnRender(Timestep ts) const;
+		void OnRender(Timestep ts);
 
 	public:
 		static PanelManager* Get() { return s_Instance; }
@@ -39,7 +40,8 @@ namespace Pine {
 		std::unordered_map<std::string, Panel*> m_Panels;
 		std::unordered_map<std::string, bool> m_PanelStates;
 		std::vector<Panel*> m_ActivePanels;
-
+		std::unordered_set<Panel*> m_PanelsToActivate;
+		std::unordered_set<Panel*> m_PanelsToDeactivate;
 	private:
 		static PanelManager* s_Instance;
 	};

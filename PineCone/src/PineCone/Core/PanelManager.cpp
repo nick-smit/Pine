@@ -48,11 +48,8 @@ namespace Pine {
 		PINE_ASSERT(m_Panels.find(name) != m_Panels.end(), "Panel '{0}' does not exist.", name);
 		PINE_ASSERT(!m_PanelStates[name], "Panel '{0}' is already active.", name);
 
-		auto panel = m_Panels[name];
-
 		m_PanelStates[name] = true;
-		panel->OnAttach();
-		m_ActivePanels.push_back(panel);
+		m_PanelsToActivate.insert(m_Panels[name]);
 	}
 
 	void PanelManager::DeactivatePanel(const std::string& name)
@@ -62,19 +59,37 @@ namespace Pine {
 		PINE_ASSERT(m_Panels.find(name) != m_Panels.end(), "Panel '{0}' does not exist.", name);
 		PINE_ASSERT(m_PanelStates[name], "Panel '{0}' is not active.", name);
 
-		auto panelPtr = std::find(m_ActivePanels.begin(), m_ActivePanels.end(), m_Panels[name]);
-
 		m_PanelStates[name] = false;
-		(*panelPtr)->OnDetach();
-		m_ActivePanels.erase(panelPtr);
+		m_PanelsToDeactivate.insert(m_Panels[name]);
 	}
 
-	void PanelManager::OnRender(Timestep ts) const
+	void PanelManager::OnRender(Timestep ts)
 	{
 		PINE_PROFILE_FUNCTION();
 
 		for (auto panel : m_ActivePanels) {
 			panel->OnRender(ts);
+		}
+
+		if (m_PanelsToActivate.size()) {
+			PINE_PROFILE_SCOPE("Activating panels");
+
+			for (Panel* panel : m_PanelsToActivate) {
+				panel->OnAttach();
+				m_ActivePanels.push_back(panel);
+			}
+			m_PanelsToActivate.clear();
+		}
+
+		if (m_PanelsToDeactivate.size()) {
+			PINE_PROFILE_SCOPE("Deactivating panels");
+
+			for (auto panel : m_PanelsToDeactivate) {
+				auto panelPtr = std::find(m_ActivePanels.begin(), m_ActivePanels.end(), panel);
+				(*panelPtr)->OnDetach();
+				m_ActivePanels.erase(panelPtr);
+			}
+			m_PanelsToDeactivate.clear();
 		}
 	}
 
