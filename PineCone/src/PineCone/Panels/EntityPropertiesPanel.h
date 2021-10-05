@@ -21,6 +21,7 @@ namespace Pine {
 	private:
 		void DrawTagComponent();
 		void DrawTransformComponent();
+		void DrawSpriteRendererComponent();
 
 	private:
 		std::vector<std::function<void()>> m_EventListeners;

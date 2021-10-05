@@ -30,4 +30,11 @@ namespace Pine {
 		}
 	};
 
+	struct SpriteRendererComponent {
+		glm::vec4 Color = glm::vec4(1.0f);
+
+		SpriteRendererComponent() = default;
+		SpriteRendererComponent(const SpriteRendererComponent& other) = default;
+	};
+
 }

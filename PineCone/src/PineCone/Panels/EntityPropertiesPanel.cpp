@@ -28,6 +28,7 @@ namespace Pine {
 		if (m_SelectedEntity) {
 			DrawTagComponent();
 			DrawTransformComponent();
+			DrawSpriteRendererComponent();
 		}
 
 		ImGui::End();
@@ -53,14 +54,20 @@ namespace Pine {
 	{
 		if (m_SelectedEntity.HasComponent<TransformComponent>())
 		{
-			auto& position = m_SelectedEntity.GetComponent<TransformComponent>().Position;
-			ImGui::DragFloat3("Position", &position.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+			auto& transform = m_SelectedEntity.GetComponent<TransformComponent>();
+			
+			ImGui::DragFloat3("Position", &transform.Position.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+			ImGui::DragFloat3("Rotation", &transform.Rotation.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+			ImGui::DragFloat3("Scale", &transform.Scale.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+		}
+	}
 
-			auto& rotation = m_SelectedEntity.GetComponent<TransformComponent>().Rotation;
-			ImGui::DragFloat3("Rotation", &rotation.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
-
-			auto& scale = m_SelectedEntity.GetComponent<TransformComponent>().Scale;
-			ImGui::DragFloat3("Scale", &scale.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+	void EntityPropertiesPanel::DrawSpriteRendererComponent()
+	{
+		if (m_SelectedEntity.HasComponent<SpriteRendererComponent>())
+		{
+			auto& component = m_SelectedEntity.GetComponent<SpriteRendererComponent>();
+			ImGui::ColorEdit4("Color", &component.Color.r);
 		}
 	}
 

@@ -37,8 +37,8 @@ namespace Pine {
 		m_ActiveScene = std::make_shared<Scene>();
 
 		m_ActiveScene->CreateEntity("TestEntity");
-		m_ActiveScene->CreateEntity("TestEntity2");
-		m_ActiveScene->CreateEntity("TestEntity3");
+		m_ActiveScene->CreateEntity("TestEntity2").AddComponent<SpriteRendererComponent>();
+		m_ActiveScene->CreateEntity("TestEntity3").AddComponent<SpriteRendererComponent>();
 
 		// setup renderer related stuff
 		FramebufferSpecification fbSpec;
