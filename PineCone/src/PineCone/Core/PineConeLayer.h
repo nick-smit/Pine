@@ -33,6 +33,8 @@ namespace Pine {
 
 		std::shared_ptr<Framebuffer> m_Framebuffer;
 		OrthographicCamera m_Camera;
+
+		std::shared_ptr<Scene> m_ActiveScene = nullptr;
 	};
 
 }

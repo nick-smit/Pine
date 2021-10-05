@@ -24,5 +24,6 @@
 #include "Pine\Renderer\VertexArray.h"
 
 // Scene
+#include "Pine\Scene\Component.h"
 #include "Pine\Scene\Entity.h"
 #include "Pine\Scene\Scene.h"

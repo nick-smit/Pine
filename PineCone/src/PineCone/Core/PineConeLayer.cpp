@@ -2,6 +2,7 @@
 
 #include "PineCone\Panels\MenuBarPanel.h"
 #include "PineCone\Panels\ImGuiDemoPanel.h"
+#include "PineCone\Panels\SceneHierarchyPanel.h"
 #include "PineCone\Panels\ViewportPanel.h"
 
 #include <imgui.h>
@@ -32,8 +33,11 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
-		Scene scene;
-		scene.CreateEntity("MyEntity");
+		m_ActiveScene = std::make_shared<Scene>();
+
+		m_ActiveScene->CreateEntity("TestEntity");
+		m_ActiveScene->CreateEntity("TestEntity2");
+		m_ActiveScene->CreateEntity("TestEntity3");
 
 		// setup renderer related stuff
 		FramebufferSpecification fbSpec;
@@ -49,10 +53,11 @@ namespace Pine {
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
 			
 			m_PanelManager.AddPanel(MenuBarPanel::GetName(), std::make_shared<MenuBarPanel>(), true);
+			m_PanelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<SceneHierarchyPanel>(m_ActiveScene), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<ViewportPanel>(m_Framebuffer), true);
 
 			#if PINE_DEBUG
-			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), std::make_shared<ImGuiDemoPanel>(), true);
+			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), std::make_shared<ImGuiDemoPanel>());
 			#endif
 		}
 
