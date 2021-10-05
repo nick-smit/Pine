@@ -2,6 +2,7 @@
 #include "PineCone\Core\Event.h"
 
 #include <imgui.h>
+#include <glm\glm.hpp>
 
 namespace Pine {
 
@@ -57,7 +58,12 @@ namespace Pine {
 			auto& transform = m_SelectedEntity.GetComponent<TransformComponent>();
 			
 			ImGui::DragFloat3("Position", &transform.Position.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
-			ImGui::DragFloat3("Rotation", &transform.Rotation.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+
+			glm::vec3 rotation = glm::degrees(transform.Rotation);
+			ImGui::DragFloat3("Rotation", &rotation.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+			transform.Rotation = glm::radians(rotation);
+			
+			
 			ImGui::DragFloat3("Scale", &transform.Scale.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
 		}
 	}

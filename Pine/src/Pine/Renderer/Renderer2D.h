@@ -33,6 +33,8 @@ namespace Pine {
 				: Position(position), Scale(scale) {};
 			QuadSpecification(const glm::vec3& position, const glm::vec3& scale, float zRotation)
 				: Position(position), Scale(scale), ZRotation(zRotation) {};
+			QuadSpecification(const glm::mat4& transform)
+				: UseTransform(true), Transform(transform) {};
 		};
 
 	public:

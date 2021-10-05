@@ -42,7 +42,7 @@ namespace Pine {
 
 		// setup renderer related stuff
 		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8 };
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = std::make_shared<Framebuffer>(fbSpec);
@@ -246,14 +246,7 @@ namespace Pine {
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RenderCommand::Clear();
 
-			Renderer2D::BeginScene(m_Camera);
-
-			Renderer2D::QuadSpecification quadSpec;
-			quadSpec.Color = { 0.3f, 0.7f, 0.1f, 1.0f };
-			quadSpec.Position = { 0.0f, 0.0f, 0.0f };
-			Renderer2D::DrawQuad(quadSpec);
-
-			Renderer2D::EndScene();
+			SceneRenderer::RenderScene(m_ActiveScene, m_Camera);
 
 			m_Framebuffer->Unbind();
 		}
