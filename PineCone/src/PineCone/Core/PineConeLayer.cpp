@@ -53,13 +53,13 @@ namespace Pine {
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
 			
-			m_PanelManager.AddPanel(MenuBarPanel::GetName(), std::make_shared<MenuBarPanel>(), true);
-			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), std::make_shared<SceneHierarchyPanel>(m_ActiveScene), true);
-			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), std::make_shared<EntityPropertiesPanel>(), true);
-			m_PanelManager.AddPanel(ViewportPanel::GetName(), std::make_shared<ViewportPanel>(m_Framebuffer), true);
+			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
+			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_ActiveScene), true);
+			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(), true);
+			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
 
 			#if PINE_DEBUG
-			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), std::make_shared<ImGuiDemoPanel>());
+			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), new ImGuiDemoPanel());
 			#endif
 		}
 

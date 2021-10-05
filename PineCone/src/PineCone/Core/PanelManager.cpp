@@ -14,8 +14,12 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
-		for (auto panels : m_ActivePanels) {
-			panels->OnDetach();
+		for (auto panel : m_ActivePanels) {
+			panel->OnDetach();
+		}
+
+		for (auto panel : m_Panels) {
+			delete panel.second;
 		}
 	}
 
@@ -24,7 +28,7 @@ namespace Pine {
 		return m_PanelStates[name];
 	}
 
-	void PanelManager::AddPanel(const std::string& name, std::shared_ptr<Panel> panel, bool activate)
+	void PanelManager::AddPanel(const std::string& name, Panel* panel, bool activate)
 	{
 		PINE_PROFILE_FUNCTION();
 
