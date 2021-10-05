@@ -27,6 +27,7 @@ namespace Pine {
 
 		if (m_SelectedEntity) {
 			DrawTagComponent();
+			DrawTransformComponent();
 		}
 
 		ImGui::End();
@@ -45,6 +46,21 @@ namespace Pine {
 			{
 				tag = std::string(buffer);
 			}
+		}
+	}
+
+	void EntityPropertiesPanel::DrawTransformComponent()
+	{
+		if (m_SelectedEntity.HasComponent<TransformComponent>())
+		{
+			auto& position = m_SelectedEntity.GetComponent<TransformComponent>().Position;
+			ImGui::DragFloat3("Position", &position.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+
+			auto& rotation = m_SelectedEntity.GetComponent<TransformComponent>().Rotation;
+			ImGui::DragFloat3("Rotation", &rotation.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
+
+			auto& scale = m_SelectedEntity.GetComponent<TransformComponent>().Scale;
+			ImGui::DragFloat3("Scale", &scale.x, 1.0f, 0.0f, 0.0f, "%.3f", 1.0f);
 		}
 	}
 

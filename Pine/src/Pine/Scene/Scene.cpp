@@ -18,6 +18,7 @@ namespace Pine {
 	{
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<TagComponent>(name.empty() ? "Empty Entity" : name);
+		entity.AddComponent<TransformComponent>();
 
 		return entity;
 	}

@@ -20,6 +20,7 @@ namespace Pine {
 		static std::string GetName() { return "EntityPropertiesPanel"; };
 	private:
 		void DrawTagComponent();
+		void DrawTransformComponent();
 
 	private:
 		std::vector<std::function<void()>> m_EventListeners;
