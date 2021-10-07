@@ -2,6 +2,7 @@
 
 #include "Panel.h"
 
+#include "PineCone\Core\SceneContext.h"
 #include "PineCone\ImGui\ImGuiHelpers.h"
 
 #include <Pine.h>
@@ -16,6 +17,9 @@ namespace Pine {
 	class EntityPropertiesPanel : public Panel
 	{
 	public:
+		EntityPropertiesPanel(std::shared_ptr<SceneContext> sceneContext)
+			: m_SceneContext(sceneContext) {};
+
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		virtual void OnRender(Timestep ts) override;
@@ -76,6 +80,7 @@ namespace Pine {
 		std::vector<std::function<void()>> m_EventListeners;
 
 		Entity m_SelectedEntity;
+		std::shared_ptr<SceneContext> m_SceneContext;
 	};
 
 }

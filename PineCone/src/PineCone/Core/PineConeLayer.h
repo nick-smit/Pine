@@ -1,5 +1,6 @@
 #include <Pine.h>
 
+#include "PineCone\Core\SceneContext.h"
 #include "PineCone\Core\PanelManager.h"
 #include "PineCone\Panels\Panel.h"
 
@@ -34,7 +35,8 @@ namespace Pine {
 		std::shared_ptr<Framebuffer> m_Framebuffer;
 		OrthographicCamera m_Camera;
 
-		std::shared_ptr<Scene> m_ActiveScene = nullptr;
+		std::shared_ptr<Scene> m_EditorScene = nullptr;
+		std::shared_ptr<SceneContext> m_SceneContext = nullptr;
 	};
 
 }

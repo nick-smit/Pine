@@ -16,6 +16,7 @@ namespace Pine {
 		virtual ~Scene();
 
 		Entity CreateEntity(const std::string& name);
+		void DestroyEntity(const Entity& entity);
 
 		void OnUpdate(Timestep ts, const Camera& camera);
 

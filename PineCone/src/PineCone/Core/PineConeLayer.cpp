@@ -20,6 +20,7 @@ namespace Pine {
 	PineConeLayer::PineConeLayer()
 		: Layer("PineCone_PineConeLayer")
 	{
+		m_SceneContext = std::make_shared<SceneContext>();
 	}
 
 	PineConeLayer::~PineConeLayer()
@@ -35,11 +36,13 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
-		m_ActiveScene = std::make_shared<Scene>();
+		m_EditorScene = std::make_shared<Scene>();
 
-		m_ActiveScene->CreateEntity("TestEntity");
-		m_ActiveScene->CreateEntity("TestEntity2").AddComponent<SpriteRendererComponent>();
-		m_ActiveScene->CreateEntity("TestEntity3").AddComponent<SpriteRendererComponent>();
+		m_EditorScene->CreateEntity("TestEntity");
+		m_EditorScene->CreateEntity("TestEntity2").AddComponent<SpriteRendererComponent>();
+		m_EditorScene->CreateEntity("TestEntity3").AddComponent<SpriteRendererComponent>();
+
+		m_SceneContext->SetContext(m_EditorScene);
 
 		// setup renderer related stuff
 		FramebufferSpecification fbSpec;
@@ -55,8 +58,8 @@ namespace Pine {
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
 			
 			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
-			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_ActiveScene), true);
-			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(), true);
+			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext), true);
+			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
 
 			#if PINE_DEBUG
@@ -247,7 +250,7 @@ namespace Pine {
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RenderCommand::Clear();
 
-			SceneRenderer::RenderScene(m_ActiveScene, m_Camera);
+			SceneRenderer::RenderScene(m_EditorScene, m_Camera);
 
 			m_Framebuffer->Unbind();
 		}

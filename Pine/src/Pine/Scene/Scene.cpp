@@ -23,6 +23,11 @@ namespace Pine {
 		return entity;
 	}
 
+	void Scene::DestroyEntity(const Entity& entity)
+	{
+		m_Registry.destroy(entity);
+	}
+
 	void Scene::OnUpdate(Timestep ts, const Camera& camera)
 	{
 	}

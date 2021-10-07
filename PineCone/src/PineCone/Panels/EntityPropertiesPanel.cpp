@@ -99,9 +99,11 @@ namespace Pine {
 	{
 		ImGui::Begin("Properties");
 
-		if (m_SelectedEntity) {
+		if (m_SelectedEntity)
+			// DrawTagComponent might destroy the selected entity
 			DrawTagComponent();
 
+		if (m_SelectedEntity) {
 			DrawComponent<TransformComponent>("Transform", [](TransformComponent& transformComponent) {
 				float speed = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl) ? 0.01f : 0.1f;
 
@@ -144,8 +146,8 @@ namespace Pine {
 				tag = std::string(buffer);
 			}
 
-			PC_IMGUI_SAME_LINE_SPACE_BETWEEN_TEXT("Add");
-			if (ImGui::Button("Add")) {
+			PC_IMGUI_SAME_LINE_SPACE_BETWEEN_TEXT("...");
+			if (ImGui::Button("...")) {
 				ImGui::OpenPopup("Add component popup");
 			}
 			if (ImGui::BeginPopup("Add component popup")) {
@@ -163,6 +165,13 @@ namespace Pine {
 
 				if (m_SelectedEntity.HasAllComponents<TransformComponent, SpriteRendererComponent>()) {
 					ImGui::MenuItem("No components to add", NULL, false, false);
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Remove Entity")) {
+					m_SceneContext->GetContext()->DestroyEntity(m_SelectedEntity);
+					EventDispatcher<EntitySelectedEvent>::Dispatch({ Entity() });
 				}
 
 				ImGui::EndPopup();

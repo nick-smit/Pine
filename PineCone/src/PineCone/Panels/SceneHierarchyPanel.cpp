@@ -8,17 +8,28 @@
 
 namespace Pine {
 
-	SceneHierarchyPanel::SceneHierarchyPanel(std::shared_ptr<Scene> context)
-		: m_Context(context), m_SelectedEntity( entt::null, nullptr )
+	void SceneHierarchyPanel::OnAttach()
 	{
+		m_EventListeners.push_back(EventDispatcher<EntitySelectedEvent>::Listen([&](const EntitySelectedEvent& e) {
+			m_SelectedEntity = e.Entity;
+
+			return false;
+		}));
+	}
+
+	void SceneHierarchyPanel::OnDetach()
+	{
+		for (auto unsub : m_EventListeners) {
+			unsub();
+		}
 	}
 
 	void SceneHierarchyPanel::OnRender(Timestep ts)
 	{
 		ImGui::Begin("Scene hierarchy");
 
-		m_Context->GetEnttRegistry().each([&](auto entityID) {
-			Entity entity(entityID, m_Context.get());
+		m_SceneContext->GetContext()->GetEnttRegistry().each([&](auto entityID) {
+			Entity entity(entityID, m_SceneContext->GetContext().get());
 			DrawEntityNode(entity);
 		});
 
@@ -30,7 +41,6 @@ namespace Pine {
 		bool selected = entity == m_SelectedEntity;
 
 		if (ImGui::Selectable(entity.GetTag().c_str(), &selected)) {
-			m_SelectedEntity = entity;
 			EventDispatcher<EntitySelectedEvent>::Dispatch({ entity });
 		}
 	}
