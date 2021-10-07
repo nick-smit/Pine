@@ -4,6 +4,9 @@ project "PineCone"
   cppdialect "C++17"
   staticruntime "on"
 
+  pchheader "pcpch.h"
+  pchsource "src/pcpch.cpp"
+
 	targetdir (targetDir)
 	objdir (objDir)
 

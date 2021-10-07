@@ -1,3 +1,4 @@
+#include "pcpch.h"
 #include "SceneHierarchyPanel.h"
 #include "PineCone\Core\Event.h"
 

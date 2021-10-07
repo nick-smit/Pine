@@ -1,3 +1,4 @@
+#include "pcpch.h"
 #include "PanelManager.h"
 
 namespace Pine {

@@ -42,7 +42,19 @@ namespace Pine {
 		template<typename T>
 		bool HasComponent()
 		{
-			return m_Scene->GetEnttRegistry().all_of<T>(m_EntityHandle);
+			return HasAllComponents<T>();
+		}
+
+		template<typename ...T>
+		bool HasAnyComponent()
+		{
+			return m_Scene->GetEnttRegistry().any_of<T...>(m_EntityHandle);
+		}
+
+		template<typename ...T>
+		bool HasAllComponents()
+		{
+			return m_Scene->GetEnttRegistry().all_of<T...>(m_EntityHandle);
 		}
 
 		const std::string& GetTag() const { return m_Scene->GetEnttRegistry().get<TagComponent>(m_EntityHandle).Tag; }

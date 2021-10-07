@@ -15,7 +15,7 @@ namespace Pine {
 	};
 
 	struct TransformComponent {
-		glm::vec3 Position = glm::vec3(0.0f);
+		glm::vec3 Translation = glm::vec3(0.0f);
 		glm::vec3 Rotation = glm::vec3(0.0f);
 		glm::vec3 Scale = glm::vec3(1.0f);
 
@@ -24,7 +24,7 @@ namespace Pine {
 		
 		glm::mat4 GetTransform() const
 		{
-			return glm::translate(glm::mat4(1.0f), Position)
+			return glm::translate(glm::mat4(1.0f), Translation)
 				* glm::toMat4(glm::quat(Rotation))
 				* glm::scale(glm::mat4(1.0f), Scale);
 		}
