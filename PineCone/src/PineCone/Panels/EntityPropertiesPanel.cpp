@@ -97,6 +97,8 @@ namespace Pine {
 
 	void EntityPropertiesPanel::OnRender(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGui::Begin("Properties");
 
 		if (m_SelectedEntity)
@@ -104,7 +106,7 @@ namespace Pine {
 			DrawTagComponent();
 
 		if (m_SelectedEntity) {
-			DrawComponent<TransformComponent>("Transform", [](TransformComponent& transformComponent) {
+			DrawComponent<TransformComponent>("Transform component", [](TransformComponent& transformComponent) {
 				float speed = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl) ? 0.01f : 0.1f;
 
 				Utils::DrawVec3Control("Translation", transformComponent.Translation);
@@ -116,7 +118,7 @@ namespace Pine {
 				Utils::DrawVec3Control("Scale", transformComponent.Scale, 1.0f);
 			});
 			
-			DrawComponent<SpriteRendererComponent>("Sprite Renderer", [](SpriteRendererComponent& spriteRenderer) {
+			DrawComponent<SpriteRendererComponent>("Sprite renderer component", [](SpriteRendererComponent& spriteRenderer) {
 				PC_IMGUI_BEGIN_INPUT_WIDGET_COLUMNS();
 
 				ImGui::Text("Color");
@@ -158,7 +160,7 @@ namespace Pine {
 				}
 
 				if (!m_SelectedEntity.HasComponent<SpriteRendererComponent>()) {
-					if (ImGui::MenuItem("Sprite Renderer")) {
+					if (ImGui::MenuItem("Sprite renderer")) {
 						m_SelectedEntity.AddComponent<SpriteRendererComponent>();
 					}
 				}
@@ -169,7 +171,7 @@ namespace Pine {
 
 				ImGui::Separator();
 
-				if (ImGui::MenuItem("Remove Entity")) {
+				if (ImGui::MenuItem("Remove entity")) {
 					m_SceneContext->GetContext()->DestroyEntity(m_SelectedEntity);
 					EventDispatcher<EntitySelectedEvent>::Dispatch({ Entity() });
 				}

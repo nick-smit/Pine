@@ -56,7 +56,7 @@ namespace Pine {
 					m_SelectedEntity.GetComponent<Component>() = Component();
 				}
 
-				if (ImGui::MenuItem("Remove")) {
+				if (ImGui::MenuItem("Remove component")) {
 					componentRemoved = true;
 				}
 
