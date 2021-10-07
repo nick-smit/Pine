@@ -31,6 +31,8 @@ namespace Pine {
 				return;
 			}
 
+			ImGui::NewLine();
+
 			ImGui::Separator();
 
 			ImGui::Text(name.c_str());
@@ -64,7 +66,10 @@ namespace Pine {
 				return;
 			}
 
+			ImGui::NewLine();
+
 			drawFunction(m_SelectedEntity.GetComponent<Component>());
+
 		};
 
 	private:
