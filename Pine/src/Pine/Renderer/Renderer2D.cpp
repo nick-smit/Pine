@@ -98,7 +98,7 @@ namespace Pine {
 		s_Data->QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
 		s_Data->QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 
-		s_Data->TextureShader = Shader::FromFile("Renderer2D_QuadShader", "./assets/shaders/Renderer2D_QuadShader.glsl");
+		s_Data->TextureShader = Shader::FromFile("Renderer2D_QuadShader", std::filesystem::current_path() / "assets/shaders/Renderer2D_QuadShader.glsl");
 	}
 
 	void Renderer2D::Terminate()

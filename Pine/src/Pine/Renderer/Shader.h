@@ -14,6 +14,7 @@ namespace Pine {
 		virtual ~Shader();
 
 		static std::shared_ptr<Shader> FromFile(const std::string& name, const std::string& path);
+		static std::shared_ptr<Shader> FromFile(const std::string& name, const std::filesystem::path& path);
 
 		bool IsValid() const;
 

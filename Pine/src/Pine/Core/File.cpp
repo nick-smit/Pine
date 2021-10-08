@@ -2,13 +2,13 @@
 #include "File.h"
 
 namespace Pine {
-	void FileStream::GetContents(const std::string& filepath, std::string& result, bool binarySave)
+	void FileStream::GetContents(const std::filesystem::path& filepath, std::string& result, bool binarySave)
 	{
 		PINE_PROFILE_FUNCTION();
 
 		auto mode = binarySave ? std::ios::in | std::ios::binary : std::ios::in;
 
-		std::ifstream file(filepath, mode);
+		std::ifstream file(filepath.string(), mode);
 
 		if (file.is_open()) {
 			file.seekg(0, std::ios::end);

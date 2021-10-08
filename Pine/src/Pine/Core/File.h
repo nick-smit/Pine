@@ -1,14 +1,13 @@
 #pragma once
 
-#include <fstream>
-#include <memory>
+#include <filesystem>
 #include <string>
 
 namespace Pine {
 
 	class FileStream {
 	public:
-		static void GetContents(const std::string& filepath, std::string& result, bool binarySave = true);
+		static void GetContents(const std::filesystem::path& filepath, std::string& result, bool binarySave = true);
 	};
 
 }

@@ -6,24 +6,26 @@
 
 namespace Pine {
 
-	Texture2D::Texture2D(const Specification& spec, const std::string& path)
+	Texture2D::Texture2D(const Specification& spec, const std::filesystem::path& path)
 		: m_Spec(spec)
 	{
 		PINE_PROFILE_FUNCTION();
-
+		
 		stbi_set_flip_vertically_on_load(true);
-
+		
 		int width, height, channels;
-		unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		PINE_ASSERT(data, "Failed to load {0}", path);
 
+		//const char* charPath = path.string().c_str();
+		unsigned char* data = stbi_load("", &width, &height, &channels, 0);
+		PINE_ASSERT(data, "Failed to load {0}", path);
+		
 		m_Width = (uint32_t)width;
 		m_Height = (uint32_t)height;
 		m_Channels = (uint32_t)channels;
-
+		
 		if (data) {
 			Load(data);
-
+		
 			stbi_image_free(data);
 		}
 	}

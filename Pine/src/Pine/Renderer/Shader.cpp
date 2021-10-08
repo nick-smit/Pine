@@ -41,12 +41,12 @@ namespace Pine {
 		glDeleteProgram(m_ProgramId);
 	}
 
-	std::shared_ptr<Shader> Shader::FromFile(const std::string& name, const std::string& filepath)
+	std::shared_ptr<Shader> Shader::FromFile(const std::string& name, const std::filesystem::path& path)
 	{
 		PINE_PROFILE_FUNCTION();
 
 		std::string contents;
-		FileStream::GetContents(filepath, contents);
+		FileStream::GetContents(path, contents);
 
 		std::unordered_map<GLenum, std::string> shaderSources;
 
