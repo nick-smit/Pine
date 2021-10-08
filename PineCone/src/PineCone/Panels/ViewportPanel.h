@@ -16,8 +16,6 @@ namespace Pine {
 			: m_Framebuffer(framebuffer) {};
 		~ViewportPanel() = default;
 
-		virtual void OnAttach() override;
-		virtual void OnDetach() override;
 		virtual void OnRender(Timestep ts) override;
 
 		const glm::vec2& GetSize() const { return m_ViewportSize; }

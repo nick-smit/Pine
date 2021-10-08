@@ -12,8 +12,6 @@
 namespace Pine {
 	void MenuBarPanel::OnAttach()
 	{
-		PINE_PROFILE_FUNCTION();
-
 		EventDispatcher<KeyPressedEvent>::Listen([](const KeyPressedEvent& e) {
 			switch (e.Key) {
 

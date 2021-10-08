@@ -26,6 +26,8 @@ namespace Pine {
 
 	void SceneHierarchyPanel::OnRender(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGui::Begin("Scene hierarchy");
 
 		if (ImGui::BeginPopupContextWindow(0, ImGuiMouseButton_Right, false)) {

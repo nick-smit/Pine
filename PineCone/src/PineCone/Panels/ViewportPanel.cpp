@@ -5,18 +5,6 @@
 
 namespace Pine {
 
-	void ViewportPanel::OnAttach()
-	{
-		PINE_PROFILE_FUNCTION();
-
-	}
-
-	void ViewportPanel::OnDetach()
-	{
-		PINE_PROFILE_FUNCTION();
-
-	}
-
 	void ViewportPanel::OnRender(Timestep ts)
 	{
 		PINE_PROFILE_FUNCTION();
