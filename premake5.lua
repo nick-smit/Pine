@@ -21,6 +21,7 @@ group "Dependencies"
 	include "Dependencies/glfw"
 	include "Dependencies/ImGui"
 	include "Dependencies/spdlog"
+	include "Dependencies/yaml-cpp"
 
 group ""
 	include "Pine"

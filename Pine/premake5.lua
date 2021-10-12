@@ -14,6 +14,7 @@ project "Pine"
 		"src/**.h",
 		"src/**.cpp",
 		"vendor/stb/**.h",
+		"vendor/yaml-cpp/include/**.h",
 	}
 
 	includedirs {
@@ -24,11 +25,13 @@ project "Pine"
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.stb}",
+		"%{IncludeDir.yaml_cpp}",
 	}
 
 	links {
 		"GLAD",
 		"GLFW",
+		"yaml-cpp"
 	}
 
 	defines {

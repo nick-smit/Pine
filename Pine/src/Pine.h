@@ -28,3 +28,4 @@
 #include "Pine\Scene\Component.h"
 #include "Pine\Scene\Entity.h"
 #include "Pine\Scene\Scene.h"
+#include "Pine\Scene\SceneSerializer.h"

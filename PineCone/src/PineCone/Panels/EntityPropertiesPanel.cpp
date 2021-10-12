@@ -86,6 +86,12 @@ namespace Pine {
 
 			return false;
 		}));
+
+		m_EventListeners.push_back(EventDispatcher<SceneOpenedEvent>::Listen([&](const SceneOpenedEvent& e) {
+			m_SelectedEntity = Entity();
+
+			return false;
+		}));
 	}
 
 	void EntityPropertiesPanel::OnDetach()

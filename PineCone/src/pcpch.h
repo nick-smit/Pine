@@ -25,3 +25,8 @@
 #include "Pine\Core\Core.h"
 
 #include <imgui.h>
+
+#ifdef WIN32
+#include <Windows.h>
+#include <ShObjIdl.h>
+#endif

@@ -26,4 +26,22 @@ namespace Pine {
 			PINE_ASSERT("Unable to open file '{0}'", filepath);
 		}
 	}
+	
+	void FileStream::PutContents(const std::filesystem::path& filepath, const char* data, size_t size)
+	{
+		PINE_PROFILE_FUNCTION();
+
+
+		std::ofstream stream(filepath, std::ios::out | std::ios::trunc);
+
+		if (stream.is_open()) {
+			stream.write(data, size);
+
+			stream.close();
+		}
+		else {
+			PINE_ASSERT("Unable to open file '{0}' for writing", filepath);
+		}
+	}
+
 }

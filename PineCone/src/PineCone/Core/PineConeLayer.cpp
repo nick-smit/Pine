@@ -1,6 +1,8 @@
 #include "pcpch.h"
 #include "PineConeLayer.h"
 
+#include "Event.h"
+
 #include "PineCone\Panels\EntityPropertiesPanel.h"
 #include "PineCone\Panels\MenuBarPanel.h"
 #include "PineCone\Panels\ImGuiDemoPanel.h"
@@ -21,15 +23,6 @@ namespace Pine {
 		: Layer("PineCone_PineConeLayer")
 	{
 		m_SceneContext = std::make_shared<SceneContext>();
-	}
-
-	PineConeLayer::~PineConeLayer()
-	{
-		PINE_PROFILE_FUNCTION();
-
-		for (auto fn : m_UnsubscribeFunctions) {
-			fn();
-		}
 	}
 
 	void PineConeLayer::OnAttach()
@@ -95,38 +88,55 @@ namespace Pine {
 			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonPressedEvent>::Listen([](const MouseButtonPressedEvent& e) {
 				ImGuiIO& io = ImGui::GetIO();
 				return io.WantCaptureMouse;
-				}));
+			}));
 			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonReleasedEvent>::Listen([](const MouseButtonReleasedEvent& e) {
 				ImGuiIO& io = ImGui::GetIO();
 				return io.WantCaptureMouse;
-				}));
+			}));
 			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseMovedEvent>::Listen([](const MouseMovedEvent& e) {
 				ImGuiIO& io = ImGui::GetIO();
 				return io.WantCaptureMouse;
-				}));
+			}));
 			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseScrolledEvent>::Listen([](const MouseScrolledEvent& e) {
 				ImGuiIO& io = ImGui::GetIO();
 				return io.WantCaptureMouse;
-				}));
+			}));
 
 			// Keyboard events
 			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyPressedEvent>::Listen([](const KeyPressedEvent& e) {
 				return ImGui::GetIO().WantCaptureKeyboard;
-				}));
+			}));
 
 			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyReleasedEvent>::Listen([](const KeyReleasedEvent& e) {
 				return ImGui::GetIO().WantCaptureKeyboard;
-				}));
+			}));
 
 			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyRepeatedEvent>::Listen([](const KeyRepeatedEvent& e) {
 				return ImGui::GetIO().WantCaptureKeyboard;
-				}));
+			}));
+
+			m_UnsubscribeFunctions.push_back(EventDispatcher<SceneOpenedEvent>::Listen([&](const SceneOpenedEvent& e) {
+				m_EditorScene = SceneSerializer::Deserialize(e.Filepath);
+				m_SceneContext->SetContext(m_EditorScene);
+
+				return false;
+			}));
+
+			m_UnsubscribeFunctions.push_back(EventDispatcher<SceneSavedEvent>::Listen([&](const SceneSavedEvent& e) {
+				SceneSerializer::Serialize(m_EditorScene, e.Filepath);
+
+				return false;
+			}));
 		}
 	}
 
 	void PineConeLayer::OnDetach()
 	{
 		PINE_PROFILE_FUNCTION();
+
+		for (auto fn : m_UnsubscribeFunctions) {
+			fn();
+		}
 
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();

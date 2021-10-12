@@ -1,0 +1,28 @@
+Entities:
+  - EntityID: 123456
+    TagComponent:
+      Tag: Red stripe
+    TransformComponent:
+      Translation: [0, 0.330000013, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.25, 0.330000013, 1]
+    SpriteRendererComponent:
+      Color: [0.808823526, 0.150663227, 0.150663227, 1]
+  - EntityID: 123456
+    TagComponent:
+      Tag: White stripe
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.25, 0.330000013, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+  - EntityID: 123456
+    TagComponent:
+      Tag: Blue stripe
+    TransformComponent:
+      Translation: [0, -0.330000013, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.25, 0.330000013, 1]
+    SpriteRendererComponent:
+      Color: [0.109250538, 0.0325836204, 0.55392158, 1]

@@ -16,7 +16,7 @@ namespace Pine {
 	{
 	public:
 		PineConeLayer();
-		virtual ~PineConeLayer();
+		virtual ~PineConeLayer() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

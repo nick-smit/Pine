@@ -13,6 +13,10 @@ namespace Pine {
 		virtual void OnAttach() override;
 		virtual void OnRender(Timestep ts) override;
 
+	private:
+		void OpenScene() const;
+		void SaveSceneAs() const;
+
 	public:
 		static std::string GetName() { return "MenuBarPanel"; };
 	};

@@ -21,12 +21,15 @@ namespace Pine {
 
             if (SUCCEEDED(hr))
             {
-                // Setup filter
                 COMDLG_FILTERSPEC* winFilter = new COMDLG_FILTERSPEC[filters.size()];
-                for (uint32_t i = 0; i < filters.size(); i++) {
-                    winFilter[i] = { filters[i].HumanReadableName.c_str(), filters[i].AcceptedTypes.c_str() };
+                if (filters.size() > 0) {
+                    // Setup filter
+                    for (uint32_t i = 0; i < filters.size(); i++) {
+                        winFilter[i] = { filters[i].HumanReadableName.c_str(), filters[i].AcceptedTypes.c_str() };
+                    }
+                    hr = pFileOpen->SetFileTypes(filters.size(), winFilter);
+                    pFileOpen->SetDefaultExtension(filters[0].AcceptedTypes.c_str());
                 }
-                pFileOpen->SetFileTypes(filters.size(), winFilter);
 
                 // Show the Open dialog box.
                 hr = pFileOpen->Show(NULL);
@@ -77,12 +80,15 @@ namespace Pine {
 
             if (SUCCEEDED(hr))
             {
-                // Setup filter
                 COMDLG_FILTERSPEC* winFilter = new COMDLG_FILTERSPEC[filters.size()];
-                for (uint32_t i = 0; i < filters.size(); i++) {
-                    winFilter[i] = { filters[i].HumanReadableName.c_str(), filters[i].AcceptedTypes.c_str() };
+                if (filters.size() > 0) {
+                    // Setup filter
+                    for (uint32_t i = 0; i < filters.size(); i++) {
+                        winFilter[i] = { filters[i].HumanReadableName.c_str(), filters[i].AcceptedTypes.c_str() };
+                    }
+                    pFileSave->SetFileTypes(filters.size(), winFilter);
+                    pFileSave->SetDefaultExtension(filters[0].AcceptedTypes.c_str());
                 }
-                pFileSave->SetFileTypes(filters.size(), winFilter);
 
                 // Show the Open dialog box.
                 hr = pFileSave->Show(NULL);
