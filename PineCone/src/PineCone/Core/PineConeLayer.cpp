@@ -31,10 +31,6 @@ namespace Pine {
 
 		m_EditorScene = std::make_shared<Scene>();
 
-		m_EditorScene->CreateEntity("TestEntity");
-		m_EditorScene->CreateEntity("TestEntity2").AddComponent<SpriteRendererComponent>();
-		m_EditorScene->CreateEntity("TestEntity3").AddComponent<SpriteRendererComponent>();
-
 		m_SceneContext->SetContext(m_EditorScene);
 
 		// setup renderer related stuff
@@ -46,19 +42,6 @@ namespace Pine {
 
 		float aspectRatio = (float)fbSpec.Width / (float)fbSpec.Height;
 		m_Camera.SetProjection(-aspectRatio, aspectRatio, -1.0f, 1.0f);
-
-		{
-			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
-			
-			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
-			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext), true);
-			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
-			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
-
-			#if PINE_DEBUG
-			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), new ImGuiDemoPanel());
-			#endif
-		}
 
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Setup ImGui");
@@ -127,6 +110,19 @@ namespace Pine {
 
 				return false;
 			}));
+		}
+
+		{
+			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
+
+			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
+			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext), true);
+			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
+			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
+
+			#if PINE_DEBUG
+			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), new ImGuiDemoPanel());
+			#endif
 		}
 	}
 

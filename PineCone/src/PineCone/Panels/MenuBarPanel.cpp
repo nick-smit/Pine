@@ -21,15 +21,20 @@ namespace Pine {
 			bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
 			bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
 
-			if (e.Key == Key::O && control) {
-				OpenScene();
-			}
-			else if (e.Key == Key::S && control) {
-				if (shift) {
-					SaveSceneAs();
+			switch (e.Key) {
+				case Key::O: {
+					if (control) {
+						OpenScene();
+						return true;
+					}
 				}
-				else {
-					// Todo
+				case Key::S: {
+					if (control) {
+						if (shift) {
+							SaveSceneAs();
+							return true;
+						}
+					}
 				}
 			}
 
