@@ -27,6 +27,8 @@ namespace Pine {
 		std::shared_ptr<Framebuffer> m_Framebuffer;
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
+
+		bool m_InFocus = false;
 	};
 
 }

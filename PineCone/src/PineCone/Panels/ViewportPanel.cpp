@@ -1,6 +1,8 @@
 #include "pcpch.h"
 #include "ViewportPanel.h"
 
+#include "PineCone\Core\Event.h"
+
 #include <imgui.h>
 
 namespace Pine {
@@ -17,6 +19,12 @@ namespace Pine {
 
 		uint32_t textureId = m_Framebuffer->GetColorAttachmentId();
 		ImGui::Image(reinterpret_cast<void*>(textureId), viewportPanelSize, ImVec2(0, 1), ImVec2(1, 0));
+
+		bool oldFocusStatus = m_InFocus;
+		m_InFocus = ImGui::IsWindowFocused() && ImGui::IsWindowHovered();
+		if (m_InFocus != oldFocusStatus) {
+			EventDispatcher<ViewportFocusedEvent>::Dispatch({ m_InFocus });
+		}
 
 		ImGui::End();
 		ImGui::PopStyleVar();

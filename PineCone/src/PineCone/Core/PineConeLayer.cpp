@@ -40,8 +40,8 @@ namespace Pine {
 		fbSpec.Height = 720;
 		m_Framebuffer = std::make_shared<Framebuffer>(fbSpec);
 
-		float aspectRatio = (float)fbSpec.Width / (float)fbSpec.Height;
-		m_Camera.SetProjection(-aspectRatio, aspectRatio, -1.0f, 1.0f);
+		m_CameraController.ResizeViewport({ (float)fbSpec.Width, (float)fbSpec.Height });
+		m_CameraController.Initialize();
 
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Setup ImGui");
@@ -67,35 +67,38 @@ namespace Pine {
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Register event handlers");
 
 			// Setup event handlers
+			m_UnsubscribeFunctions.push_back(EventDispatcher<ViewportFocusedEvent>::Listen([&](const ViewportFocusedEvent& e) {
+				PINE_LOG_CORE_INFO("Viewport focus status is now: {0}", e.Status);
+				m_ViewportInFocus = e.Status;
+
+				return false;
+			}));
+
 			// Mouse events
-			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonPressedEvent>::Listen([](const MouseButtonPressedEvent& e) {
-				ImGuiIO& io = ImGui::GetIO();
-				return io.WantCaptureMouse;
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonPressedEvent>::Listen([&](const MouseButtonPressedEvent& e) {
+				return !m_ViewportInFocus && ImGui::GetIO().WantCaptureMouse;
 			}));
-			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonReleasedEvent>::Listen([](const MouseButtonReleasedEvent& e) {
-				ImGuiIO& io = ImGui::GetIO();
-				return io.WantCaptureMouse;
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseButtonReleasedEvent>::Listen([&](const MouseButtonReleasedEvent& e) {
+				return !m_ViewportInFocus && ImGui::GetIO().WantCaptureMouse;
 			}));
-			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseMovedEvent>::Listen([](const MouseMovedEvent& e) {
-				ImGuiIO& io = ImGui::GetIO();
-				return io.WantCaptureMouse;
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseMovedEvent>::Listen([&](const MouseMovedEvent& e) {
+				return !m_ViewportInFocus && ImGui::GetIO().WantCaptureMouse;
 			}));
-			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseScrolledEvent>::Listen([](const MouseScrolledEvent& e) {
-				ImGuiIO& io = ImGui::GetIO();
-				return io.WantCaptureMouse;
+			m_UnsubscribeFunctions.push_back(EventDispatcher<MouseScrolledEvent>::Listen([&](const MouseScrolledEvent& e) {
+				return !m_ViewportInFocus && ImGui::GetIO().WantCaptureMouse;
 			}));
 
 			// Keyboard events
-			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyPressedEvent>::Listen([](const KeyPressedEvent& e) {
-				return ImGui::GetIO().WantCaptureKeyboard;
+			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyPressedEvent>::Listen([&](const KeyPressedEvent& e) {
+				return !m_ViewportInFocus && ImGui::GetIO().WantCaptureKeyboard;
 			}));
 
-			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyReleasedEvent>::Listen([](const KeyReleasedEvent& e) {
-				return ImGui::GetIO().WantCaptureKeyboard;
+			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyReleasedEvent>::Listen([&](const KeyReleasedEvent& e) {
+				return !m_ViewportInFocus && ImGui::GetIO().WantCaptureKeyboard;
 			}));
 
-			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyRepeatedEvent>::Listen([](const KeyRepeatedEvent& e) {
-				return ImGui::GetIO().WantCaptureKeyboard;
+			m_UnsubscribeFunctions.push_back(EventDispatcher<KeyRepeatedEvent>::Listen([&](const KeyRepeatedEvent& e) {
+				return !m_ViewportInFocus && ImGui::GetIO().WantCaptureKeyboard;
 			}));
 
 			m_UnsubscribeFunctions.push_back(EventDispatcher<SceneOpenedEvent>::Listen([&](const SceneOpenedEvent& e) {
@@ -239,10 +242,11 @@ namespace Pine {
 			{
 				m_Framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 
-				float aspectRatio = viewportSize.x / viewportSize.y;
-				m_Camera.SetProjection(-aspectRatio, aspectRatio, -1.0f, 1.0f);
+				m_CameraController.ResizeViewport(viewportSize);
 			}
 		}
+
+		m_CameraController.Update(ts);
 
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::UpdateScene - Draw Framebuffer");
@@ -252,7 +256,7 @@ namespace Pine {
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RenderCommand::Clear();
 
-			SceneRenderer::RenderScene(m_EditorScene, m_Camera);
+			SceneRenderer::RenderScene(m_EditorScene, m_CameraController.GetCamera());
 
 			m_Framebuffer->Unbind();
 		}

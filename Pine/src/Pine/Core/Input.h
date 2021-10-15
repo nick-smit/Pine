@@ -158,7 +158,10 @@ namespace Pine {
 	class Input {
 	public:
 		static bool IsKeyPressed(Key key);
-		static bool isMouseButtonPressed(MouseButton button);
+		static bool IsMouseButtonPressed(MouseButton button);
+
+		static float GetMouseX();
+		static float GetMouseY();
 	};
 
 }

@@ -4,6 +4,8 @@
 #include "PineCone\Core\PanelManager.h"
 #include "PineCone\Panels\Panel.h"
 
+#include "PineCone\Controller\EditorCameraController.h"
+
 #include <Pine.h>
 
 #include <functional>
@@ -33,10 +35,12 @@ namespace Pine {
 		PanelManager m_PanelManager;
 
 		std::shared_ptr<Framebuffer> m_Framebuffer;
-		OrthographicCamera m_Camera;
+		EditorCameraController m_CameraController;
 
 		std::shared_ptr<Scene> m_EditorScene = nullptr;
 		std::shared_ptr<SceneContext> m_SceneContext = nullptr;
+
+		bool m_ViewportInFocus = false;
 	};
 
 }

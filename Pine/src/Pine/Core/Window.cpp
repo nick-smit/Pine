@@ -95,6 +95,20 @@ namespace Pine {
 		return glfwGetMouseButton(m_WindowHandle, (int)button) == GLFW_PRESS;
 	}
 
+	float Window::GetMouseX() const
+	{
+		double x, y;
+		glfwGetCursorPos(m_WindowHandle, &x, &y);
+		return (float) x;
+	}
+
+	float Window::GetMouseY() const
+	{
+		double x, y;
+		glfwGetCursorPos(m_WindowHandle, &x, &y);
+		return (float) y;
+	}
+
 	void Window::RegisterEvents()
 	{
 		PINE_PROFILE_FUNCTION();

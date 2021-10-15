@@ -29,4 +29,12 @@ namespace Pine {
 		SceneSavedEvent() = default;
 	};
 
+	struct ViewportFocusedEvent {
+		bool Status;
+
+		ViewportFocusedEvent() = default;
+		ViewportFocusedEvent(bool status)
+			: Status(status) {};
+	};
+
 }

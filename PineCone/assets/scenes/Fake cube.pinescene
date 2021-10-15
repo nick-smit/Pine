@@ -1,0 +1,28 @@
+Entities:
+  - EntityID: 123456
+    TagComponent:
+      Tag: Top
+    TransformComponent:
+      Translation: [0, 0.5, 0]
+      Rotation: [1.57079637, 0.785398185, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.209979266, 0.122789316, 0.715686262, 1]
+  - EntityID: 123456
+    TagComponent:
+      Tag: Right
+    TransformComponent:
+      Translation: [0.351999998, 0, 0.349999994]
+      Rotation: [0, 0.785398185, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.163759127, 0.324648887, 0.710784316, 1]
+  - EntityID: 123456
+    TagComponent:
+      Tag: Left
+    TransformComponent:
+      Translation: [-0.354999989, 0, 0.349999994]
+      Rotation: [0, -0.785398185, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.0502210744, 0.280336171, 0.539215684, 1]

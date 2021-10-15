@@ -10,9 +10,19 @@ namespace Pine {
         return Application::Get()->m_Window->IsKeyPressed(key);
     }
 
-    bool Input::isMouseButtonPressed(MouseButton button)
+    bool Input::IsMouseButtonPressed(MouseButton button)
     {
         return Application::Get()->m_Window->IsMouseButtonPressed(button);
+    }
+
+    float Input::GetMouseX()
+    {
+        return Application::Get()->m_Window->GetMouseX();
+    }
+    
+    float Input::GetMouseY()
+    {
+        return Application::Get()->m_Window->GetMouseY();
     }
 
 }
