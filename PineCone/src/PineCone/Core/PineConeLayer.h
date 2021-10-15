@@ -35,7 +35,7 @@ namespace Pine {
 		PanelManager m_PanelManager;
 
 		std::shared_ptr<Framebuffer> m_Framebuffer;
-		EditorCameraController m_CameraController;
+		std::shared_ptr<EditorCameraController> m_CameraController;
 
 		std::shared_ptr<Scene> m_EditorScene = nullptr;
 		std::shared_ptr<SceneContext> m_SceneContext = nullptr;

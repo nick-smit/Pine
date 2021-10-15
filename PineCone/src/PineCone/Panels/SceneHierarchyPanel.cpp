@@ -21,6 +21,19 @@ namespace Pine {
 
 			return false;
 		}));
+
+		m_EventListeners.push_back(EventDispatcher<KeyPressedEvent>::Listen([&](const KeyPressedEvent& e) {
+			if (e.Key == Key::F) {
+				if (m_SelectedEntity && m_SelectedEntity.HasComponent<TransformComponent>()) {
+					auto& transformComponent = m_SelectedEntity.GetComponent<TransformComponent>();
+					m_EditorCamera->Focus(transformComponent.Translation);
+
+					return true;
+				}
+			}
+
+			return false;
+		}));
 	}
 
 	void SceneHierarchyPanel::OnDetach()

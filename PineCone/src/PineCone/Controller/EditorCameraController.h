@@ -17,6 +17,8 @@ namespace Pine {
 		void Initialize();
 		void Reset();
 
+		void Focus(const glm::vec3& focusPoint);
+
 		void SetCameraProjection(float fieldOfView, const glm::vec2& viewportSize, float zNear, float zFar);
 
 		void Update(Timestep ts);

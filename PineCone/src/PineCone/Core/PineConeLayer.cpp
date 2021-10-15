@@ -23,6 +23,7 @@ namespace Pine {
 		: Layer("PineCone_PineConeLayer")
 	{
 		m_SceneContext = std::make_shared<SceneContext>();
+		m_CameraController = std::make_shared<EditorCameraController>();
 	}
 
 	void PineConeLayer::OnAttach()
@@ -40,8 +41,8 @@ namespace Pine {
 		fbSpec.Height = 720;
 		m_Framebuffer = std::make_shared<Framebuffer>(fbSpec);
 
-		m_CameraController.ResizeViewport({ (float)fbSpec.Width, (float)fbSpec.Height });
-		m_CameraController.Initialize();
+		m_CameraController->ResizeViewport({ (float)fbSpec.Width, (float)fbSpec.Height });
+		m_CameraController->Initialize();
 
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Setup ImGui");
@@ -68,7 +69,6 @@ namespace Pine {
 
 			// Setup event handlers
 			m_UnsubscribeFunctions.push_back(EventDispatcher<ViewportFocusedEvent>::Listen([&](const ViewportFocusedEvent& e) {
-				PINE_LOG_CORE_INFO("Viewport focus status is now: {0}", e.Status);
 				m_ViewportInFocus = e.Status;
 
 				return false;
@@ -119,7 +119,7 @@ namespace Pine {
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
 
 			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
-			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext), true);
+			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext, m_CameraController), true);
 			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
 
@@ -242,11 +242,11 @@ namespace Pine {
 			{
 				m_Framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 
-				m_CameraController.ResizeViewport(viewportSize);
+				m_CameraController->ResizeViewport(viewportSize);
 			}
 		}
 
-		m_CameraController.Update(ts);
+		m_CameraController->Update(ts);
 
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::UpdateScene - Draw Framebuffer");
@@ -256,7 +256,7 @@ namespace Pine {
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RenderCommand::Clear();
 
-			SceneRenderer::RenderScene(m_EditorScene, m_CameraController.GetCamera());
+			SceneRenderer::RenderScene(m_EditorScene, m_CameraController->GetCamera());
 
 			m_Framebuffer->Unbind();
 		}

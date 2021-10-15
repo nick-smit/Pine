@@ -39,6 +39,17 @@ namespace Pine {
 		m_Pitch = 0.0f;
 
 		m_MousePosition = { 0.0f, 0.0f };
+		UpdateView();
+	}
+
+	void EditorCameraController::Focus(const glm::vec3& focusPoint)
+	{
+		m_Distance = 50.0f;
+		m_FocalPoint = glm::vec3(focusPoint.x, focusPoint.y, focusPoint.z);
+		m_Yaw = 0.0f;
+		m_Pitch = glm::radians(45.0f);
+
+		UpdateView();
 	}
 
 	void EditorCameraController::SetCameraProjection(float fieldOfView, const glm::vec2& viewportSize, float zNear, float zFar)
