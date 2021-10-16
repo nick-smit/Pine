@@ -113,6 +113,30 @@ namespace Pine {
 		RecalculateCameraProjection();
 	}
 
+	void EditorCameraController::SetFocalPoint(const glm::vec3& focalPoint)
+	{
+		m_FocalPoint = focalPoint;
+		UpdateView();
+	}
+
+	void EditorCameraController::SetYaw(float yaw)
+	{
+		m_Yaw = glm::radians(yaw);
+		UpdateView();
+	}
+
+	void EditorCameraController::SetPitch(float pitch)
+	{
+		m_Pitch = glm::radians(pitch);
+		UpdateView();
+	}
+
+	void EditorCameraController::SetDistance(float distance)
+	{
+		m_Distance = distance;
+		UpdateView();
+	}
+
 	void EditorCameraController::RecalculateCameraProjection()
 	{
 		m_Camera.SetProjection(glm::radians(m_FieldOfView), m_AspectRatio, m_ZNear, m_ZFar);

@@ -33,6 +33,18 @@ namespace Pine {
 		float GetZFar() const { return m_ZFar; }
 		void SetZFar(float zFar);
 
+		glm::vec3 GetFocalPoint() const { return m_FocalPoint; }
+		void SetFocalPoint(const glm::vec3& focalPoint);
+
+		float GetYaw() const { return glm::degrees(m_Yaw); }
+		void SetYaw(float yaw);
+
+		float GetPitch() const { return glm::degrees(m_Pitch); }
+		void SetPitch(float pitch);
+
+		float GetDistance() const { return m_Distance; }
+		void SetDistance(float distance);
+
 		const PerspectiveCamera& GetCamera() const { return m_Camera; }
 
 	private:
@@ -64,7 +76,7 @@ namespace Pine {
 		PerspectiveCamera m_Camera;
 
 		float m_Distance = 25.0f;
-		glm::vec3 m_FocalPoint = glm::vec3(0.0f, 0.0f, m_Distance);
+		glm::vec3 m_FocalPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 		float m_Yaw = 0.0f;
 		float m_Pitch = 0.0f;
 

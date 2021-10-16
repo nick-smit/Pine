@@ -3,6 +3,7 @@
 
 #include "Event.h"
 
+#include "PineCone\Panels\EditorPropertiesPanel.h"
 #include "PineCone\Panels\EntityPropertiesPanel.h"
 #include "PineCone\Panels\MenuBarPanel.h"
 #include "PineCone\Panels\ImGuiDemoPanel.h"
@@ -131,6 +132,7 @@ namespace Pine {
 			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext, m_CameraController), true);
 			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
+			m_PanelManager.AddPanel(EditorPropertiesPanel::GetName(), new EditorPropertiesPanel(m_CameraController), true);
 
 			#if PINE_DEBUG
 			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), new ImGuiDemoPanel());
