@@ -71,6 +71,15 @@ namespace Pine {
 			m_UnsubscribeFunctions.push_back(EventDispatcher<ViewportFocusedEvent>::Listen([&](const ViewportFocusedEvent& e) {
 				m_ViewportInFocus = e.Status;
 
+				ImGuiIO& io = ImGui::GetIO();
+				if (m_ViewportInFocus) {
+					// Disable keyboard navidation when viewport is in focus
+					io.ConfigFlags &= ~ImGuiConfigFlags_NavEnableKeyboard;
+				}
+				else {
+					io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+				}
+
 				return false;
 			}));
 
