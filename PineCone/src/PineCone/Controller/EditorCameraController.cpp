@@ -36,9 +36,8 @@ namespace Pine {
 		m_Distance = 10.0f;
 		m_FocalPoint = glm::vec3(0.0f, 0.0f, m_Distance);
 		m_Yaw = 0.0f;
-		m_Pitch = 0.0f;
+		m_Pitch = glm::radians(45.0f);
 
-		m_MousePosition = { 0.0f, 0.0f };
 		UpdateView();
 	}
 
@@ -128,7 +127,7 @@ namespace Pine {
 	{
 		auto [xSpeed, ySpeed] = PanSpeed();
 		m_FocalPoint += GetRightDirection() * delta.x * xSpeed * (m_Distance * 0.1f);
-		m_FocalPoint += GetUpDirection() * delta.y * ySpeed * (m_Distance * 0.1f);
+		m_FocalPoint -= GetUpDirection() * delta.y * ySpeed * (m_Distance * 0.1f);
 	}
 
 	std::pair<float, float> EditorCameraController::PanSpeed() const
