@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glm\glm.hpp>
 
 namespace Pine {
@@ -11,6 +13,8 @@ namespace Pine {
 		static void Vec3Control(const char* label, glm::vec3& values, float resetValue = 0.0f);
 
 		static void ColorEdit4(const char* label, glm::vec4& value);
+
+		static void LabeledText(const char* label, const char* text);
 	};
 
 }

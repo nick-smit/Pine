@@ -103,4 +103,15 @@ namespace Pine {
 		PC_IMGUI_END_INPUT_WIDGET_COLUMNS();
 	}
 
+	void UI::LabeledText(const char* label, const char* text)
+	{
+		PC_IMGUI_BEGIN_INPUT_WIDGET_COLUMNS();
+
+		ImGui::Text(label);
+		ImGui::NextColumn();
+		ImGui::Text(text);
+
+		PC_IMGUI_END_INPUT_WIDGET_COLUMNS();
+	}
+
 }

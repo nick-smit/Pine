@@ -39,6 +39,8 @@ namespace Pine {
 		glm::vec4 QuadVertexPositions[4];
 
 		std::shared_ptr<Shader> TextureShader;
+
+		Renderer2D::Stats Stats;
 	};
 
 	static Renderer2DData* s_Data;
@@ -113,6 +115,8 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
+		s_Data->Stats = {};
+
 		s_Data->TextureShader->SetMat4("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
 		StartBatch();
@@ -172,6 +176,12 @@ namespace Pine {
 		}
 
 		s_Data->QuadIndexCount += 6;
+		s_Data->Stats.Quads++;
+	}
+
+	Renderer2D::Stats Renderer2D::GetStats()
+	{
+		return s_Data->Stats;
 	}
 
 	void Renderer2D::StartBatch()
@@ -198,7 +208,10 @@ namespace Pine {
 			}
 
 			RenderCommand::DrawIndexed(s_Data->QuadVertexArray, s_Data->TextureShader, s_Data->QuadIndexCount);
+			s_Data->Stats.DrawCalls++;
 		}
+
+		s_Data->Stats.Batches++;
 	}
 
 }

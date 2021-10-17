@@ -37,6 +37,14 @@ namespace Pine {
 				: UseTransform(true), Transform(transform) {};
 		};
 
+		struct Stats {
+			uint32_t DrawCalls = 0;
+			uint32_t Quads = 0;
+			uint32_t Batches = 0;
+
+			Stats() = default;
+		};
+
 	public:
 		Renderer2D() = delete;
 		~Renderer2D() = delete;
@@ -48,6 +56,8 @@ namespace Pine {
 		static void EndScene();
 
 		static void DrawQuad(const QuadSpecification& spec);
+
+		static Stats GetStats();
 
 	private:
 		static void StartBatch();

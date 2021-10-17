@@ -2,6 +2,7 @@
 #include "MenuBarPanel.h"
 
 #include "ImGuiDemoPanel.h"
+#include "Debug\RenderStatsPanel.h"
 
 #include "PineCone\Core\PanelManager.h"
 #include "PineCone\Core\Event.h"
@@ -81,6 +82,18 @@ namespace Pine {
 						panelManager->DeactivatePanel(ImGuiDemoPanel::GetName());
 				}
 				#endif
+
+				if (ImGui::BeginMenu("Debug")) {
+					bool renderStatsPanelActive = panelManager->IsPanelActive(RenderStatsPanel::GetName());
+					if (ImGui::MenuItem("Render statistics", nullptr, &renderStatsPanelActive)) {
+						if (renderStatsPanelActive)
+							panelManager->ActivatePanel(RenderStatsPanel::GetName());
+						else
+							panelManager->DeactivatePanel(RenderStatsPanel::GetName());
+					}
+
+					ImGui::EndMenu();
+				}
 
 				ImGui::EndMenu();
 			}

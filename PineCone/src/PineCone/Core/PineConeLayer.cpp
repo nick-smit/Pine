@@ -9,6 +9,7 @@
 #include "PineCone\Panels\ImGuiDemoPanel.h"
 #include "PineCone\Panels\SceneHierarchyPanel.h"
 #include "PineCone\Panels\ViewportPanel.h"
+#include "PineCone\Panels\Debug\RenderStatsPanel.h"
 
 #include <imgui.h>
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
@@ -133,6 +134,8 @@ namespace Pine {
 			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
 			m_PanelManager.AddPanel(EditorPropertiesPanel::GetName(), new EditorPropertiesPanel(m_CameraController), true);
+
+			m_PanelManager.AddPanel(RenderStatsPanel::GetName(), new RenderStatsPanel(), true);
 
 			#if PINE_DEBUG
 			m_PanelManager.AddPanel(ImGuiDemoPanel::GetName(), new ImGuiDemoPanel());

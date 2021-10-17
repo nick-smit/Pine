@@ -1,7 +1,6 @@
 #build folders
 **/bin/
 **/bin-int/
-**/Debug/
 
 #visual studio
 .vs/
