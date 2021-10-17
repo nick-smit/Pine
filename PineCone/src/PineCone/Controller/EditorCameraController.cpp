@@ -33,8 +33,8 @@ namespace Pine {
 
 	void EditorCameraController::Reset()
 	{
-		m_Distance = 10.0f;
-		m_FocalPoint = glm::vec3(0.0f, 0.0f, m_Distance);
+		m_Distance = 100.0f;
+		m_FocalPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 		m_Yaw = 0.0f;
 		m_Pitch = glm::radians(45.0f);
 
@@ -168,9 +168,24 @@ namespace Pine {
 
 	void EditorCameraController::Rotate(const glm::vec2& delta)
 	{
+		constexpr float maxRadians = glm::radians(360.0f);
+
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		m_Yaw += yawSign * delta.x * RotationSpeed();
+		if (m_Yaw > maxRadians) {
+			m_Yaw -= maxRadians;
+		}
+		else if (m_Yaw < 0.0f) {
+			m_Yaw += maxRadians;
+		}
+
 		m_Pitch += delta.y * RotationSpeed();
+		if (m_Pitch > maxRadians) {
+			m_Pitch -= maxRadians;
+		}
+		else if (m_Pitch < 0.0f) {
+			m_Pitch += maxRadians;
+		}
 	}
 
 	float EditorCameraController::RotationSpeed() const

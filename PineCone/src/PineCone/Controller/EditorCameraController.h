@@ -75,7 +75,7 @@ namespace Pine {
 
 		PerspectiveCamera m_Camera;
 
-		float m_Distance = 25.0f;
+		float m_Distance = 100.0f;
 		glm::vec3 m_FocalPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 		float m_Yaw = 0.0f;
 		float m_Pitch = 0.0f;
