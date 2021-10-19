@@ -7,14 +7,14 @@
 #include <imgui_internal.h>
 
 namespace Pine {
-	
+
 	bool UI::DragFloat(const char* label, float* value, float speed, float min, float max, const char* format)
 	{
 		PC_IMGUI_BEGIN_INPUT_WIDGET_COLUMNS();
 
 		ImGui::Text(label);
 		ImGui::NextColumn();
-		
+
 		std::stringstream ss;
 		ss << "##" << label;
 
@@ -112,6 +112,33 @@ namespace Pine {
 		ImGui::Text(text);
 
 		PC_IMGUI_END_INPUT_WIDGET_COLUMNS();
+	}
+
+	void UI::TextCentered(const std::string& text)
+	{
+		float windowWidth = ImGui::GetWindowSize().x;
+
+		UI::TextCentered(text, windowWidth);
+	}
+
+	void UI::TextCentered(const std::string& text, float maxWidth)
+	{
+		ImVec2 currentCursorPos = ImGui::GetCursorPos();
+
+		float textWidth = ImGui::CalcTextSize(text.c_str()).x;
+
+		ImGui::SetCursorPosX((maxWidth - textWidth) * 0.5f + currentCursorPos.x);
+		ImGui::Text(text.c_str());
+	}
+
+	ImVec4 UI::GetColor(const std::string& name)
+	{
+		if (name == "ActionBarBg") return ImVec4(0.266f, 0.316f, 0.340f, 1.0f); // rgb: 68, 81, 87
+		
+		if (name == "Icon_Default") return ImVec4(1, 1, 1, 1);
+
+		PINE_ASSERT("Undefined color: '{0}'!", name);
+		return ImVec4(1.0f, 0.0f, 0.898f, 1.0f);
 	}
 
 }

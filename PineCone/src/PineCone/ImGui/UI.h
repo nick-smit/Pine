@@ -3,6 +3,7 @@
 #include <string>
 
 #include <glm\glm.hpp>
+#include <imgui.h>
 
 namespace Pine {
 	
@@ -15,6 +16,10 @@ namespace Pine {
 		static void ColorEdit4(const char* label, glm::vec4& value);
 
 		static void LabeledText(const char* label, const char* text);
+		static void TextCentered(const std::string& text);
+		static void TextCentered(const std::string& text, float maxWidth);
+
+		static ImVec4 GetColor(const std::string& name);
 	};
 
 }
