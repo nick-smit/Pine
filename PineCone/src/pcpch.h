@@ -30,4 +30,5 @@
 #ifdef WIN32
 #include <Windows.h>
 #include <ShObjIdl.h>
+#include <ShellApi.h>
 #endif
