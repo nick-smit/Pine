@@ -131,6 +131,53 @@ namespace Pine {
 		ImGui::Text(text.c_str());
 	}
 
+	bool UI::Button(const std::string& text, const glm::vec2& size, bool disabled)
+	{
+		if (disabled)
+			BeginDisabled();
+
+		bool clicked = ImGui::Button(text.c_str(), ImVec2(size.x, size.y));
+		
+		if (disabled)
+			EndDisabled();
+
+		return clicked;
+	}
+
+	bool UI::ImageButton(UITexture texture, const glm::vec2& size, bool disabled)
+	{
+		auto* textureLib = UITextureLibrary::Get();
+
+		return ImageButton(textureLib->GetTexture(texture), size, disabled);
+	}
+
+	bool UI::ImageButton(std::shared_ptr<Pine::Texture2D> texture, const glm::vec2& size, bool disabled)
+	{
+		if (disabled)
+			BeginDisabled();
+
+		bool clicked = ImGui::ImageButton((void*)texture->GetId(), ImVec2(size.x, size.y));
+
+		if (disabled)
+			EndDisabled();
+
+		return clicked;
+	}
+
+	void UI::BeginDisabled()
+	{
+		auto& style = ImGui::GetStyle();
+
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * 0.5f);
+	}
+
+	void UI::EndDisabled()
+	{
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
+	}
+
 	ImVec4 UI::GetColor(const std::string& name)
 	{
 		if (name == "ActionBarBg") return ImVec4(0.266f, 0.316f, 0.340f, 1.0f); // rgb: 68, 81, 87

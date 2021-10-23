@@ -22,13 +22,13 @@ project "PineCone"
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glm}",
-    "%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.spdlog}",
 	}
 
 	links {
 		"Pine",
-    "ImGui",
+		"ImGui",
 	}
 
 	filter "system:windows"

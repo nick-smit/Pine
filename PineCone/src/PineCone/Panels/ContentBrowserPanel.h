@@ -12,6 +12,9 @@ namespace Pine {
 
 	class ContentBrowserPanel : public Panel
 	{
+	private:
+		enum class GotoAction { None, Previous, Next };
+
 	public:
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -21,7 +24,8 @@ namespace Pine {
 		static std::string GetName() { return "ContentBrowserPanel"; };
 
 	private:
-		enum class GotoAction { None, Previous, Next };
+		void RenderNodeView();
+
 		void GotoPrevious();
 		void GotoNext();
 		void Goto(const std::filesystem::path& path, GotoAction action = GotoAction::None);
