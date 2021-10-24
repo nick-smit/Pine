@@ -9,6 +9,15 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
+/// <summary>
+/// Wanted features
+/// * Drag drop to targets
+/// * Move directories/files
+/// * Rename directories/files
+/// * Open files in external editor
+/// * Project file
+/// </summary>
+
 namespace Pine {
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
@@ -22,10 +31,31 @@ namespace Pine {
 		m_CurrentDirectory = m_BaseDirectory;
 
 		m_UITextureLibrary = UITextureLibrary::Get();
+
+		m_EventListeners.push_back(EventDispatcher<MouseButtonReleasedEvent>::Listen([&](const MouseButtonReleasedEvent& e) {
+			if (m_ContentBrowserPanelFocused && m_ContentBrowserPanelHovered) {
+				switch (e.Button) {
+					case MouseButton::Four: {
+						GotoPrevious();
+						return true;
+					}
+					case MouseButton::Five: {
+						GotoNext();
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}));
 	}
 
 	void ContentBrowserPanel::OnDetach()
 	{
+		for (auto& unsub : m_EventListeners) {
+			unsub();
+		}
+
 		m_UITextureLibrary = nullptr;
 	}
 
@@ -42,6 +72,10 @@ namespace Pine {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::Begin("Content browser");
+
+		m_ContentBrowserPanelFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows | ImGuiFocusedFlags_NoPopupHierarchy);
+		m_ContentBrowserPanelHovered = ImGui::IsWindowHovered(ImGuiFocusedFlags_ChildWindows | ImGuiFocusedFlags_NoPopupHierarchy);
+
 		ImGui::PopStyleVar();
 
 		if (baseDirMissing) {
@@ -78,19 +112,25 @@ namespace Pine {
 			return;
 		}
 		
-		{
-			ImGui::BeginChild("Tree view", ImVec2(200.0f, 0.0f));
-
-			ImGui::Text("Todo: directory tree");
-
-			ImGui::EndChild(); // End tree view
-		}
+		RenderTreeView();
 		
 		ImGui::SameLine();
 
 		RenderNodeView();
 
 		ImGui::End();
+	}
+
+	void ContentBrowserPanel::RenderTreeView()
+	{
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, style.WindowPadding);
+		ImGui::BeginChild("Tree view", ImVec2(200.0f, 0.0f)); {
+
+			RenderDirectory(m_BaseDirectory);
+
+		} ImGui::EndChild(); // End tree view
+		ImGui::PopStyleVar();
 	}
 
 	void ContentBrowserPanel::RenderNodeView()
@@ -265,14 +305,57 @@ namespace Pine {
 		ImGui::EndGroup();
 	}
 
+	void ContentBrowserPanel::RenderDirectory(const std::filesystem::path& path)
+	{
+		PINE_PROFILE_FUNCTION();
+
+		for (const auto& directory : std::filesystem::directory_iterator(path)) {
+			if (!directory.is_directory())
+				continue;
+
+			ImGuiTreeNodeFlags baseFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf;
+
+			if (directory == m_CurrentDirectory)
+				baseFlags |= ImGuiTreeNodeFlags_Selected;
+
+			bool hasSubDirectories = false;
+			for (const auto& subDir : std::filesystem::directory_iterator(directory)) {
+				if (subDir.is_directory()) {
+					hasSubDirectories = true;
+					break;
+				}
+			}
+			if (hasSubDirectories)
+				baseFlags &= ~ImGuiTreeNodeFlags_Leaf;
+
+			bool open = ImGui::TreeNodeEx(directory.path().filename().string().c_str(), baseFlags);
+			if (ImGui::IsItemClicked()) {
+				Goto(directory);
+			}
+
+			if (open) {
+				RenderDirectory(directory);
+
+				ImGui::TreePop();
+			}
+
+		}
+	}
+
 	void ContentBrowserPanel::GotoPrevious()
 	{
+		if (m_PreviousDirectory.empty())
+			return;
+
 		std::filesystem::path path = m_PreviousDirectory.back();
 		Goto(path, GotoAction::Previous);
 	}
 
 	void ContentBrowserPanel::GotoNext()
 	{
+		if (m_NextDirectory.empty())
+			return;
+
 		std::filesystem::path path = m_NextDirectory.back();
 		Goto(path, GotoAction::Next);
 	}

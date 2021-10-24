@@ -6,7 +6,9 @@
 #include <Pine.h>
 
 #include <filesystem>
+#include <functional>
 #include <memory>
+#include <vector>
 
 namespace Pine {
 
@@ -27,7 +29,10 @@ namespace Pine {
 		static std::string GetName() { return "ContentBrowserPanel"; };
 
 	private:
+		void RenderTreeView();
 		void RenderNodeView();
+
+		void RenderDirectory(const std::filesystem::path& path);
 
 		void GotoPrevious();
 		void GotoNext();
@@ -36,6 +41,8 @@ namespace Pine {
 		bool MakeDir(const char* buffer);
 
 	private:
+		std::vector<std::function<void()>> m_EventListeners;
+
 		std::filesystem::path m_BaseDirectory = {};
 		std::filesystem::path m_CurrentDirectory = {};
 
@@ -46,6 +53,9 @@ namespace Pine {
 		UITextureLibrary* m_UITextureLibrary = nullptr;
 
 		char m_ModalInputBuffer[255];
+
+		bool m_ContentBrowserPanelFocused = false;
+		bool m_ContentBrowserPanelHovered = false;
 	};
 
 }
