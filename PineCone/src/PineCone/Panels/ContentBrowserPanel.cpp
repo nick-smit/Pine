@@ -11,12 +11,13 @@
 
 /// <summary>
 /// Wanted features
-/// * Drag drop to targets
 /// * Move directories/files
 /// * Rename directories/files
 /// * Open files in external editor
 /// * Project file
 /// </summary>
+
+static std::filesystem::path dragDropPayload;
 
 namespace Pine {
 	ContentBrowserPanel::ContentBrowserPanel()
@@ -127,7 +128,7 @@ namespace Pine {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, style.WindowPadding);
 		ImGui::BeginChild("Tree view", ImVec2(200.0f, 0.0f)); {
 
-			RenderDirectory(m_BaseDirectory);
+			RenderDirectoryTree(m_BaseDirectory);
 
 		} ImGui::EndChild(); // End tree view
 		ImGui::PopStyleVar();
@@ -281,6 +282,15 @@ namespace Pine {
 				ImGui::Image((void*)m_UITextureLibrary->GetTextureID(UITexture::File), nodeSize, ImVec2(0, 0), ImVec2(1, 1), iconColor);
 				UI::TextCentered(node.path().filename().string(), (float)nodeSize.x);
 				ImGui::EndGroup();
+
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+					dragDropPayload = node.path();
+					ImGui::SetDragDropPayload("file", &dragDropPayload, sizeof(dragDropPayload));
+
+					ImGui::Text(node.path().filename().string().c_str());
+					
+					ImGui::EndDragDropSource();
+				}
 			}
 
 			if (ImGui::BeginPopupContextItem(fn.c_str())) {
@@ -305,7 +315,7 @@ namespace Pine {
 		ImGui::EndGroup();
 	}
 
-	void ContentBrowserPanel::RenderDirectory(const std::filesystem::path& path)
+	void ContentBrowserPanel::RenderDirectoryTree(const std::filesystem::path& path)
 	{
 		PINE_PROFILE_FUNCTION();
 
@@ -334,7 +344,7 @@ namespace Pine {
 			}
 
 			if (open) {
-				RenderDirectory(directory);
+				RenderDirectoryTree(directory);
 
 				ImGui::TreePop();
 			}

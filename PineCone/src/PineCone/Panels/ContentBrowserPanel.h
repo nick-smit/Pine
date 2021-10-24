@@ -31,8 +31,8 @@ namespace Pine {
 	private:
 		void RenderTreeView();
 		void RenderNodeView();
-
-		void RenderDirectory(const std::filesystem::path& path);
+		
+		void RenderDirectoryTree(const std::filesystem::path& path);
 
 		void GotoPrevious();
 		void GotoNext();
