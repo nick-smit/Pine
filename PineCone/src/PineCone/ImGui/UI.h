@@ -24,7 +24,7 @@ namespace Pine {
 		static void TextCentered(const std::string& text);
 		static void TextCentered(const std::string& text, float maxWidth);
 
-		static bool Button(const std::string& text, const glm::vec2& size, bool disabled = false);
+		static bool Button(const std::string& text, const glm::vec2& size = { 0, 0 }, bool disabled = false);
 
 		static bool ImageButton(UITexture texture, const glm::vec2& size, bool disabled = false);
 		static bool ImageButton(std::shared_ptr<Pine::Texture2D> texture, const glm::vec2& size, bool disabled = false);

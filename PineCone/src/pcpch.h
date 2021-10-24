@@ -4,6 +4,7 @@
 #include <fstream>
 #include <filesystem>
 
+#include <cstring>
 #include <string>
 #include <sstream>
 #include <array>

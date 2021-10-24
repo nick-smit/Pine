@@ -14,6 +14,9 @@ namespace Pine {
 	{
 	private:
 		enum class GotoAction { None, Previous, Next };
+	
+	public:
+		ContentBrowserPanel();
 
 	public:
 		virtual void OnAttach() override;
@@ -30,6 +33,8 @@ namespace Pine {
 		void GotoNext();
 		void Goto(const std::filesystem::path& path, GotoAction action = GotoAction::None);
 
+		bool MakeDir(const char* buffer);
+
 	private:
 		std::filesystem::path m_BaseDirectory = {};
 		std::filesystem::path m_CurrentDirectory = {};
@@ -39,6 +44,8 @@ namespace Pine {
 		std::vector<std::filesystem::path> m_NextDirectory;
 
 		UITextureLibrary* m_UITextureLibrary = nullptr;
+
+		char m_ModalInputBuffer[255];
 	};
 
 }

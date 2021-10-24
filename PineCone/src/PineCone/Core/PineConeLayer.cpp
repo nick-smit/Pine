@@ -12,6 +12,8 @@
 #include "PineCone\Panels\ViewportPanel.h"
 #include "PineCone\Panels\Debug\RenderStatsPanel.h"
 
+#include "PineCone\ImGui\ErrorPopup.h"
+
 #include <imgui.h>
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include "backends\imgui_impl_opengl3.h"
@@ -181,6 +183,7 @@ namespace Pine {
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnUpdate() - Render Panels");
 
 			m_PanelManager.OnRender(ts);
+			ErrorPopup::Render();
 		}
 
 		EndDockspace();

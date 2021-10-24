@@ -18,6 +18,8 @@ namespace Pine {
 	public:
 		static std::filesystem::path OpenFile(const std::vector<Filter>& filter);
 		static std::filesystem::path SaveFile(const std::vector<Filter>& filter);
+
+		static std::filesystem::path SelectDirectory();
 	};
 
 }
