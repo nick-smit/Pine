@@ -11,7 +11,6 @@
 
 /// <summary>
 /// Wanted features
-/// * Move directories/files
 /// * Rename directories/files
 /// * Open files in external editor
 /// * Project file
@@ -172,6 +171,12 @@ namespace Pine {
 			if (UI::Button(m_BaseDirectory.filename().string().c_str(), { 0.0f, actionButtonSize.y })) {
 				Goto(m_BaseDirectory);
 			}
+			if (ImGui::BeginDragDropTarget()) {
+				DirectoryDropTarget(m_BaseDirectory);
+				FileDropTarget(m_BaseDirectory);
+
+				ImGui::EndDragDropTarget();
+			}
 			
 			if (m_CurrentDirectory != m_BaseDirectory) {
 				ImGui::SameLine();
@@ -182,6 +187,13 @@ namespace Pine {
 
 					if (UI::Button(dirname.string(), { 0.0f, actionButtonSize.y })) {
 						Goto(clickedPath);
+					}
+					
+					if (ImGui::BeginDragDropTarget()) {
+						DirectoryDropTarget(clickedPath);
+						FileDropTarget(clickedPath);
+
+						ImGui::EndDragDropTarget();
 					}
 
 					ImGui::SameLine();
@@ -271,6 +283,22 @@ namespace Pine {
 				UI::TextCentered(node.path().stem().string(), (float)nodeSize.x);
 				ImGui::EndGroup();
 
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+					dragDropPayload = node.path();
+					ImGui::SetDragDropPayload("directory", &dragDropPayload, sizeof(dragDropPayload));
+
+					ImGui::Text(node.path().filename().string().c_str());
+
+					ImGui::EndDragDropSource();
+				}
+
+				if (ImGui::BeginDragDropTarget()) {
+					DirectoryDropTarget(node.path());
+					FileDropTarget(node.path());
+
+					ImGui::EndDragDropTarget();
+				}
+
 				if (ImGui::IsItemHovered()) {
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 						Goto(node.path());
@@ -328,19 +356,32 @@ namespace Pine {
 			if (directory == m_CurrentDirectory)
 				baseFlags |= ImGuiTreeNodeFlags_Selected;
 
-			bool hasSubDirectories = false;
 			for (const auto& subDir : std::filesystem::directory_iterator(directory)) {
 				if (subDir.is_directory()) {
-					hasSubDirectories = true;
+					baseFlags &= ~ImGuiTreeNodeFlags_Leaf;
 					break;
 				}
 			}
-			if (hasSubDirectories)
-				baseFlags &= ~ImGuiTreeNodeFlags_Leaf;
 
 			bool open = ImGui::TreeNodeEx(directory.path().filename().string().c_str(), baseFlags);
 			if (ImGui::IsItemClicked()) {
 				Goto(directory);
+			}
+
+			if (ImGui::BeginDragDropSource()) {
+				dragDropPayload = directory.path();
+				ImGui::SetDragDropPayload("directory", &dragDropPayload, sizeof(dragDropPayload));
+
+				ImGui::Text(directory.path().filename().string().c_str());
+
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget()) {
+				DirectoryDropTarget(directory);
+				FileDropTarget(directory);
+
+				ImGui::EndDragDropTarget();
 			}
 
 			if (open) {
@@ -406,7 +447,7 @@ namespace Pine {
 		m_CurrentDirectory = path;
 	}
 
-	bool ContentBrowserPanel::MakeDir(const char* buffer)
+	bool ContentBrowserPanel::MakeDir(const char* buffer) const
 	{
 		if (   std::strstr(buffer, ":")  != nullptr 
 			|| std::strstr(buffer, "<")  != nullptr
@@ -435,6 +476,41 @@ namespace Pine {
 		}
 
 		return true;
+	}
+
+	bool ContentBrowserPanel::Move(const std::filesystem::path& src, const std::filesystem::path& dst)
+	{
+		if (std::filesystem::exists(src / dst.filename())) {
+			// Todo: Confirmation for overwriting directory
+			ErrorPopup::Open(fmt::format("Cannot move file '{0}' because a file with the same name exists in '{1}'", src.filename(), dst));
+			return false;
+		}
+
+		std::filesystem::rename(src, dst / src.filename());
+		
+		if (src == m_CurrentDirectory) {
+			m_CurrentDirectory = dst / src.filename();
+		}
+
+		return true;
+	}
+
+	void ContentBrowserPanel::DirectoryDropTarget(const std::filesystem::path& dst)
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("directory")) {
+			const std::filesystem::path src = *(const std::filesystem::path*)payload->Data;
+
+			Move(src, dst);
+		}
+	}
+
+	void ContentBrowserPanel::FileDropTarget(const std::filesystem::path& dst)
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
+			const std::filesystem::path src = *(const std::filesystem::path*)payload->Data;
+
+			Move(src, dst);
+		}
 	}
 
 }

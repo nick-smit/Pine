@@ -38,7 +38,11 @@ namespace Pine {
 		void GotoNext();
 		void Goto(const std::filesystem::path& path, GotoAction action = GotoAction::None);
 
-		bool MakeDir(const char* buffer);
+		bool MakeDir(const char* buffer) const;
+		bool Move(const std::filesystem::path& src, const std::filesystem::path& dst);
+
+		void DirectoryDropTarget(const std::filesystem::path& dst);
+		void FileDropTarget(const std::filesystem::path& dst);
 
 	private:
 		std::vector<std::function<void()>> m_EventListeners;
