@@ -6,6 +6,8 @@
 
 #include "PineCone\Controller\EditorCameraController.h"
 
+#include "PineCone\ImGui\UITextureLibrary.h"
+
 #include <Pine.h>
 
 #include <functional>
@@ -39,6 +41,8 @@ namespace Pine {
 
 		std::shared_ptr<Scene> m_EditorScene = nullptr;
 		std::shared_ptr<SceneContext> m_SceneContext = nullptr;
+
+		std::unique_ptr<UITextureLibrary> m_UITextureLibrary = nullptr;
 
 		bool m_ViewportInFocus = false;
 	};

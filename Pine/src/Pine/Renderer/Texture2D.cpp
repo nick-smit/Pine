@@ -2,32 +2,42 @@
 #include "Texture2D.h"
 
 #include <glad\glad.h>
+
 #include <stb\stb_image.h>
 
 namespace Pine {
 
+	Texture2D::Texture2D(const std::filesystem::path& path)
+		: Texture2D({}, path)
+	{
+	}
+
 	Texture2D::Texture2D(const Specification& spec, const std::filesystem::path& path)
-		: m_Spec(spec)
+		: m_Spec(spec), m_TextureId(0)
 	{
 		PINE_PROFILE_FUNCTION();
 		
-		stbi_set_flip_vertically_on_load(true);
+		stbi_set_flip_vertically_on_load(false);
 		
 		int width, height, channels;
 
-		//const char* charPath = path.string().c_str();
-		unsigned char* data = stbi_load("", &width, &height, &channels, 0);
+		unsigned char* data = stbi_load(path.string().c_str() , &width, &height, &channels, 0);
 		PINE_ASSERT(data, "Failed to load {0}", path);
 		
 		m_Width = (uint32_t)width;
 		m_Height = (uint32_t)height;
 		m_Channels = (uint32_t)channels;
-		
+
 		if (data) {
 			Load(data);
 		
 			stbi_image_free(data);
 		}
+	}
+
+	Texture2D::Texture2D(uint32_t width, uint32_t height, uint32_t channels, void* data, size_t size)
+		: Texture2D({}, width, height, channels, data, size)
+	{
 	}
 
 	Texture2D::Texture2D(const Specification& spec, uint32_t width, uint32_t height, uint32_t channels, void* data, size_t size)

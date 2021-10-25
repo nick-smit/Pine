@@ -4,6 +4,7 @@
 #include <fstream>
 #include <filesystem>
 
+#include <cstring>
 #include <string>
 #include <sstream>
 #include <array>
@@ -30,4 +31,5 @@
 #ifdef WIN32
 #include <Windows.h>
 #include <ShObjIdl.h>
+#include <ShellApi.h>
 #endif

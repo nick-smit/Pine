@@ -7,14 +7,14 @@
 #include <imgui_internal.h>
 
 namespace Pine {
-	
+
 	bool UI::DragFloat(const char* label, float* value, float speed, float min, float max, const char* format)
 	{
 		PC_IMGUI_BEGIN_INPUT_WIDGET_COLUMNS();
 
 		ImGui::Text(label);
 		ImGui::NextColumn();
-		
+
 		std::stringstream ss;
 		ss << "##" << label;
 
@@ -112,6 +112,80 @@ namespace Pine {
 		ImGui::Text(text);
 
 		PC_IMGUI_END_INPUT_WIDGET_COLUMNS();
+	}
+
+	void UI::TextCentered(const std::string& text)
+	{
+		float windowWidth = ImGui::GetWindowSize().x;
+
+		UI::TextCentered(text, windowWidth);
+	}
+
+	void UI::TextCentered(const std::string& text, float maxWidth)
+	{
+		ImVec2 currentCursorPos = ImGui::GetCursorPos();
+
+		float textWidth = ImGui::CalcTextSize(text.c_str()).x;
+
+		ImGui::SetCursorPosX((maxWidth - textWidth) * 0.5f + currentCursorPos.x);
+		ImGui::Text(text.c_str());
+	}
+
+	bool UI::Button(const std::string& text, const glm::vec2& size, bool disabled)
+	{
+		if (disabled)
+			BeginDisabled();
+
+		bool clicked = ImGui::Button(text.c_str(), ImVec2(size.x, size.y));
+		
+		if (disabled)
+			EndDisabled();
+
+		return clicked;
+	}
+
+	bool UI::ImageButton(UITexture texture, const glm::vec2& size, bool disabled)
+	{
+		auto* textureLib = UITextureLibrary::Get();
+
+		return ImageButton(textureLib->GetTexture(texture), size, disabled);
+	}
+
+	bool UI::ImageButton(std::shared_ptr<Pine::Texture2D> texture, const glm::vec2& size, bool disabled)
+	{
+		if (disabled)
+			BeginDisabled();
+
+		bool clicked = ImGui::ImageButton((void*)texture->GetId(), ImVec2(size.x, size.y));
+
+		if (disabled)
+			EndDisabled();
+
+		return clicked;
+	}
+
+	void UI::BeginDisabled()
+	{
+		auto& style = ImGui::GetStyle();
+
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * 0.5f);
+	}
+
+	void UI::EndDisabled()
+	{
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
+	}
+
+	ImVec4 UI::GetColor(const std::string& name)
+	{
+		if (name == "ActionBarBg") return ImVec4(0.266f, 0.316f, 0.340f, 1.0f); // rgb: 68, 81, 87
+		
+		if (name == "Icon_Default") return ImVec4(1, 1, 1, 1);
+
+		PINE_ASSERT("Undefined color: '{0}'!", name);
+		return ImVec4(1.0f, 0.0f, 0.898f, 1.0f);
 	}
 
 }

@@ -3,6 +3,7 @@
 
 #include "Event.h"
 
+#include "PineCone\Panels\ContentBrowserPanel.h"
 #include "PineCone\Panels\EditorPropertiesPanel.h"
 #include "PineCone\Panels\EntityPropertiesPanel.h"
 #include "PineCone\Panels\MenuBarPanel.h"
@@ -10,6 +11,8 @@
 #include "PineCone\Panels\SceneHierarchyPanel.h"
 #include "PineCone\Panels\ViewportPanel.h"
 #include "PineCone\Panels\Debug\RenderStatsPanel.h"
+
+#include "PineCone\ImGui\ErrorPopup.h"
 
 #include <imgui.h>
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
@@ -45,6 +48,8 @@ namespace Pine {
 
 		m_CameraController->ResizeViewport({ (float)fbSpec.Width, (float)fbSpec.Height });
 		m_CameraController->Initialize();
+
+		m_UITextureLibrary = std::make_unique<UITextureLibrary>();
 
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Setup ImGui");
@@ -134,6 +139,7 @@ namespace Pine {
 			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
 			m_PanelManager.AddPanel(EditorPropertiesPanel::GetName(), new EditorPropertiesPanel(m_CameraController), true);
+			m_PanelManager.AddPanel(ContentBrowserPanel::GetName(), new ContentBrowserPanel(), true);
 
 			m_PanelManager.AddPanel(RenderStatsPanel::GetName(), new RenderStatsPanel(), true);
 
@@ -146,6 +152,8 @@ namespace Pine {
 	void PineConeLayer::OnDetach()
 	{
 		PINE_PROFILE_FUNCTION();
+
+		m_UITextureLibrary = nullptr;
 
 		for (auto fn : m_UnsubscribeFunctions) {
 			fn();
@@ -175,6 +183,7 @@ namespace Pine {
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnUpdate() - Render Panels");
 
 			m_PanelManager.OnRender(ts);
+			ErrorPopup::Render();
 		}
 
 		EndDockspace();
