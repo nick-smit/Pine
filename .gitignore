@@ -16,3 +16,6 @@ PineCone/imgui.ini
 profile-init.json
 profile-run.json
 profile-terminate.json
+
+# Mac
+.DS_Store
