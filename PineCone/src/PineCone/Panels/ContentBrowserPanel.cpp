@@ -148,19 +148,19 @@ namespace Pine {
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, UI::GetColor("ActionBarBg"));
 		ImGui::BeginChild("Action bar", ImVec2(0.0f, actionBarPadding * 2 + actionButtonSize.y), false, ImGuiWindowFlags_AlwaysUseWindowPadding);
 		{
-			if (UI::ImageButton(UITexture::ArrowLeft, actionButtonSize, m_PreviousDirectory.empty())) {
+			if (UI::ImageButton(UITexture::ArrowLeftFill, actionButtonSize, m_PreviousDirectory.empty())) {
 				GotoPrevious();
 			}
 
 			ImGui::SameLine();
 
-			if (UI::ImageButton(UITexture::ArrowRight, actionButtonSize, m_NextDirectory.empty())) {
+			if (UI::ImageButton(UITexture::ArrowRightFill, actionButtonSize, m_NextDirectory.empty())) {
 				GotoNext();
 			}
 
 			ImGui::SameLine();
 
-			if (UI::ImageButton(UITexture::ArrowUp, actionButtonSize, m_CurrentDirectory == m_BaseDirectory)) {
+			if (UI::ImageButton(UITexture::ArrowUpFill, actionButtonSize, m_CurrentDirectory == m_BaseDirectory)) {
 				Goto(m_CurrentDirectory.parent_path());
 			}
 
@@ -203,7 +203,6 @@ namespace Pine {
 		ImGui::PopStyleColor(); // ActionBarBg
 		ImGui::PopStyleVar(); // WindowPadding
 
-		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.8f, 0.2f, 0.1f, 1.0f));
 		ImGui::BeginChild("Node view");
 
 		std::string openPopup;
@@ -270,6 +269,7 @@ namespace Pine {
 		float windowVisiblex2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 
 		ImVec2 nodeSize = ImVec2(96, 96);
+		constexpr UITextureSize texSize = UITextureSize::_96;
 		ImVec4 iconColor = UI::GetColor("Icon_Default");
 
 		for (const auto& node : std::filesystem::directory_iterator(m_CurrentDirectory)) {
@@ -279,7 +279,7 @@ namespace Pine {
 
 			if (node.is_directory()) {
 				ImGui::BeginGroup();
-				ImGui::Image((void*)m_UITextureLibrary->GetTextureID(UITexture::Folder), nodeSize, ImVec2(0, 0), ImVec2(1, 1), iconColor);
+				ImGui::Image((void*)m_UITextureLibrary->GetTextureID(UITexture::FolderFill, texSize), nodeSize, ImVec2(0, 0), ImVec2(1, 1), iconColor);
 				UI::TextCentered(node.path().stem().string(), (float)nodeSize.x);
 				ImGui::EndGroup();
 
@@ -307,7 +307,7 @@ namespace Pine {
 			}
 			else {
 				ImGui::BeginGroup();
-				ImGui::Image((void*)m_UITextureLibrary->GetTextureID(UITexture::File), nodeSize, ImVec2(0, 0), ImVec2(1, 1), iconColor);
+				ImGui::Image((void*)m_UITextureLibrary->GetTextureID(UITexture::FileFill, texSize), nodeSize, ImVec2(0, 0), ImVec2(1, 1), iconColor);
 				UI::TextCentered(node.path().filename().string(), (float)nodeSize.x);
 				ImGui::EndGroup();
 
@@ -338,7 +338,6 @@ namespace Pine {
 		}
 
 		ImGui::EndChild(); // End node view
-		ImGui::PopStyleColor();
 
 		ImGui::EndGroup();
 	}
