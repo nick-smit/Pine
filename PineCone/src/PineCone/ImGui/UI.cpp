@@ -178,6 +178,22 @@ namespace Pine {
 		ImGui::PopStyleVar();
 	}
 
+	glm::vec2 UI::GetWindowSpaceMousePosition()
+	{
+		if (!ImGui::IsWindowHovered())
+			return { -1,-1 };
+
+		ImVec2 windowPos = ImGui::GetWindowPos();
+		ImVec2 vMin = ImGui::GetWindowContentRegionMin();
+
+		vMin.x += ImGui::GetWindowPos().x;
+		vMin.y += ImGui::GetWindowPos().y;
+
+		ImVec2 screenSpaceMousePos = ImGui::GetMousePos();
+
+		return { screenSpaceMousePos.x - vMin.x, screenSpaceMousePos.y - vMin.y };
+	}
+
 	ImVec4 UI::GetColor(const std::string& name)
 	{
 		if (name == "ActionBarBg") return ImVec4(0.266f, 0.316f, 0.340f, 1.0f); // rgb: 68, 81, 87

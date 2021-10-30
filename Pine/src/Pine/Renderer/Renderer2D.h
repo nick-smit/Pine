@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include "Texture2D.h"
+#include "Pine/Scene/Entity.h"
 
 #include <memory>
 #include <glm\glm.hpp>
@@ -18,13 +19,15 @@ namespace Pine {
 			glm::vec3 Position = glm::vec3(1.0f);
 			glm::vec3 Scale = glm::vec3(1.0f);
 			float ZRotation = 0.0f;
-			
+
 			// Color
 			glm::vec4 Color = glm::vec4(1.0f);
-			
+
 			// Textures
 			float TilingFactor = 1.0f;
 			std::shared_ptr<Texture2D> Texture = nullptr;
+
+			Entity Entity;
 
 			QuadSpecification() = default;
 			QuadSpecification(const glm::vec3& position)

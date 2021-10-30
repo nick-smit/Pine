@@ -194,13 +194,19 @@ namespace Pine {
 
 	void Framebuffer::Bind()
 	{
+		if (m_IsBound) {
+			return;
+		}
+
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FramebufferId);
 		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
+		m_IsBound = true;
 	}
 
 	void Framebuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		m_IsBound = false;
 	}
 
 	void Framebuffer::Resize(uint32_t width, uint32_t height)
@@ -223,6 +229,26 @@ namespace Pine {
 		PINE_ASSERT(index < m_ColorAttachments.size(), "Index out of bounds");
 		
 		return m_ColorAttachments[index];
+	}
+
+	int32_t Framebuffer::ReadRedPixel(uint32_t index, uint32_t x, uint32_t y)
+	{
+		PINE_ASSERT(index < m_ColorAttachments.size(), "Index out of bounds");
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
+
+		int data;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &data);
+
+		return data;
+	}
+
+	void Framebuffer::ClearAttachment(uint32_t index, int32_t value)
+	{
+		PINE_ASSERT(index < m_ColorAttachments.size(), "Index out of bounds");
+
+		auto& spec = m_ColorAttachmentSpecifications[index];
+		glClearTexImage(m_ColorAttachments[index], 0, Utils::PineFramebufferTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
 	}
 
 }

@@ -41,7 +41,7 @@ namespace Pine {
 
 		// setup renderer related stuff
 		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth, FramebufferTextureFormat::RED_INTEGER };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = std::make_shared<Framebuffer>(fbSpec);
@@ -137,7 +137,7 @@ namespace Pine {
 			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
 			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext, m_CameraController), true);
 			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
-			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_Framebuffer), true);
+			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_SceneContext, m_Framebuffer), true);
 			m_PanelManager.AddPanel(EditorPropertiesPanel::GetName(), new EditorPropertiesPanel(m_CameraController), true);
 			m_PanelManager.AddPanel(ContentBrowserPanel::GetName(), new ContentBrowserPanel(), true);
 
@@ -278,6 +278,8 @@ namespace Pine {
 
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RenderCommand::Clear();
+
+			m_Framebuffer->ClearAttachment(1, -1);
 
 			SceneRenderer::RenderScene(m_EditorScene, m_CameraController->GetCamera());
 

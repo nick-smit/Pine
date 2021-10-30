@@ -32,6 +32,8 @@ namespace Pine {
 		static void BeginDisabled();
 		static void EndDisabled();
 
+		static glm::vec2 GetWindowSpaceMousePosition();
+
 		static ImVec4 GetColor(const std::string& name);
 	};
 

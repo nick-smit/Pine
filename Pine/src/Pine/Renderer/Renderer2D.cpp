@@ -18,6 +18,7 @@ namespace Pine {
 		glm::vec2 TexCoord;
 		float TexIndex;
 		float TilingFactor;
+		int32_t EntityID;
 	};
 
 	struct Renderer2DData {
@@ -59,7 +60,8 @@ namespace Pine {
 				{ ShaderDataType::Float4, "a_Color" },
 				{ ShaderDataType::Float2, "a_TexCoords" },
 				{ ShaderDataType::Float1, "a_TexIndex" },
-				{ ShaderDataType::Float1, "a_TilingFactor" }
+				{ ShaderDataType::Float1, "a_TilingFactor" },
+				{ ShaderDataType::Int1,   "a_EntityID" }
 			};
 			s_Data->QuadVertexBuffer = std::make_shared<VertexBuffer>(s_Data->MaxVertices * sizeof(QuadVertex), layout);
 			s_Data->QuadVertexArray->AddVertexBuffer(s_Data->QuadVertexBuffer);
@@ -172,6 +174,8 @@ namespace Pine {
 			s_Data->QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data->QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data->QuadVertexBufferPtr->TilingFactor = spec.TilingFactor;
+			s_Data->QuadVertexBufferPtr->EntityID = (uint32_t)spec.Entity;
+			
 			s_Data->QuadVertexBufferPtr++;
 		}
 
