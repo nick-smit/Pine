@@ -18,6 +18,7 @@
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include "backends\imgui_impl_opengl3.h"
 #include "backends\imgui_impl_glfw.h"
+#include <ImGuizmo.h>
 
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
@@ -137,7 +138,7 @@ namespace Pine {
 			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
 			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext, m_CameraController), true);
 			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
-			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_SceneContext, m_Framebuffer), true);
+			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_SceneContext, m_Framebuffer, m_CameraController), true);
 			m_PanelManager.AddPanel(EditorPropertiesPanel::GetName(), new EditorPropertiesPanel(m_CameraController), true);
 			m_PanelManager.AddPanel(ContentBrowserPanel::GetName(), new ContentBrowserPanel(), true);
 
@@ -176,6 +177,7 @@ namespace Pine {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 
 		BeginDockspace();
 

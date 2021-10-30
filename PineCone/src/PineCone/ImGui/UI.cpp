@@ -146,9 +146,17 @@ namespace Pine {
 
 	bool UI::ImageButton(UITexture texture, const glm::vec2& size, bool disabled)
 	{
+		UITextureSize textureSize = UITextureSize::Small;
+		if (std::max(size.x, size.y) > 96) {
+			textureSize = UITextureSize::Large;
+		}
+		else if (std::max(size.x, size.y) > 48) {
+			textureSize = UITextureSize::Medium;
+		}
+
 		auto* textureLib = UITextureLibrary::Get();
 
-		return ImageButton(textureLib->GetTexture(texture), size, disabled);
+		return ImageButton(textureLib->GetTexture(texture, textureSize), size, disabled);
 	}
 
 	bool UI::ImageButton(std::shared_ptr<Pine::Texture2D> texture, const glm::vec2& size, bool disabled)

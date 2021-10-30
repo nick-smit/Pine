@@ -29,3 +29,6 @@
 #include "Pine\Scene\Entity.h"
 #include "Pine\Scene\Scene.h"
 #include "Pine\Scene\SceneSerializer.h"
+
+// Math
+#include "Pine\Math\Math.h"

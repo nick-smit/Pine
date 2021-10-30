@@ -23,12 +23,14 @@ project "PineCone"
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImGuizmo}",
 		"%{IncludeDir.spdlog}",
 	}
 
 	links {
 		"Pine",
 		"ImGui",
+		"ImGuizmo",
 	}
 
 	filter "system:windows"

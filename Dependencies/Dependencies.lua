@@ -4,6 +4,7 @@ IncludeDir["glfw"]   = "Pine/vendor/glfw/include";
 IncludeDir["glad"]   = "Pine/vendor/glad/include";
 IncludeDir["glm"]    = "Pine/vendor/glm";
 IncludeDir["ImGui"]  = "PineCone/vendor/imgui"
+IncludeDir["ImGuizmo"]  = "PineCone/vendor/imguizmo"
 IncludeDir["spdlog"] = "Pine/vendor/spdlog/include";
 IncludeDir["stb"]    = "Pine/vendor/stb";
 IncludeDir["yaml_cpp"]    = "Pine/vendor/yaml-cpp/include";

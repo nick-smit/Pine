@@ -19,3 +19,6 @@
 [submodule "Pine/vendor/yaml-cpp"]
 	path = Pine/vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "PineCone/vendor/ImGuizmo"]
+	path = PineCone/vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

@@ -53,6 +53,9 @@ namespace Pine {
 		void SetRotation(const glm::vec3& rotation);
 
 		void UpdateView(const glm::vec3& position, const glm::vec3& rotation);
+
+		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 	private:
 		void RecalculateViewMatrix();
 

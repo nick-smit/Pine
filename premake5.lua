@@ -20,6 +20,7 @@ group "Dependencies"
 	include "Dependencies/glm"
 	include "Dependencies/glfw"
 	include "Dependencies/ImGui"
+	include "Dependencies/ImGuizmo"
 	include "Dependencies/spdlog"
 	include "Dependencies/yaml-cpp"
 
