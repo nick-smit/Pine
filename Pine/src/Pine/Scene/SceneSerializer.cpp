@@ -72,6 +72,8 @@ namespace Pine {
 
 	void SceneSerializer::Serialize(std::shared_ptr<Scene> scene, const std::filesystem::path& filepath)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		YAML::Emitter out;
 		
 		out << YAML::BeginMap;
@@ -109,6 +111,8 @@ namespace Pine {
 
 	std::shared_ptr<Scene> SceneSerializer::Deserialize(const std::filesystem::path& filepath)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		YAML::Node sceneData = YAML::LoadFile(filepath.string());
 
 		if (!sceneData["Entities"]) {

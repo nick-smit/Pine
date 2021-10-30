@@ -7,6 +7,8 @@ namespace Pine {
 
 	UITextureLibrary::UITextureLibrary()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		s_UITextureLibrary = this;
 
 		// Load textures into map
@@ -19,6 +21,10 @@ namespace Pine {
 			m_TextureMap[UITexture::ArrowLeftFill][size] = nullptr;
 			m_TextureMap[UITexture::ArrowDownFill][size] = nullptr;
 			m_TextureMap[UITexture::ArrowRightFill][size] = nullptr;
+			m_TextureMap[UITexture::CursorFill][size] = nullptr;
+			m_TextureMap[UITexture::TranslateFill][size] = nullptr;
+			m_TextureMap[UITexture::RotateFill][size] = nullptr;
+			m_TextureMap[UITexture::ScaleFill][size] = nullptr;
 		}
 	}
 
@@ -29,6 +35,8 @@ namespace Pine {
 
 	std::shared_ptr<Texture2D> UITextureLibrary::GetTexture(UITexture texture, UITextureSize size)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		if (!m_TextureMap[texture][size]) {
 			Load(texture, size);
 		}
@@ -43,6 +51,8 @@ namespace Pine {
 
 	void UITextureLibrary::Load(UITexture texture, UITextureSize size)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		// TODO(Nick) We might want to optimize this, but for the time being this is fine.
 
 		auto iconBasePath = std::filesystem::current_path() / "editor_assets/icon";
@@ -71,6 +81,22 @@ namespace Pine {
 			}
 			case UITexture::ArrowLeftFill: {
 				icon = "arrow-left-circle-fill";
+				break;
+			}
+			case UITexture::CursorFill: {
+				icon = "cursor-fill";
+				break;
+			}
+			case UITexture::TranslateFill: {
+				icon = "drag-move-2-line";
+				break;
+			}
+			case UITexture::RotateFill: {
+				icon = "clockwise-2-fill";
+				break;
+			}
+			case UITexture::ScaleFill: {
+				icon = "shape-fill";
 				break;
 			}
 		}

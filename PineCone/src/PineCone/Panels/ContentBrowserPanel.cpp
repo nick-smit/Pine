@@ -123,6 +123,8 @@ namespace Pine {
 
 	void ContentBrowserPanel::RenderTreeView()
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, style.WindowPadding);
 		ImGui::BeginChild("Tree view", ImVec2(200.0f, 0.0f)); {

@@ -11,6 +11,8 @@ namespace Pine {
 	
 	void RenderStatsPanel::OnRender(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGui::Begin("Render statistics");
 
 		UI::LabeledText("FPS:", std::to_string(1.0f / ts).c_str());

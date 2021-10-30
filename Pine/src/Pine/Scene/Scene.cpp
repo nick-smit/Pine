@@ -16,6 +16,8 @@ namespace Pine {
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<TagComponent>(name.empty() ? "Empty Entity" : name);
 		entity.AddComponent<TransformComponent>();
@@ -25,11 +27,15 @@ namespace Pine {
 
 	void Scene::DestroyEntity(const Entity& entity)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		m_Registry.destroy(entity);
 	}
 
 	void Scene::OnUpdate(Timestep ts, const Camera& camera)
 	{
+		PINE_PROFILE_FUNCTION();
+
 	}
 
 }

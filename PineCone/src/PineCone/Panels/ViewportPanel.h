@@ -36,6 +36,10 @@ namespace Pine {
 		static std::string GetName() { return "ViewportPanel"; };
 
 	private:
+		void RenderToolbar();
+		void RenderViewport();
+
+	private:
 		std::vector<std::function<void()>> m_EventListeners;
 		
 		std::shared_ptr<SceneContext> m_Context;

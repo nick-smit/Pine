@@ -63,6 +63,8 @@ namespace Pine {
 
 	void EditorCameraController::Update(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		bool shouldUpdateView = false;
 		if (Input::IsKeyPressed(Key::LeftAlt) || Input::IsKeyPressed(Key::RightAlt)) {
 			const glm::vec2& mouse = { Input::GetMouseX(), Input::GetMouseY() };

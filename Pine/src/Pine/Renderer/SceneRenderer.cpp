@@ -12,6 +12,8 @@ namespace Pine {
 
 	void SceneRenderer::RenderScene(std::shared_ptr<Scene> scene, const Camera& camera)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		Renderer2D::BeginScene(camera);
 
 		auto view = scene->GetEnttRegistry().view<const TransformComponent, const SpriteRendererComponent>();

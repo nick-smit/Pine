@@ -9,6 +9,8 @@ namespace Pine {
 	
 	void EditorPropertiesPanel::OnRender(Timestep ts)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		ImGui::Begin("Editor properties");
 
 		ImGuiTreeNodeFlags editorCameraFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed;

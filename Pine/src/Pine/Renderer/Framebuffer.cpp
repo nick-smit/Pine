@@ -233,6 +233,8 @@ namespace Pine {
 
 	int32_t Framebuffer::ReadRedPixel(uint32_t index, uint32_t x, uint32_t y)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PINE_ASSERT(index < m_ColorAttachments.size(), "Index out of bounds");
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
@@ -245,6 +247,8 @@ namespace Pine {
 
 	void Framebuffer::ClearAttachment(uint32_t index, int32_t value)
 	{
+		PINE_PROFILE_FUNCTION();
+
 		PINE_ASSERT(index < m_ColorAttachments.size(), "Index out of bounds");
 
 		auto& spec = m_ColorAttachmentSpecifications[index];

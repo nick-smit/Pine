@@ -4,8 +4,10 @@
 #include "PineCone\Core\Event.h"
 #include "PineCone\ImGui\ErrorPopup.h"
 #include "PineCone\ImGui\UI.h"
+#include "PineCone\ImGui\UITextureLibrary.h"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <ImGuizmo.h>
 
 #include <glm\glm.hpp>
@@ -14,6 +16,8 @@
 #include <string>
 
 namespace Pine {
+
+	static float toolbarButtonSize = 24.0f;
 
 	void ViewportPanel::OnAttach()
 	{
@@ -100,8 +104,91 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		ImGui::Begin("Viewport");
+		const float toolBarHeight = toolbarButtonSize + ImGui::GetStyle().FramePadding.y * 5;
+
+		ImGuiWindowFlags viewportWindowFlags = 0
+			| ImGuiWindowFlags_NoScrollbar
+			| ImGuiWindowFlags_NoCollapse;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
+		ImGui::Begin("Viewport", NULL, viewportWindowFlags);
+		ImGui::PopStyleVar();
+
+		ImGuiWindowFlags childWindowFlags = 0
+			| ImGuiWindowFlags_NoDocking
+			| ImGuiWindowFlags_NoTitleBar
+			| ImGuiWindowFlags_NoResize
+			| ImGuiWindowFlags_NoMove
+			| ImGuiWindowFlags_NoScrollbar
+			| ImGuiWindowFlags_AlwaysUseWindowPadding;
+		
+
+		ImGui::BeginChild("Toolbar", { 0, toolBarHeight }, false, childWindowFlags);
+		RenderToolbar();
+		ImGui::EndChild();
+
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
+		ImGui::BeginChild("Viewport", { 0, 0 }, false, childWindowFlags);
+		ImGui::PopStyleVar();
+		RenderViewport();
+		ImGui::EndChild();
+
+		ImGui::End();
+	}
+
+	void ViewportPanel::RenderToolbar()
+	{
+		PINE_PROFILE_FUNCTION();
+
+		GuizmoMode curGuizmoMode = m_GuizmoMode;
+
+		UITextureLibrary* texLib = UITextureLibrary::Get();
+
+		const ImVec2 buttonSize = { toolbarButtonSize, toolbarButtonSize };
+		
+		auto& style = ImGui::GetStyle();
+		auto origButtonCol = style.Colors[ImGuiCol_Button];
+
+		ImVec4 activeColor = style.Colors[ImGuiCol_ButtonActive];
+		ImVec4 defaultColor = ImVec4(0, 0, 0, 0);
+
+		style.Colors[ImGuiCol_Button] = defaultColor;
+
+		if (curGuizmoMode == GuizmoMode::Cursor) style.Colors[ImGuiCol_Button] = activeColor;
+		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::CursorFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+			m_GuizmoMode = GuizmoMode::Cursor;
+		}
+		if (curGuizmoMode == GuizmoMode::Cursor) style.Colors[ImGuiCol_Button] = defaultColor;
+		ImGui::SameLine();
+
+		if (curGuizmoMode == GuizmoMode::Translate) style.Colors[ImGuiCol_Button] = activeColor;
+		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::TranslateFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+			m_GuizmoMode = GuizmoMode::Translate;
+		}
+		if (curGuizmoMode == GuizmoMode::Translate) style.Colors[ImGuiCol_Button] = defaultColor;
+		ImGui::SameLine();
+
+		if (curGuizmoMode == GuizmoMode::Rotate) style.Colors[ImGuiCol_Button] = activeColor;
+		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::RotateFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+			m_GuizmoMode = GuizmoMode::Rotate;
+		}
+		if (curGuizmoMode == GuizmoMode::Rotate) style.Colors[ImGuiCol_Button] = defaultColor;
+		ImGui::SameLine();
+
+		if (curGuizmoMode == GuizmoMode::Scale) style.Colors[ImGuiCol_Button] = activeColor;
+		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::ScaleFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+			m_GuizmoMode = GuizmoMode::Scale;
+		}
+		if (curGuizmoMode == GuizmoMode::Scale) style.Colors[ImGuiCol_Button] = defaultColor;
+		ImGui::SameLine();
+
+		style.Colors[ImGuiCol_Button] = origButtonCol;
+	}
+
+	void ViewportPanel::RenderViewport()
+	{
+		PINE_PROFILE_FUNCTION();
 
 		m_IsHovered = ImGui::IsWindowHovered();
 		m_WindowSpaceMousePos = UI::GetWindowSpaceMousePosition();
@@ -117,7 +204,7 @@ namespace Pine {
 
 		uint32_t textureId = m_Framebuffer->GetColorAttachmentId();
 		ImGui::Image(reinterpret_cast<void*>(textureId), viewportPanelSize, ImVec2(0, 1), ImVec2(1, 0));
-		
+
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
 				const std::filesystem::path path = *(const std::filesystem::path*)payload->Data;
@@ -135,6 +222,8 @@ namespace Pine {
 
 		// ImGuizmo
 		if (m_SelectedEntity && m_GuizmoMode != GuizmoMode::Cursor) {
+			PINE_PROFILE_SCOPE("ImGuizmo");
+
 			ImGuizmo::SetDrawlist();
 			ImGuizmo::SetRect(viewportBoundsMin.x, viewportBoundsMin.y, viewportBoundsMax.x - viewportBoundsMin.x, viewportBoundsMax.y - viewportBoundsMin.y);
 
@@ -174,7 +263,7 @@ namespace Pine {
 			if (ImGuizmo::IsUsing()) {
 				glm::vec3 translation, rotation, scale;
 				Math::DecomposeTransform(transform, translation, rotation, scale);
-				
+
 				transformComponent.Translation = translation;
 				transformComponent.Rotation = rotation;
 				transformComponent.Scale = scale;
@@ -186,9 +275,6 @@ namespace Pine {
 		if (m_InFocus != oldFocusStatus) {
 			EventDispatcher<ViewportFocusedEvent>::Dispatch({ m_InFocus });
 		}
-
-		ImGui::End();
-		ImGui::PopStyleVar();
 	}
 
 }

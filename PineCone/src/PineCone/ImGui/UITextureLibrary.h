@@ -19,6 +19,11 @@ namespace Pine {
 		ArrowLeftFill,
 		ArrowDownFill,
 		ArrowRightFill,
+		
+		CursorFill,
+		TranslateFill,
+		RotateFill,
+		ScaleFill,
 	};
 
 	enum class UITextureSize { 

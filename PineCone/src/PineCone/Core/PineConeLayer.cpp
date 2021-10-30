@@ -211,6 +211,8 @@ namespace Pine {
 
 	void PineConeLayer::BeginDockspace() const
 	{
+		PINE_PROFILE_FUNCTION();
+
 		static bool dockspaceOpen = true;
 		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
