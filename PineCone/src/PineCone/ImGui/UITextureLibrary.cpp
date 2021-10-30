@@ -10,15 +10,15 @@ namespace Pine {
 		s_UITextureLibrary = this;
 
 		// Load textures into map
-		UITextureSize[] textureSizes = { UITextureSize::_48, UITextureSize::_96, UITextureSize::_240 };
+		UITextureSize textureSizes[] = { UITextureSize::_48, UITextureSize::_96, UITextureSize::_240 };
 		
 		for (const UITextureSize& size : textureSizes) {
-			m_LoadedTextures[UITexture::FolderFill][size] = nullptr;
-			m_LoadedTextures[UITexture::FileFill][size] = nullptr;
-			m_LoadedTextures[UITexture::ArrowUpFill][size] = nullptr;
-			m_LoadedTextures[UITexture::ArrowLeftFill][size] = nullptr;
-			m_LoadedTextures[UITexture::ArrowDownFill][size] = nullptr;
-			m_LoadedTextures[UITexture::ArrowRightFill][size] = nullptr;
+			m_TextureMap[UITexture::FolderFill][size] = nullptr;
+			m_TextureMap[UITexture::FileFill][size] = nullptr;
+			m_TextureMap[UITexture::ArrowUpFill][size] = nullptr;
+			m_TextureMap[UITexture::ArrowLeftFill][size] = nullptr;
+			m_TextureMap[UITexture::ArrowDownFill][size] = nullptr;
+			m_TextureMap[UITexture::ArrowRightFill][size] = nullptr;
 		}
 	}
 
@@ -36,12 +36,12 @@ namespace Pine {
 		return m_TextureMap[texture][size];
 	}
 
-	uint32_t UITextureLibrary::GetTextureID(UITexture texture)
+	uint32_t UITextureLibrary::GetTextureID(UITexture texture, UITextureSize size)
 	{
-		return GetTexture(texture)->GetId();
+		return GetTexture(texture, size)->GetId();
 	}
 
-	void Load(UITexture texture, UITextureSize size)
+	void UITextureLibrary::Load(UITexture texture, UITextureSize size)
 	{
 		// TODO(Nick) We might want to optimize this, but for the time being this is fine.
 
@@ -93,6 +93,8 @@ namespace Pine {
 
 		auto iconPath = iconBasePath / icon;
 		PINE_ASSERT(std::filesystem::exists(iconPath), "Icon could not be found!");
+
+		PINE_LOG_CORE_DEBUG("Loading UI Texture: '{0}'", iconPath);
 
 		m_TextureMap[texture][size] = std::make_shared<Texture2D>(iconPath);
 	}

@@ -182,7 +182,7 @@ namespace Pine {
 	{
 		if (name == "ActionBarBg") return ImVec4(0.266f, 0.316f, 0.340f, 1.0f); // rgb: 68, 81, 87
 		
-		if (name == "Icon_Default") return ImVec4(1, 1, 1, 1);
+		if (name == "Icon_Default") return ImVec4(0.8f, 0.8f, 0.8f, 1);
 
 		PINE_ASSERT("Undefined color: '{0}'!", name);
 		return ImVec4(1.0f, 0.0f, 0.898f, 1.0f);

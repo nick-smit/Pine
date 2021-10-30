@@ -38,7 +38,7 @@ namespace Pine {
 		virtual ~UITextureLibrary();
 
 		std::shared_ptr<Texture2D> GetTexture(UITexture texture, UITextureSize size = UITextureSize::Small);
-		uint32_t GetTextureID(UITexture texture);
+		uint32_t GetTextureID(UITexture texture, UITextureSize size = UITextureSize::Small);
 
 		static UITextureLibrary* Get() { return s_UITextureLibrary; };
 	
