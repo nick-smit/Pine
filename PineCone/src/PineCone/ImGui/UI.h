@@ -15,6 +15,7 @@ namespace Pine {
 	class UI {
 	public:
 		enum class Status { None, Default, Hovered, Active, Clicked, Disabled };
+		enum class Font { Regular = 0, Italic = 1, Bold = 2, BoldItalic = 3, Default = Regular };
 	public:
 		static bool DragFloat(const char* label, float* value, float speed = 0.1f, float min = 0.0f, float max = 0.0f, const char* format = "%.3f");
 
@@ -51,6 +52,8 @@ namespace Pine {
 		static glm::vec2 GetWindowSpaceMousePosition();
 
 		static ImVec4 GetColor(const std::string& name);
+		static uint32_t GetFont(Font font);
+		static void ApplyStyle();
 	
 	private:
 		static bool s_InToolbar;

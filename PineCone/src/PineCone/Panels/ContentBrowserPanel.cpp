@@ -123,14 +123,11 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
-		ImGuiStyle& style = ImGui::GetStyle();
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, style.WindowPadding);
-		ImGui::BeginChild("Tree view", ImVec2(200.0f, 0.0f)); {
+		ImGui::BeginChild("Tree view", ImVec2(200.0f, 0.0f), false, ImGuiWindowFlags_AlwaysUseWindowPadding);
 
-			RenderDirectoryTree(m_BaseDirectory);
+		RenderDirectoryTree(m_BaseDirectory);
 
-		} ImGui::EndChild(); // End tree view
-		ImGui::PopStyleVar();
+		ImGui::EndChild();
 	}
 
 	void ContentBrowserPanel::RenderNodeView()
@@ -226,7 +223,6 @@ namespace Pine {
 		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-		// Todo nick: Figure out why the popup status is not open?
 		if (ImGui::BeginPopupModal("New directory", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 			auto closeFn = [&]() {
 				memset(m_ModalInputBuffer, 0, sizeof(m_ModalInputBuffer));

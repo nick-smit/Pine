@@ -61,7 +61,7 @@ namespace Pine {
 						m_GuizmoMode = GuizmoMode::Cursor;
 						break;
 					}
-					case Key::M: {
+					case Key::T: {
 						m_GuizmoMode = GuizmoMode::Translate;
 						break;
 					}

@@ -13,6 +13,7 @@
 #include "PineCone\Panels\Debug\RenderStatsPanel.h"
 
 #include "PineCone\ImGui\ErrorPopup.h"
+#include "PineCone\ImGui\UI.h"
 
 #include <imgui.h>
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
@@ -70,6 +71,7 @@ namespace Pine {
 
 			// Setup Dear ImGui style
 			ImGui::StyleColorsDark();
+			UI::ApplyStyle();
 		}
 
 		{
