@@ -8,6 +8,8 @@
 
 namespace Pine {
 
+	bool UI::s_InToolbar = false;
+
 	bool UI::DragFloat(const char* label, float* value, float speed, float min, float max, const char* format)
 	{
 		PC_IMGUI_BEGIN_INPUT_WIDGET_COLUMNS();
@@ -131,21 +133,51 @@ namespace Pine {
 		ImGui::Text(text.c_str());
 	}
 
-	bool UI::Button(const std::string& text, const glm::vec2& size, bool disabled)
+	bool UI::Button(const std::string& text, const glm::vec2& size, Status status)
 	{
-		if (disabled)
-			BeginDisabled();
+		auto& style = ImGui::GetStyle();
 
-		bool clicked = ImGui::Button(text.c_str(), ImVec2(size.x, size.y));
-		
-		if (disabled)
-			EndDisabled();
+		ImVec4 originalColor = style.Colors[ImGuiCol_Button];
+		ImVec4 activeColor = style.Colors[ImGuiCol_ButtonActive];
+
+		switch (status) {
+			case Status::Disabled:
+				BeginDisabled();
+				break;
+			case Status::Active:
+				style.Colors[ImGuiCol_Button] = activeColor;
+				break;
+		}
+
+		bool clicked = ImGui::ButtonEx(text.c_str(), ImVec2(size.x, size.y));
+
+		switch (status) {
+			case Status::Disabled:
+				EndDisabled();
+				break;
+			case Status::Active:
+				style.Colors[ImGuiCol_Button] = originalColor;
+				break;
+		}
 
 		return clicked;
 	}
 
-	bool UI::ImageButton(UITexture texture, const glm::vec2& size, bool disabled)
+	bool UI::Button(const std::string& text, uint32_t size, Status status)
 	{
+		return Button(text, { (float) size, (float) size }, status);
+	}
+
+	bool UI::Button(const std::string& text, float size, Status status)
+	{
+		return Button(text, { size, size }, status);
+	}
+
+	bool UI::Button(UITexture texture, const glm::vec2& size, Status status)
+	{
+		auto& style = ImGui::GetStyle();
+		auto* texLib = UITextureLibrary::Get();
+		
 		UITextureSize textureSize = UITextureSize::Small;
 		if (std::max(size.x, size.y) > 96) {
 			textureSize = UITextureSize::Large;
@@ -154,22 +186,37 @@ namespace Pine {
 			textureSize = UITextureSize::Medium;
 		}
 
-		auto* textureLib = UITextureLibrary::Get();
+		switch (status) {
+			case Status::Disabled:
+				BeginDisabled();
+				break;
+			case Status::Active:
+				ImGui::PushStyleColor(ImGuiCol_Button, style.Colors[ImGuiCol_ButtonActive]);
+				break;
+		}
 
-		return ImageButton(textureLib->GetTexture(texture, textureSize), size, disabled);
-	}
+		bool clicked = ImGui::ImageButton((void*)texLib->GetTextureID(texture), ImVec2(size.x, size.y), { 0,0 }, { 1,1 }, s_InToolbar ? 0: -1);
 
-	bool UI::ImageButton(std::shared_ptr<Pine::Texture2D> texture, const glm::vec2& size, bool disabled)
-	{
-		if (disabled)
-			BeginDisabled();
-
-		bool clicked = ImGui::ImageButton((void*)texture->GetId(), ImVec2(size.x, size.y));
-
-		if (disabled)
-			EndDisabled();
+		switch (status) {
+			case Status::Disabled:
+				EndDisabled();
+				break;
+			case Status::Active:
+				ImGui::PopStyleColor();
+				break;
+		}
 
 		return clicked;
+	}
+
+	bool UI::Button(UITexture texture, uint32_t size, Status status)
+	{
+		return Button(texture, { (float)size, (float)size }, status);
+	}
+
+	bool UI::Button(UITexture texture, float size, Status status)
+	{
+		return Button(texture, { size, size }, status);
 	}
 
 	void UI::BeginDisabled()
@@ -184,6 +231,94 @@ namespace Pine {
 	{
 		ImGui::PopItemFlag();
 		ImGui::PopStyleVar();
+	}
+
+	void UI::BeginWindowWithToolbar(const std::string& name)
+	{
+		ImGuiWindowFlags viewportWindowFlags = 0
+			| ImGuiWindowFlags_NoScrollbar
+			| ImGuiWindowFlags_NoCollapse;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
+		ImGui::Begin(name.c_str(), NULL, viewportWindowFlags);
+		ImGui::PopStyleVar();
+	}
+
+	void UI::BeginWindowWithToolbar_Toolbar()
+	{
+		ImGuiWindowFlags childWindowFlags = 0
+			| ImGuiWindowFlags_NoDocking
+			| ImGuiWindowFlags_NoTitleBar
+			| ImGuiWindowFlags_NoResize
+			| ImGuiWindowFlags_NoMove
+			| ImGuiWindowFlags_NoScrollbar
+			| ImGuiWindowFlags_AlwaysUseWindowPadding;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 2, 2 });
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 2, 2 });
+
+		float toolbarHeight = GetToolbarButtonHeight() + ImGui::GetStyle().FramePadding.y * 2;
+		ImGui::BeginChild("##toolbar", { 0, toolbarHeight }, false, childWindowFlags);
+		
+		ImGui::PopStyleVar();
+
+		s_InToolbar = true;
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+
+		auto* window = ImGui::GetCurrentWindow();
+		window->DC.LayoutType = ImGuiLayoutType_Horizontal;
+	}
+
+	void UI::EndWindowWithToolbar_Toolbar()
+	{
+		auto* window = ImGui::GetCurrentWindow();
+		window->DC.LayoutType = ImGuiLayoutType_Vertical;
+
+		s_InToolbar = false;
+		ImGui::PopStyleColor();
+
+		ImGui::PopStyleVar(); // Item spacing
+		
+		ImGui::EndChild();
+	}
+
+	void UI::BeginWindowWithToolbar_Content()
+	{
+		ImGuiWindowFlags childWindowFlags = 0
+			| ImGuiWindowFlags_NoDocking
+			| ImGuiWindowFlags_NoTitleBar
+			| ImGuiWindowFlags_NoResize
+			| ImGuiWindowFlags_NoMove
+			| ImGuiWindowFlags_NoScrollbar
+			| ImGuiWindowFlags_AlwaysUseWindowPadding;
+
+		ImGui::BeginChild("##content", { 0,0 }, false, childWindowFlags);
+	}
+
+	void UI::EndWindowWithToolbar_Content()
+	{
+		ImGui::EndChild();
+	}
+
+	void UI::EndWindowWithToolbar()
+	{
+		ImGui::End();
+	}
+
+	void UI::ToolbarSeparator()
+	{
+		float currentSpacing = ImGui::GetStyle().ItemSpacing.x;
+		float separatorSpacing = 4.0f;
+
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (separatorSpacing - currentSpacing));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { separatorSpacing, separatorSpacing });
+		ImGui::Separator();
+		ImGui::PopStyleVar();
+	}
+
+	float UI::GetToolbarButtonHeight()
+	{
+		return 20.0f;
 	}
 
 	glm::vec2 UI::GetWindowSpaceMousePosition()

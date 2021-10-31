@@ -34,6 +34,8 @@ namespace Pine {
 		
 		void RenderDirectoryTree(const std::filesystem::path& path);
 
+		void ExecuteMainAction(const std::filesystem::directory_entry& entry);
+
 		void GotoPrevious();
 		void GotoNext();
 		void Goto(const std::filesystem::path& path, GotoAction action = GotoAction::None);

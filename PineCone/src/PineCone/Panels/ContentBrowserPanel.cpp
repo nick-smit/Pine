@@ -1,6 +1,7 @@
 #include "pcpch.h"
 #include "ContentBrowserPanel.h"
 
+#include "PineCone\Core\Event.h"
 #include "PineCone\ImGui\UI.h"
 #include "PineCone\ImGui\ErrorPopup.h"
 #include "PineCone\Platform\FileDialog.h"
@@ -70,13 +71,10 @@ namespace Pine {
 			m_CurrentDirectory = m_BaseDirectory;
 		}
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		ImGui::Begin("Content browser");
+		UI::BeginWindowWithToolbar("Content browser");
 
 		m_ContentBrowserPanelFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows | ImGuiFocusedFlags_NoPopupHierarchy);
 		m_ContentBrowserPanelHovered = ImGui::IsWindowHovered(ImGuiFocusedFlags_ChildWindows | ImGuiFocusedFlags_NoPopupHierarchy);
-
-		ImGui::PopStyleVar();
 
 		if (baseDirMissing) {
 			ImGui::OpenPopup("Base directory error");
@@ -108,7 +106,7 @@ namespace Pine {
 
 		if (baseDirMissing) {
 			ImGui::Text("Base directory is missing!");
-			ImGui::End();
+			UI::EndWindowWithToolbar();
 			return;
 		}
 		
@@ -118,7 +116,7 @@ namespace Pine {
 
 		RenderNodeView();
 
-		ImGui::End();
+		UI::EndWindowWithToolbar();
 	}
 
 	void ContentBrowserPanel::RenderTreeView()
@@ -143,34 +141,31 @@ namespace Pine {
 
 		ImGui::BeginGroup();
 
-		glm::vec2 actionButtonSize = { 20.0f, 20.0f };
+		const float actionButtonSize = UI::GetToolbarButtonHeight();
 		float actionBarPadding = (float)style.WindowPadding.y;
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(style.WindowPadding.x, actionBarPadding / 2.0f));
-		ImGui::PushStyleColor(ImGuiCol_ChildBg, UI::GetColor("ActionBarBg"));
-		ImGui::BeginChild("Action bar", ImVec2(0.0f, actionBarPadding * 2 + actionButtonSize.y), false, ImGuiWindowFlags_AlwaysUseWindowPadding);
+		UI::BeginWindowWithToolbar_Toolbar();
+
 		{
-			if (UI::ImageButton(UITexture::ArrowLeftFill, actionButtonSize, m_PreviousDirectory.empty())) {
+			if (UI::Button(UITexture::ArrowLeftFill, actionButtonSize, m_PreviousDirectory.empty() ? UI::Status::Disabled : UI::Status::None)) {
 				GotoPrevious();
 			}
 
-			ImGui::SameLine();
-
-			if (UI::ImageButton(UITexture::ArrowRightFill, actionButtonSize, m_NextDirectory.empty())) {
+			if (UI::Button(UITexture::ArrowRightFill, actionButtonSize, m_NextDirectory.empty() ? UI::Status::Disabled : UI::Status::None)) {
 				GotoNext();
 			}
 
-			ImGui::SameLine();
-
-			if (UI::ImageButton(UITexture::ArrowUpFill, actionButtonSize, m_CurrentDirectory == m_BaseDirectory)) {
+			if (UI::Button(UITexture::ArrowUpFill, actionButtonSize, m_CurrentDirectory == m_BaseDirectory ? UI::Status::Disabled : UI::Status::None)) {
 				Goto(m_CurrentDirectory.parent_path());
 			}
 
-			ImGui::SameLine();
+			UI::ToolbarSeparator();
 
 			auto relativePath = std::filesystem::relative(m_CurrentDirectory, m_BaseDirectory);
 			
-			if (UI::Button(m_BaseDirectory.filename().string().c_str(), { 0.0f, actionButtonSize.y })) {
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 0, 0 });
+
+			if (UI::Button(m_BaseDirectory.filename().string(), { 0.0f, actionButtonSize })) {
 				Goto(m_BaseDirectory);
 			}
 			if (ImGui::BeginDragDropTarget()) {
@@ -181,13 +176,13 @@ namespace Pine {
 			}
 			
 			if (m_CurrentDirectory != m_BaseDirectory) {
-				ImGui::SameLine();
-
 				std::filesystem::path clickedPath = m_BaseDirectory;
 				for (const auto& dirname : relativePath) {
+					ImGui::Text("/");
+
 					clickedPath /= dirname;
 
-					if (UI::Button(dirname.string(), { 0.0f, actionButtonSize.y })) {
+					if (UI::Button(dirname.string(), { 0.0f, actionButtonSize })) {
 						Goto(clickedPath);
 					}
 					
@@ -197,15 +192,13 @@ namespace Pine {
 
 						ImGui::EndDragDropTarget();
 					}
-
-					ImGui::SameLine();
 				}
 			}
-		} ImGui::EndChild(); // End action bar
-		ImGui::PopStyleColor(); // ActionBarBg
-		ImGui::PopStyleVar(); // WindowPadding
 
-		ImGui::BeginChild("Node view");
+			ImGui::PopStyleVar();
+		} 
+		UI::EndWindowWithToolbar_Toolbar();
+		UI::BeginWindowWithToolbar_Content();
 
 		std::string openPopup;
 		if (ImGui::BeginPopupContextWindow()) {
@@ -300,12 +293,6 @@ namespace Pine {
 
 					ImGui::EndDragDropTarget();
 				}
-
-				if (ImGui::IsItemHovered()) {
-					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-						Goto(node.path());
-					}
-				}
 			}
 			else {
 				ImGui::BeginGroup();
@@ -321,6 +308,10 @@ namespace Pine {
 					
 					ImGui::EndDragDropSource();
 				}
+			}
+
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+				ExecuteMainAction(node);
 			}
 
 			if (ImGui::BeginPopupContextItem(fn.c_str())) {
@@ -339,7 +330,7 @@ namespace Pine {
 			ImGui::PopID();
 		}
 
-		ImGui::EndChild(); // End node view
+		UI::EndWindowWithToolbar_Content();
 
 		ImGui::EndGroup();
 	}
@@ -391,6 +382,26 @@ namespace Pine {
 				ImGui::TreePop();
 			}
 
+		}
+	}
+
+	void ContentBrowserPanel::ExecuteMainAction(const std::filesystem::directory_entry& entry)
+	{
+		if (entry.is_directory()) {
+			Goto(entry.path());
+			return;
+		}
+
+		if (!entry.path().has_extension()) {
+			return;
+		}
+
+		const auto& ext = entry.path().extension();
+		if (ext == ".pinescene") {
+			EventDispatcher<SceneOpenedEvent>::Dispatch({ entry.path() });
+		}
+		else {
+			PINE_LOG_CORE_WARN("Unable to execute main action for {0}", entry.path().filename());
 		}
 	}
 

@@ -104,86 +104,41 @@ namespace Pine {
 	{
 		PINE_PROFILE_FUNCTION();
 
-		const float toolBarHeight = toolbarButtonSize + ImGui::GetStyle().FramePadding.y * 5;
+		UI::BeginWindowWithToolbar("Viewport");
 
-		ImGuiWindowFlags viewportWindowFlags = 0
-			| ImGuiWindowFlags_NoScrollbar
-			| ImGuiWindowFlags_NoCollapse;
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
-		ImGui::Begin("Viewport", NULL, viewportWindowFlags);
-		ImGui::PopStyleVar();
-
-		ImGuiWindowFlags childWindowFlags = 0
-			| ImGuiWindowFlags_NoDocking
-			| ImGuiWindowFlags_NoTitleBar
-			| ImGuiWindowFlags_NoResize
-			| ImGuiWindowFlags_NoMove
-			| ImGuiWindowFlags_NoScrollbar
-			| ImGuiWindowFlags_AlwaysUseWindowPadding;
-		
-
-		ImGui::BeginChild("Toolbar", { 0, toolBarHeight }, false, childWindowFlags);
+		UI::BeginWindowWithToolbar_Toolbar();
 		RenderToolbar();
-		ImGui::EndChild();
-
+		UI::EndWindowWithToolbar_Toolbar();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0,0 });
-		ImGui::BeginChild("Viewport", { 0, 0 }, false, childWindowFlags);
+		UI::BeginWindowWithToolbar_Content();
 		ImGui::PopStyleVar();
-		RenderViewport();
-		ImGui::EndChild();
 
-		ImGui::End();
+		RenderViewport();
+
+		UI::EndWindowWithToolbar_Content();
+		UI::EndWindowWithToolbar();
 	}
 
 	void ViewportPanel::RenderToolbar()
 	{
 		PINE_PROFILE_FUNCTION();
 
-		GuizmoMode curGuizmoMode = m_GuizmoMode;
-
-		UITextureLibrary* texLib = UITextureLibrary::Get();
-
-		const ImVec2 buttonSize = { toolbarButtonSize, toolbarButtonSize };
-		
-		auto& style = ImGui::GetStyle();
-		auto origButtonCol = style.Colors[ImGuiCol_Button];
-
-		ImVec4 activeColor = style.Colors[ImGuiCol_ButtonActive];
-		ImVec4 defaultColor = ImVec4(0, 0, 0, 0);
-
-		style.Colors[ImGuiCol_Button] = defaultColor;
-
-		if (curGuizmoMode == GuizmoMode::Cursor) style.Colors[ImGuiCol_Button] = activeColor;
-		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::CursorFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+		if (UI::Button(UITexture::CursorFill, UI::GetToolbarButtonHeight(), m_GuizmoMode == GuizmoMode::Cursor ? UI::Status::Active : UI::Status::None)) {
 			m_GuizmoMode = GuizmoMode::Cursor;
 		}
-		if (curGuizmoMode == GuizmoMode::Cursor) style.Colors[ImGuiCol_Button] = defaultColor;
-		ImGui::SameLine();
 
-		if (curGuizmoMode == GuizmoMode::Translate) style.Colors[ImGuiCol_Button] = activeColor;
-		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::TranslateFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+		if (UI::Button(UITexture::TranslateFill, UI::GetToolbarButtonHeight(), m_GuizmoMode == GuizmoMode::Translate ? UI::Status::Active : UI::Status::None)) {
 			m_GuizmoMode = GuizmoMode::Translate;
 		}
-		if (curGuizmoMode == GuizmoMode::Translate) style.Colors[ImGuiCol_Button] = defaultColor;
-		ImGui::SameLine();
 
-		if (curGuizmoMode == GuizmoMode::Rotate) style.Colors[ImGuiCol_Button] = activeColor;
-		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::RotateFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+		if (UI::Button(UITexture::RotateFill, UI::GetToolbarButtonHeight(), m_GuizmoMode == GuizmoMode::Rotate ? UI::Status::Active : UI::Status::None)) {
 			m_GuizmoMode = GuizmoMode::Rotate;
 		}
-		if (curGuizmoMode == GuizmoMode::Rotate) style.Colors[ImGuiCol_Button] = defaultColor;
-		ImGui::SameLine();
 
-		if (curGuizmoMode == GuizmoMode::Scale) style.Colors[ImGuiCol_Button] = activeColor;
-		if (ImGui::ImageButton((void*)texLib->GetTextureID(UITexture::ScaleFill), buttonSize, { 0,0 }, { 1,1 }, 0)) {
+		if (UI::Button(UITexture::ScaleFill, UI::GetToolbarButtonHeight(), m_GuizmoMode == GuizmoMode::Scale ? UI::Status::Active : UI::Status::None)) {
 			m_GuizmoMode = GuizmoMode::Scale;
 		}
-		if (curGuizmoMode == GuizmoMode::Scale) style.Colors[ImGuiCol_Button] = defaultColor;
-		ImGui::SameLine();
-
-		style.Colors[ImGuiCol_Button] = origButtonCol;
 	}
 
 	void ViewportPanel::RenderViewport()
