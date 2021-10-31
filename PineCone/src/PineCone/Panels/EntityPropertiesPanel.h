@@ -4,6 +4,7 @@
 
 #include "PineCone\Core\SceneContext.h"
 #include "PineCone\ImGui\ImGuiHelpers.h"
+#include "PineCone\ImGui\UI.h"
 
 #include <Pine.h>
 #include <functional>
@@ -41,15 +42,14 @@ namespace Pine {
 
 			ImGui::Text(name.c_str());
 
-			std::string text = "...";
+			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 8.0f);
 
-			PC_IMGUI_SAME_LINE_SPACE_BETWEEN_TEXT(text.c_str());
+			ImGui::PushID(name.c_str());
+			if (UI::Button(UITexture::VerticalDots, { 8.0f, 16.0f }, ImGui::IsPopupOpen("ComponentContext") ? UI::Status::Active : UI::Status::None)) {
 
-			ImGui::PushID(std::string("OpenComponentContext##").append(name).c_str());
-			if (ImGui::Button(text.c_str())) {
 				ImGui::OpenPopup("ComponentContext");
 			}
-
+			
 			bool componentRemoved = false;
 			if (ImGui::BeginPopup("ComponentContext")) {
 				if (ImGui::MenuItem("Reset to default")) {

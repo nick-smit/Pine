@@ -180,11 +180,15 @@ namespace Pine {
 		return Button(text, { size, size }, status);
 	}
 
-	bool UI::Button(UITexture texture, const glm::vec2& size, Status status)
+	bool UI::Button(UITexture texture, const glm::vec2& size, Status status, bool transparent)
 	{
 		auto& style = ImGui::GetStyle();
 		auto* texLib = UITextureLibrary::Get();
-		
+
+		if (transparent) {
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		}
+
 		UITextureSize textureSize = UITextureSize::Small;
 		if (std::max(size.x, size.y) > 96) {
 			textureSize = UITextureSize::Large;
@@ -202,7 +206,7 @@ namespace Pine {
 				break;
 		}
 
-		bool clicked = ImGui::ImageButton((void*)texLib->GetTextureID(texture), ImVec2(size.x, size.y), { 0,0 }, { 1,1 }, s_InToolbar ? 0: -1);
+		bool clicked = ImGui::ImageButton((void*)texLib->GetTextureID(texture), ImVec2(size.x, size.y), { 0, 0 }, { 1, 1 }, s_InToolbar ? 0: -1);
 
 		switch (status) {
 			case Status::Disabled:
@@ -213,17 +217,21 @@ namespace Pine {
 				break;
 		}
 
+		if (transparent) {
+			ImGui::PopStyleColor();
+		}
+
 		return clicked;
 	}
 
-	bool UI::Button(UITexture texture, uint32_t size, Status status)
+	bool UI::Button(UITexture texture, uint32_t size, Status status, bool transparent)
 	{
-		return Button(texture, { (float)size, (float)size }, status);
+		return Button(texture, { (float)size, (float)size }, status, transparent);
 	}
 
-	bool UI::Button(UITexture texture, float size, Status status)
+	bool UI::Button(UITexture texture, float size, Status status, bool transparent)
 	{
-		return Button(texture, { size, size }, status);
+		return Button(texture, { size, size }, status, transparent);
 	}
 
 	void UI::BeginDisabled()

@@ -24,6 +24,8 @@ namespace Pine {
 		TranslateFill,
 		RotateFill,
 		ScaleFill,
+
+		VerticalDots,
 	};
 
 	enum class UITextureSize { 

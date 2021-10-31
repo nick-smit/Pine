@@ -25,6 +25,7 @@ namespace Pine {
 			m_TextureMap[UITexture::TranslateFill][size] = nullptr;
 			m_TextureMap[UITexture::RotateFill][size] = nullptr;
 			m_TextureMap[UITexture::ScaleFill][size] = nullptr;
+			m_TextureMap[UITexture::VerticalDots][size] = nullptr;
 		}
 	}
 
@@ -97,6 +98,10 @@ namespace Pine {
 			}
 			case UITexture::ScaleFill: {
 				icon = "shape-fill";
+				break;
+			}
+			case UITexture::VerticalDots: {
+				icon = "more-2-fill";
 				break;
 			}
 		}

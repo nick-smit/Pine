@@ -31,9 +31,9 @@ namespace Pine {
 		static bool Button(const std::string& text, uint32_t size, Status status = Status::None);
 		static bool Button(const std::string& text, float size, Status status = Status::None);
 		
-		static bool Button(UITexture texture, const glm::vec2& size = { 0, 0 }, Status status = Status::None);
-		static bool Button(UITexture texture, uint32_t size, Status status = Status::None);
-		static bool Button(UITexture texture, float size, Status status = Status::None);
+		static bool Button(UITexture texture, const glm::vec2& size = { 0, 0 }, Status status = Status::None, bool transparent = true);
+		static bool Button(UITexture texture, uint32_t size, Status status = Status::None, bool transparent = true);
+		static bool Button(UITexture texture, float size, Status status = Status::None, bool transparent = true);
 
 		static void BeginDisabled();
 		static void EndDisabled();

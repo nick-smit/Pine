@@ -78,10 +78,11 @@ namespace Pine {
 				tag = std::string(buffer);
 			}
 
-			PC_IMGUI_SAME_LINE_SPACE_BETWEEN_TEXT("...");
-			if (ImGui::Button("...")) {
+			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 8.0f);
+			if (UI::Button(UITexture::VerticalDots, { 8.0f, 16.0f }, ImGui::IsPopupOpen("Add component popup") ? UI::Status::Active : UI::Status::None)) {
 				ImGui::OpenPopup("Add component popup");
 			}
+
 			if (ImGui::BeginPopup("Add component popup")) {
 				if (!m_SelectedEntity.HasComponent<TransformComponent>()) {
 					if (ImGui::MenuItem("Transform")) {
