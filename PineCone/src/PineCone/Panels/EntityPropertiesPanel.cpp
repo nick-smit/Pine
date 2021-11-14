@@ -17,6 +17,13 @@ namespace Pine {
 			return false;
 		}));
 
+		m_EventListeners.push_back(EventDispatcher<EntityDestroyedEvent>::Listen([&](const EntityDestroyedEvent& e) {
+			if (m_SelectedEntity == e.Entity)
+				m_SelectedEntity = Entity();
+
+			return false;
+		}));
+
 		m_EventListeners.push_back(EventDispatcher<SceneOpenedEvent>::Listen([&](const SceneOpenedEvent& e) {
 			m_SelectedEntity = Entity();
 
@@ -68,6 +75,7 @@ namespace Pine {
 
 		if (m_SelectedEntity.HasComponent<TagComponent>())
 		{
+			auto& commandManager = CommandManager::GetInstance();
 			auto& tag = m_SelectedEntity.GetComponent<TagComponent>().Tag;
 
 			char buffer[256];
@@ -86,13 +94,15 @@ namespace Pine {
 			if (ImGui::BeginPopup("Add component popup")) {
 				if (!m_SelectedEntity.HasComponent<TransformComponent>()) {
 					if (ImGui::MenuItem("Transform")) {
-						m_SelectedEntity.AddComponent<TransformComponent>();
+						auto cmd = std::make_shared<AddComponentCommand<TransformComponent>>(m_SceneContext->GetContext(), m_SelectedEntity);
+						commandManager.ExecuteCommand(cmd);
 					}
 				}
 
 				if (!m_SelectedEntity.HasComponent<SpriteRendererComponent>()) {
 					if (ImGui::MenuItem("Sprite renderer")) {
-						m_SelectedEntity.AddComponent<SpriteRendererComponent>();
+						auto cmd = std::make_shared<AddComponentCommand<SpriteRendererComponent>>(m_SceneContext->GetContext(), m_SelectedEntity);
+						commandManager.ExecuteCommand(cmd);
 					}
 				}
 
@@ -103,8 +113,8 @@ namespace Pine {
 				ImGui::Separator();
 
 				if (ImGui::MenuItem("Remove entity")) {
-					m_SceneContext->GetContext()->DestroyEntity(m_SelectedEntity);
-					EventDispatcher<EntitySelectedEvent>::Dispatch({ Entity() });
+					auto cmd = std::make_shared<DestroyEntityCommand>(m_SceneContext->GetContext(), m_SelectedEntity);
+					commandManager.ExecuteCommand(cmd);
 				}
 
 				ImGui::EndPopup();

@@ -91,6 +91,13 @@ namespace Pine {
 
 			return false;
 		}));
+
+		m_EventListeners.push_back(EventDispatcher<EntityDestroyedEvent>::Listen([&](const EntityDestroyedEvent& e) {
+			if (m_SelectedEntity == e.Entity)
+				m_SelectedEntity = Entity();
+
+			return false;
+		}));
 	}
 
 	void ViewportPanel::OnDetach()

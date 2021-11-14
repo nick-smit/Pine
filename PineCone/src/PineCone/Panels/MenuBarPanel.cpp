@@ -8,6 +8,8 @@
 #include "PineCone\Core\Event.h"
 #include "PineCone\Platform\FileDialog.h"
 
+#include "PineCone\Command\CommandManager.h"
+
 #include <Pine.h>
 
 #include <imgui.h>
@@ -37,6 +39,19 @@ namespace Pine {
 						}
 						else {
 							SaveScene(m_Context->GetPath());
+							return true;
+						}
+					}
+				}
+				case Key::Z: {
+					if (control) {
+						auto& commandManager = CommandManager::GetInstance();
+						if (shift) {
+							commandManager.RedoCommand();
+							return true;
+						}
+						else {
+							commandManager.UndoCommand();
 							return true;
 						}
 					}
@@ -75,17 +90,21 @@ namespace Pine {
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("View")) {
+			if (ImGui::BeginMenu("Edit")) {
+				auto& commandManager = CommandManager::GetInstance();
 
-				#if PINE_DEBUG
-				bool imguiDemoPanelActive = panelManager->IsPanelActive(ImGuiDemoPanel::GetName());
-				if (ImGui::MenuItem("ImGui Demo", nullptr, &imguiDemoPanelActive)) {
-					if (imguiDemoPanelActive)
-						panelManager->ActivatePanel(ImGuiDemoPanel::GetName());
-					else
-						panelManager->DeactivatePanel(ImGuiDemoPanel::GetName());
+				if (ImGui::MenuItem("Undo", "Ctrl+Z", false, commandManager.CanUndo())) {
+					commandManager.UndoCommand();
 				}
-				#endif
+				
+				if (ImGui::MenuItem("Redo", "Ctrl+Shift+Z", false, commandManager.CanRedo())) {
+					commandManager.RedoCommand();
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("View")) {
 
 				if (ImGui::BeginMenu("Debug")) {
 					bool renderStatsPanelActive = panelManager->IsPanelActive(RenderStatsPanel::GetName());
@@ -95,6 +114,16 @@ namespace Pine {
 						else
 							panelManager->DeactivatePanel(RenderStatsPanel::GetName());
 					}
+
+					#ifndef PINE_DIST
+					bool imguiDemoPanelActive = panelManager->IsPanelActive(ImGuiDemoPanel::GetName());
+					if (ImGui::MenuItem("ImGui Demo", nullptr, &imguiDemoPanelActive)) {
+						if (imguiDemoPanelActive)
+							panelManager->ActivatePanel(ImGuiDemoPanel::GetName());
+						else
+							panelManager->DeactivatePanel(ImGuiDemoPanel::GetName());
+					}
+					#endif
 
 					ImGui::EndMenu();
 				}

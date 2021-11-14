@@ -7,7 +7,7 @@ workspace "Pine"
   configurations {
     "Debug",
     "Release",
-    "Distribution"
+    "Dist"
   }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"

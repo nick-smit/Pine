@@ -1,6 +1,8 @@
 #include "pcpch.h"
 #include "SceneHierarchyPanel.h"
 #include "PineCone\Core\Event.h"
+#include "PineCone\Command\CommandManager.h"
+#include "PineCone\Command\EntityCommand.h"
 
 #include <Pine.h>
 #include <entt\entt.hpp>
@@ -12,6 +14,13 @@ namespace Pine {
 	{
 		m_EventListeners.push_back(EventDispatcher<EntitySelectedEvent>::Listen([&](const EntitySelectedEvent& e) {
 			m_SelectedEntity = e.Entity;
+
+			return false;
+		}));
+
+		m_EventListeners.push_back(EventDispatcher<EntityDestroyedEvent>::Listen([&](const EntityDestroyedEvent& e) {
+			if (m_SelectedEntity == e.Entity)
+				m_SelectedEntity = Entity();
 
 			return false;
 		}));
@@ -51,8 +60,8 @@ namespace Pine {
 
 		if (ImGui::BeginPopupContextWindow(0, ImGuiMouseButton_Right, false)) {
 			if (ImGui::MenuItem("Create empty entity")) {
-				Entity entity = m_SceneContext->GetContext()->CreateEntity("Empty Entity");
-				EventDispatcher<EntitySelectedEvent>::Dispatch({ entity });
+				auto cmd = std::make_shared<CreateEntityCommand>(m_SceneContext->GetContext());
+				CommandManager::GetInstance().ExecuteCommand(cmd);
 
 				ImGui::CloseCurrentPopup();
 			}
@@ -80,9 +89,8 @@ namespace Pine {
 
 		if (ImGui::BeginPopupContextItem()) {
 			if (ImGui::MenuItem("Remove entity")) {
-				m_SceneContext->GetContext()->DestroyEntity(entity);
-				if (selected)
-					EventDispatcher<EntitySelectedEvent>::Dispatch({ Entity() });
+				auto cmd = std::make_shared<DestroyEntityCommand>(m_SceneContext->GetContext(), entity);
+				CommandManager::GetInstance().ExecuteCommand(cmd);
 
 				ImGui::CloseCurrentPopup();
 			}

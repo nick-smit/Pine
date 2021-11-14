@@ -2,6 +2,7 @@
 
 #include "PineCone\Core\SceneContext.h"
 #include "PineCone\Core\PanelManager.h"
+#include "PineCone\Command\CommandManager.h"
 #include "PineCone\Panels\Panel.h"
 
 #include "PineCone\Controller\EditorCameraController.h"
@@ -35,6 +36,7 @@ namespace Pine {
 		std::vector<std::function<void()>> m_UnsubscribeFunctions;
 
 		PanelManager m_PanelManager;
+		CommandManager m_CommandManager;
 
 		std::shared_ptr<Framebuffer> m_Framebuffer;
 		std::shared_ptr<EditorCameraController> m_CameraController;
@@ -43,6 +45,7 @@ namespace Pine {
 		std::shared_ptr<SceneContext> m_SceneContext = nullptr;
 
 		std::unique_ptr<UITextureLibrary> m_UITextureLibrary = nullptr;
+
 
 		bool m_ViewportInFocus = false;
 	};

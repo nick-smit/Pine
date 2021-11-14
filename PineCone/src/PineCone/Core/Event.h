@@ -13,6 +13,13 @@ namespace Pine {
 		EntitySelectedEvent() = default;
 	};
 
+	struct EntityDestroyedEvent
+	{
+		Entity Entity;
+
+		EntityDestroyedEvent() = default;
+	};
+
 	struct SceneOpenedEvent
 	{
 		std::filesystem::path Filepath;

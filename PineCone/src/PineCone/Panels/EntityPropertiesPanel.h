@@ -5,6 +5,8 @@
 #include "PineCone\Core\SceneContext.h"
 #include "PineCone\ImGui\ImGuiHelpers.h"
 #include "PineCone\ImGui\UI.h"
+#include "PineCone\Command\CommandManager.h"
+#include "PineCone\Command\EntityCommand.h"
 
 #include <Pine.h>
 #include <functional>
@@ -66,7 +68,8 @@ namespace Pine {
 			ImGui::PopID();
 
 			if (componentRemoved) {
-				m_SelectedEntity.RemoveComponent<Component>();
+				auto cmd = std::make_shared<RemoveComponentCommand<Component>>(m_SceneContext->GetContext(), m_SelectedEntity);
+				CommandManager::GetInstance().ExecuteCommand(cmd);
 				return;
 			}
 
