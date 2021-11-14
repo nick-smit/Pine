@@ -8,6 +8,7 @@
 #include "Pine\Core\Input.h"
 #include "Pine\Core\Layer.h"
 #include "Pine\Core\Timestep.h"
+#include "Pine\Core\Uuid.h"
 
 // Debug
 #include "Pine\Debug\Instrumentor.h"

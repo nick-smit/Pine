@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Pine\Core\Uuid.h"
 #include "Scene.h"
 #include "Component.h"
 
@@ -40,21 +41,30 @@ namespace Pine {
 		}
 
 		template<typename T>
-		bool HasComponent()
+		bool HasComponent() const
 		{
 			return HasAllComponents<T>();
 		}
 
 		template<typename ...T>
-		bool HasAnyComponent()
+		bool HasAnyComponent() const
 		{
 			return m_Scene->GetEnttRegistry().any_of<T...>(m_EntityHandle);
 		}
 
 		template<typename ...T>
-		bool HasAllComponents()
+		bool HasAllComponents() const
 		{
 			return m_Scene->GetEnttRegistry().all_of<T...>(m_EntityHandle);
+		}
+
+		const Uuid& GetID() const
+		{
+			if (m_EntityHandle == entt::null)
+				return 0;
+
+			PINE_ASSERT(HasComponent<IDComponent>(), "Entity must have an ID component!");
+			return m_Scene->GetEnttRegistry().get<IDComponent>(m_EntityHandle).ID;
 		}
 
 		const std::string& GetTag() const { return m_Scene->GetEnttRegistry().get<TagComponent>(m_EntityHandle).Tag; }

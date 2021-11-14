@@ -84,7 +84,8 @@ namespace Pine {
 			Entity entity = { entityID, scene.get() };
 			out << YAML::BeginMap;
 			
-			out << YAML::Key << "EntityID" << YAML::Value << "123456"; // TODO(Nick): Entity IDs
+
+			out << YAML::Key << "EntityID" << YAML::Value << entity.GetID();
 		
 			Utils::SerializeComponent<TagComponent>(out, "TagComponent", entity, [&](auto& component) {
 				out << YAML::Key << "Tag" << YAML::Value << component.Tag;
@@ -132,7 +133,6 @@ namespace Pine {
 				UNABLE_TO_DESERIALIZE("Entity must be a map");
 			}
 
-			// Todo entity ID
 			if (!curNode["EntityID"]) {
 				UNABLE_TO_DESERIALIZE("Entity does not have an ID");
 			}
@@ -143,7 +143,7 @@ namespace Pine {
 			else if (!curNode["TagComponent"]["Tag"]) {
 				UNABLE_TO_DESERIALIZE("Entity does not have a valid TagComponent!");
 			}
-			Entity entity = scene->CreateEntity(curNode["TagComponent"]["Tag"].as<std::string>());
+			Entity entity = scene->CreateEntity(curNode["EntityID"].as<uint64_t>(), curNode["TagComponent"]["Tag"].as<std::string>());
 
 			if (curNode["TransformComponent"]) {
 				PINE_ASSERT(entity.HasComponent<TransformComponent>(), "Entity must be created with a transform component");

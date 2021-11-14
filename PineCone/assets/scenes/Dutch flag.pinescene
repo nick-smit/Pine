@@ -1,104 +1,5 @@
 Entities:
-  - EntityID: 123456
-    TagComponent:
-      Tag: Red stripe
-    TransformComponent:
-      Translation: [-0.0441941023, 0.916399121, -1]
-      Rotation: [0, -0, 0]
-      Scale: [1.13, 0.330000013, 1]
-    SpriteRendererComponent:
-      Color: [0.808823526, 0.150663227, 0.150663227, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: White stripe
-    TransformComponent:
-      Translation: [-0.0477303267, 0.58748287, -1]
-      Rotation: [0, -0, 0]
-      Scale: [1.13473153, 0.330000013, 1]
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: Blue stripe
-    TransformComponent:
-      Translation: [-0.0465841144, 0.26336664, -1]
-      Rotation: [0, -0, 0]
-      Scale: [1.13, 0.330000013, 1]
-    SpriteRendererComponent:
-      Color: [0.16744028, 0.0726379529, 0.717299581, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: Air
-    TransformComponent:
-      Translation: [0, 0.562121272, -1.5]
-      Rotation: [0, -0, 0]
-      Scale: [11.1000004, 3.41316652, 1]
-    SpriteRendererComponent:
-      Color: [0.307749838, 0.636064649, 0.848101258, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: Ground
-    TransformComponent:
-      Translation: [0, -1.58387363, 1.52483249]
-      Rotation: [0, -0, 0]
-      Scale: [19.2000008, 1.12307715, 1]
-    SpriteRendererComponent:
-      Color: [0.208189994, 0.691983104, 0.195623919, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: Pole
-    TransformComponent:
-      Translation: [-0.612668157, 0, 0.125725031]
-      Rotation: [0, -0, 0]
-      Scale: [0.0299999993, 2.22460866, 1]
-    SpriteRendererComponent:
-      Color: [0.185653985, 0.185653985, 0.185653985, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: House base
-    TransformComponent:
-      Translation: [1.52966046, -0.705299735, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.616033792, 0.345180243, 0.179351613, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: House 2
-    TransformComponent:
-      Translation: [1.52966094, -0.198118359, 0]
-      Rotation: [0, -0, -0.785743892]
-      Scale: [0.692543685, 0.710699916, 0.710699975]
-    SpriteRendererComponent:
-      Color: [0.615686297, 0.345098048, 0.180392161, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: House roof 1
-    TransformComponent:
-      Translation: [1.2626704, 0.0668508261, 0.5]
-      Rotation: [0, -0, -0.785398185]
-      Scale: [0.100000083, 0.870971859, 1]
-    SpriteRendererComponent:
-      Color: [0.362869203, 0.286314517, 0.286314517, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: House roof 2
-    TransformComponent:
-      Translation: [1.80825758, 0.0648969933, 0.5]
-      Rotation: [0, -0, 0.785398245]
-      Scale: [0.100000001, 0.869999766, 1]
-    SpriteRendererComponent:
-      Color: [0.36470589, 0.286274523, 0.286274523, 1]
-  - EntityID: 123456
-    TagComponent:
-      Tag: Door
-    TransformComponent:
-      Translation: [1.33529425, -0.828100324, 0.300000012]
-      Rotation: [0, -0, 0]
-      Scale: [0.25, 0.400000006, 1]
-    SpriteRendererComponent:
-      Color: [0.80590719, 0.674839139, 0.312841624, 1]
-  - EntityID: 123456
+  - EntityID: 12
     TagComponent:
       Tag: Window 1
     TransformComponent:
@@ -107,3 +8,102 @@ Entities:
       Scale: [0.25, 0.25, 1]
     SpriteRendererComponent:
       Color: [0.148907781, 0.797684073, 0.860759497, 1]
+  - EntityID: 11
+    TagComponent:
+      Tag: Door
+    TransformComponent:
+      Translation: [1.33529425, -0.828100324, 0.300000012]
+      Rotation: [0, -0, 0]
+      Scale: [0.25, 0.400000006, 1]
+    SpriteRendererComponent:
+      Color: [0.80590719, 0.674839139, 0.312841624, 1]
+  - EntityID: 10
+    TagComponent:
+      Tag: House roof 2
+    TransformComponent:
+      Translation: [1.80825758, 0.0648969933, 0.5]
+      Rotation: [0, -0, 0.785398245]
+      Scale: [0.100000001, 0.869999766, 1]
+    SpriteRendererComponent:
+      Color: [0.36470589, 0.286274523, 0.286274523, 1]
+  - EntityID: 9
+    TagComponent:
+      Tag: House roof 1
+    TransformComponent:
+      Translation: [1.2626704, 0.0668508261, 0.5]
+      Rotation: [0, -0, -0.785398185]
+      Scale: [0.100000083, 0.870971859, 1]
+    SpriteRendererComponent:
+      Color: [0.362869203, 0.286314517, 0.286314517, 1]
+  - EntityID: 8
+    TagComponent:
+      Tag: House 2
+    TransformComponent:
+      Translation: [1.52966094, -0.198118359, 0]
+      Rotation: [0, -0, -0.785743892]
+      Scale: [0.692543685, 0.710699916, 0.710699975]
+    SpriteRendererComponent:
+      Color: [0.615686297, 0.345098048, 0.180392161, 1]
+  - EntityID: 7
+    TagComponent:
+      Tag: House base
+    TransformComponent:
+      Translation: [1.52966046, -0.705299735, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.616033792, 0.345180243, 0.179351613, 1]
+  - EntityID: 6
+    TagComponent:
+      Tag: Pole
+    TransformComponent:
+      Translation: [-0.612668157, 0, 0.125725031]
+      Rotation: [0, -0, 0]
+      Scale: [0.0299999993, 2.22460866, 1]
+    SpriteRendererComponent:
+      Color: [0.185653985, 0.185653985, 0.185653985, 1]
+  - EntityID: 5
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Translation: [0, -1.58387363, 1.52483249]
+      Rotation: [0, -0, 0]
+      Scale: [19.2000008, 1.12307715, 1]
+    SpriteRendererComponent:
+      Color: [0.208189994, 0.691983104, 0.195623919, 1]
+  - EntityID: 4
+    TagComponent:
+      Tag: Air
+    TransformComponent:
+      Translation: [0, 0.562121272, -1.5]
+      Rotation: [0, -0, 0]
+      Scale: [11.1000004, 3.41316652, 1]
+    SpriteRendererComponent:
+      Color: [0.307749838, 0.636064649, 0.848101258, 1]
+  - EntityID: 3
+    TagComponent:
+      Tag: Blue stripe
+    TransformComponent:
+      Translation: [-0.0465841144, 0.26336664, -1]
+      Rotation: [0, -0, 0]
+      Scale: [1.13, 0.330000013, 1]
+    SpriteRendererComponent:
+      Color: [0.16744028, 0.0726379529, 0.717299581, 1]
+  - EntityID: 2
+    TagComponent:
+      Tag: White stripe
+    TransformComponent:
+      Translation: [-0.0477303267, 0.58748287, -1]
+      Rotation: [0, -0, 0]
+      Scale: [1.13473153, 0.330000013, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+  - EntityID: 1
+    TagComponent:
+      Tag: Red stripe
+    TransformComponent:
+      Translation: [-0.0441941023, 0.916399121, -1]
+      Rotation: [0, -0, 0]
+      Scale: [1.13, 0.330000013, 1]
+    SpriteRendererComponent:
+      Color: [0.808823526, 0.150663227, 0.150663227, 1]

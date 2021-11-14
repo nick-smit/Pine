@@ -20,6 +20,7 @@
 #include <memory>
 #include <chrono>
 #include <utility>
+#include <random>
 
 #include "Pine\Core\Logger.h"
 #include "Pine\Core\Core.h"

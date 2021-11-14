@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Pine\Core\Uuid.h"
+
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
@@ -8,10 +10,20 @@
 
 namespace Pine {
 
+	struct IDComponent {
+		Uuid ID;
+
+		IDComponent() = default;
+		IDComponent(Uuid id)
+			: ID(id) {};
+		IDComponent(const IDComponent& other) = default;
+	};
+
 	struct TagComponent {
 		std::string Tag;
 
 		TagComponent() = default;
+		TagComponent(const TagComponent& other) = default;
 	};
 
 	struct TransformComponent {

@@ -1,5 +1,5 @@
 Entities:
-  - EntityID: 123456
+  - EntityID: 1
     TagComponent:
       Tag: Top
     TransformComponent:
@@ -8,7 +8,7 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.209979266, 0.122789316, 0.715686262, 1]
-  - EntityID: 123456
+  - EntityID: 2
     TagComponent:
       Tag: Right
     TransformComponent:
@@ -17,7 +17,7 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.163759127, 0.324648887, 0.710784316, 1]
-  - EntityID: 123456
+  - EntityID: 3
     TagComponent:
       Tag: Left
     TransformComponent:
