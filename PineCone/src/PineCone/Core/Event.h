@@ -11,8 +11,6 @@ namespace Pine {
 		Entity Entity;
 
 		EntitySelectedEvent() = default;
-		EntitySelectedEvent(const ::Pine::Entity& entity)
-			: Entity(entity) {};
 	};
 
 	struct SceneOpenedEvent
@@ -29,12 +27,15 @@ namespace Pine {
 		SceneSavedEvent() = default;
 	};
 
+	struct SceneChangedEvent
+	{
+		SceneChangedEvent() = default;
+	};
+
 	struct ViewportFocusedEvent {
 		bool Status;
 
 		ViewportFocusedEvent() = default;
-		ViewportFocusedEvent(bool status)
-			: Status(status) {};
 	};
 
 }

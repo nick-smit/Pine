@@ -122,13 +122,26 @@ namespace Pine {
 
 			m_UnsubscribeFunctions.push_back(EventDispatcher<SceneOpenedEvent>::Listen([&](const SceneOpenedEvent& e) {
 				m_EditorScene = SceneSerializer::Deserialize(e.Filepath);
+				
 				m_SceneContext->SetContext(m_EditorScene);
+				m_SceneContext->SetPath(e.Filepath);
+				m_SceneContext->SetPristine(true);
 
 				return false;
 			}));
 
 			m_UnsubscribeFunctions.push_back(EventDispatcher<SceneSavedEvent>::Listen([&](const SceneSavedEvent& e) {
 				SceneSerializer::Serialize(m_EditorScene, e.Filepath);
+				
+				m_SceneContext->SetPath(e.Filepath);
+				m_SceneContext->SetPristine(true);
+
+				return false;
+			}));
+
+			m_UnsubscribeFunctions.push_back(EventDispatcher<SceneChangedEvent>::Listen([&](const SceneChangedEvent& e) {
+
+				m_SceneContext->SetPristine(false);
 
 				return false;
 			}));
@@ -137,7 +150,7 @@ namespace Pine {
 		{
 			PINE_PROFILE_SCOPE("Pine::PineConeLayer::OnAttach - Add panels");
 
-			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(), true);
+			m_PanelManager.AddPanel(MenuBarPanel::GetName(), new MenuBarPanel(m_SceneContext), true);
 			m_PanelManager.AddPanel(SceneHierarchyPanel::GetName(), new SceneHierarchyPanel(m_SceneContext, m_CameraController), true);
 			m_PanelManager.AddPanel(EntityPropertiesPanel::GetName(), new EntityPropertiesPanel(m_SceneContext), true);
 			m_PanelManager.AddPanel(ViewportPanel::GetName(), new ViewportPanel(m_SceneContext, m_Framebuffer, m_CameraController), true);

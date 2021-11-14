@@ -1,13 +1,17 @@
 #pragma once
 
 #include "Panel.h"
+#include "PineCone\Core\SceneContext.h"
+
+#include <memory>
 
 namespace Pine {
 
 	class MenuBarPanel : public Panel
 	{
 	public:
-		MenuBarPanel() = default;
+		MenuBarPanel(std::shared_ptr<SceneContext> context)
+			: m_Context(context) {}
 		~MenuBarPanel() = default;
 
 		virtual void OnAttach() override;
@@ -15,10 +19,15 @@ namespace Pine {
 
 	private:
 		void OpenScene() const;
+
+		void SaveScene(const std::filesystem::path& path) const;
 		void SaveSceneAs() const;
 
 	public:
 		static std::string GetName() { return "MenuBarPanel"; };
+
+	private:
+		std::shared_ptr<SceneContext> m_Context;
 	};
 
 }

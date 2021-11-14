@@ -35,6 +35,10 @@ namespace Pine {
 							SaveSceneAs();
 							return true;
 						}
+						else {
+							SaveScene(m_Context->GetPath());
+							return true;
+						}
 					}
 				}
 			}
@@ -111,13 +115,17 @@ namespace Pine {
 		}
 	}
 
+	void MenuBarPanel::SaveScene(const std::filesystem::path& path) const
+	{
+		if (!path.empty())
+			EventDispatcher<SceneSavedEvent>::Dispatch({ path });
+	}
+
 	void MenuBarPanel::SaveSceneAs() const
 	{
 		auto filepath = FileDialog::SaveFile(s_SceneFileFilter);
 
-		if (!filepath.empty()) {
-			EventDispatcher<SceneSavedEvent>::Dispatch({ filepath });
-		}
+		SaveScene(filepath);
 	}
 
 } 
