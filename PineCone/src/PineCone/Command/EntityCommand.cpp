@@ -26,7 +26,7 @@ namespace Pine {
 
 	void CreateEntityCommand::Redo()
 	{
-		Execute();
+		Entity entity = m_Scene->CreateEntity(m_EntityID, "Empty Entity");
 	}
 
 

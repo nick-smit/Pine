@@ -16,7 +16,10 @@ namespace Pine {
 
 		Entity& GetEntity() const
 		{
-			return m_Scene->GetEntityByID(m_EntityID);
+			Entity entity = m_Scene->GetEntityByID(m_EntityID);
+			PINE_ASSERT((bool)entity, "Invalid entity!");
+
+			return entity;
 		}
 
 		template <typename Component>
@@ -83,12 +86,14 @@ namespace Pine {
 
 		virtual void Execute() override
 		{
-			GetEntity().AddComponent<Component>();
+			Entity entity = GetEntity();
+			entity.AddComponent<Component>();
 		}
 
 		virtual void Undo() override
 		{
-			GetEntity().RemoveComponent<Component>();
+			Entity entity = GetEntity();
+			entity.RemoveComponent<Component>();
 		}
 
 		virtual void Redo() override
