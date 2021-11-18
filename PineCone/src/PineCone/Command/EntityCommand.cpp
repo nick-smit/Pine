@@ -36,7 +36,6 @@ namespace Pine {
 
 	void DestroyEntityCommand::Execute()
 	{
-		// TODO(Nick): Figure out why this crashes
 		Entity entity = GetEntity();
 
 		m_TagComponent = CopyComponentInto<TagComponent>(entity);

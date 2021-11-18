@@ -55,7 +55,8 @@ namespace Pine {
 			bool componentRemoved = false;
 			if (ImGui::BeginPopup("ComponentContext")) {
 				if (ImGui::MenuItem("Reset to default")) {
-					m_SelectedEntity.GetComponent<Component>() = Component();
+					auto cmd = std::make_shared<ResetComponentCommand<Component>>(m_SceneContext->GetContext(), m_SelectedEntity);
+					CommandManager::GetInstance().ExecuteCommand(cmd);
 				}
 
 				if (ImGui::MenuItem("Remove component")) {

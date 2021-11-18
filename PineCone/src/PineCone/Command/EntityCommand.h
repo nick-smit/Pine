@@ -81,25 +81,32 @@ namespace Pine {
 	{
 	public:
 		AddComponentCommand(std::shared_ptr<Scene> scene, Entity entity)
-			: HandlesEntities(scene, entity) {};
+			: HandlesEntities(scene, entity), m_Entity(entity) {};
 		virtual ~AddComponentCommand() = default;
 
 		virtual void Execute() override
 		{
-			Entity entity = GetEntity();
-			entity.AddComponent<Component>();
+			m_Entity.AddComponent<Component>();
 		}
 
 		virtual void Undo() override
 		{
+			// We cannot rely on m_Entity anymore because it might have been recreated.
 			Entity entity = GetEntity();
+
 			entity.RemoveComponent<Component>();
 		}
 
 		virtual void Redo() override
 		{
-			Execute();
+			// We cannot rely on m_Entity anymore because it might have been recreated.
+			Entity entity = GetEntity();
+
+			entity.AddComponent<Component>();
 		}
+
+	private:
+		Entity m_Entity;
 	};
 
 	template <class Component>
@@ -107,26 +114,70 @@ namespace Pine {
 	{
 	public:
 		RemoveComponentCommand(std::shared_ptr<Scene> scene, Entity entity)
-			: HandlesEntities(scene, entity) {};
+			: HandlesEntities(scene, entity), m_Entity(entity) {};
 		virtual ~RemoveComponentCommand() = default;
 
 		virtual void Execute() override
 		{
-			Entity entity = GetEntity();
-			m_RemovedComponent = CopyComponentInto<Component>(entity);
-			entity.RemoveComponent<Component>();
+			m_RemovedComponent = CopyComponentInto<Component>(m_Entity);
+			m_Entity.RemoveComponent<Component>();
 		}
 
 		virtual void Undo() override
 		{
-			AddComponentFrom<Component>(GetEntity(), m_RemovedComponent);
+			// We cannot rely on m_Entity anymore because it might have been recreated.
+			Entity entity = GetEntity();
+
+			AddComponentFrom<Component>(entity, m_RemovedComponent);
 		}
 
 		virtual void Redo() override
 		{
-			Execute();
+			// We cannot rely on m_Entity anymore because it might have been recreated.
+			Entity entity = GetEntity();
+
+			m_RemovedComponent = CopyComponentInto<Component>(entity);
+			entity.RemoveComponent<Component>();
 		}
 	private:
+		Entity m_Entity;
 		std::shared_ptr<Component> m_RemovedComponent;
+	};
+
+	template <class Component>
+	class ResetComponentCommand : public Command, HandlesEntities
+	{
+	public:
+		ResetComponentCommand(std::shared_ptr<Scene> scene, Entity entity)
+			: HandlesEntities(scene, entity), m_Entity(entity) {};
+		virtual ~ResetComponentCommand() = default;
+
+		// Inherited via Command
+		virtual void Execute() override
+		{
+			m_ResetComponent = CopyComponentInto<Component>(m_Entity);
+			m_Entity.GetComponent<Component>() = Component();
+		}
+
+		virtual void Undo() override
+		{
+			// We cannot rely on m_Entity anymore because it might have been recreated.
+			Entity entity = GetEntity();
+
+			entity.GetComponent<Component>() = *m_ResetComponent.get();
+		}
+
+		virtual void Redo() override
+		{
+			// We cannot rely on m_Entity anymore because it might have been recreated.
+			Entity entity = GetEntity();
+
+			m_ResetComponent = CopyComponentInto<Component>(entity);
+			entity.GetComponent<Component>() = Component();
+		}
+
+	private:
+		Entity m_Entity;
+		std::shared_ptr<Component> m_ResetComponent = nullptr;
 	};
 }
